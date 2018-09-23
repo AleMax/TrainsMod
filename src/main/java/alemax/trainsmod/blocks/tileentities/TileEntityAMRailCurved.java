@@ -180,7 +180,14 @@ public class TileEntityAMRailCurved extends TileEntity implements ITrack {
 			TrackPoint lastTP = getTrackPoint(index - 1);
 			Vec3d pointVector = new Vec3d(currentTP.x - lastTP.x, currentTP.y - lastTP.y, currentTP.z - lastTP.z);
 			
-			double angle = Math.acos(motion.dotProduct(pointVector) / (motion.lengthVector() * pointVector.lengthVector()));
+			double numerator = motion.dotProduct(pointVector);
+			double denominator = Math.abs(motion.lengthVector() * pointVector.lengthVector());
+			double angle = Math.acos(numerator / denominator);
+			if(numerator / denominator > 1) {
+				angle = 0;
+			} else if(numerator / denominator < -1) {
+				angle = 180;
+			}
 			if(Math.abs(angle) > (0.5 * Math.PI)) backwards = true;
 			if(!backwards) {
 				dir = new Vec3d(currentTP.x - lastTP.x, 0, currentTP.z - lastTP.z);
@@ -238,7 +245,14 @@ public class TileEntityAMRailCurved extends TileEntity implements ITrack {
 			TrackPoint lastTP = getTrackPoint(index - 1);
 			Vec3d pointVector = new Vec3d(currentTP.x - lastTP.x, currentTP.y - lastTP.y, currentTP.z - lastTP.z);
 			
-			double angle = Math.acos(motion.dotProduct(pointVector) / (motion.lengthVector() * pointVector.lengthVector()));
+			double numerator = motion.dotProduct(pointVector);
+			double denominator = Math.abs(motion.lengthVector() * pointVector.lengthVector());
+			double angle = Math.acos(numerator / denominator);
+			if(numerator / denominator > 1) {
+				angle = 0;
+			} else if(numerator / denominator < -1) {
+				angle = 180;
+			}
 			if(Math.abs(angle) > (0.5 * Math.PI)) backwards = true;
 			if(!backwards) {
 				dir = new Vec3d(currentTP.x - lastTP.x, 0, currentTP.z - lastTP.z);
@@ -296,7 +310,14 @@ public class TileEntityAMRailCurved extends TileEntity implements ITrack {
 			TrackPoint lastTP = getTrackPoint(index - 1);
 			Vec3d pointVector = new Vec3d(currentTP.x - lastTP.x, currentTP.y - lastTP.y, currentTP.z - lastTP.z);
 			
-			double angle = Math.acos(motion.dotProduct(pointVector) / (motion.lengthVector() * pointVector.lengthVector()));
+			double numerator = motion.dotProduct(pointVector);
+			double denominator = Math.abs(motion.lengthVector() * pointVector.lengthVector());
+			double angle = Math.acos(numerator / denominator);
+			if(numerator / denominator > 1) {
+				angle = 0;
+			} else if(numerator / denominator < -1) {
+				angle = 180;
+			}
 			if(Math.abs(angle) > (0.5 * Math.PI)) backwards = true;
 			if(!backwards) {
 				dir = new Vec3d(currentTP.x - lastTP.x, 0, currentTP.z - lastTP.z);
@@ -354,7 +375,14 @@ public class TileEntityAMRailCurved extends TileEntity implements ITrack {
 			TrackPoint lastTP = getTrackPoint(index - 1);
 			Vec3d pointVector = new Vec3d(currentTP.x - lastTP.x, currentTP.y - lastTP.y, currentTP.z - lastTP.z);
 			
-			double angle = Math.acos(motion.dotProduct(pointVector) / (motion.lengthVector() * pointVector.lengthVector()));
+			double numerator = motion.dotProduct(pointVector);
+			double denominator = Math.abs(motion.lengthVector() * pointVector.lengthVector());
+			double angle = Math.acos(numerator / denominator);
+			if(numerator / denominator > 1) {
+				angle = 0;
+			} else if(numerator / denominator < -1) {
+				angle = 180;
+			}
 			if(Math.abs(angle) > (0.5 * Math.PI)) backwards = true;
 			if(!backwards) {
 				dir = new Vec3d(currentTP.x - lastTP.x, 0, currentTP.z - lastTP.z);
@@ -412,7 +440,14 @@ public class TileEntityAMRailCurved extends TileEntity implements ITrack {
 			TrackPoint lastTP = getTrackPoint(index - 1);
 			Vec3d pointVector = new Vec3d(currentTP.x - lastTP.x, currentTP.y - lastTP.y, currentTP.z - lastTP.z);
 			
-			double angle = Math.acos(motion.dotProduct(pointVector) / (motion.lengthVector() * pointVector.lengthVector()));
+			double numerator = motion.dotProduct(pointVector);
+			double denominator = Math.abs(motion.lengthVector() * pointVector.lengthVector());
+			double angle = Math.acos(numerator / denominator);
+			if(numerator / denominator > 1) {
+				angle = 0;
+			} else if(numerator / denominator < -1) {
+				angle = 180;
+			}
 			if(Math.abs(angle) > (0.5 * Math.PI)) backwards = true;
 			if(!backwards) {
 				dir = new Vec3d(currentTP.x - lastTP.x, 0, currentTP.z - lastTP.z);
@@ -470,7 +505,14 @@ public class TileEntityAMRailCurved extends TileEntity implements ITrack {
 			TrackPoint lastTP = getTrackPoint(index - 1);
 			Vec3d pointVector = new Vec3d(currentTP.x - lastTP.x, currentTP.y - lastTP.y, currentTP.z - lastTP.z);
 			
-			double angle = Math.acos(motion.dotProduct(pointVector) / (motion.lengthVector() * pointVector.lengthVector()));
+			double numerator = motion.dotProduct(pointVector);
+			double denominator = Math.abs(motion.lengthVector() * pointVector.lengthVector());
+			double angle = Math.acos(numerator / denominator);
+			if(numerator / denominator > 1) {
+				angle = 0;
+			} else if(numerator / denominator < -1) {
+				angle = 180;
+			}
 			if(Math.abs(angle) > (0.5 * Math.PI)) backwards = true;
 			if(!backwards) {
 				dir = new Vec3d(currentTP.x - lastTP.x, 0, currentTP.z - lastTP.z);
@@ -528,7 +570,14 @@ public class TileEntityAMRailCurved extends TileEntity implements ITrack {
 			TrackPoint lastTP = getTrackPoint(index - 1);
 			Vec3d pointVector = new Vec3d(currentTP.x - lastTP.x, currentTP.y - lastTP.y, currentTP.z - lastTP.z);
 			
-			double angle = Math.acos(motion.dotProduct(pointVector) / (motion.lengthVector() * pointVector.lengthVector()));
+			double numerator = motion.dotProduct(pointVector);
+			double denominator = Math.abs(motion.lengthVector() * pointVector.lengthVector());
+			double angle = Math.acos(numerator / denominator);
+			if(numerator / denominator > 1) {
+				angle = 0;
+			} else if(numerator / denominator < -1) {
+				angle = 180;
+			}
 			if(Math.abs(angle) > (0.5 * Math.PI)) backwards = true;
 			if(!backwards) {
 				dir = new Vec3d(currentTP.x - lastTP.x, 0, currentTP.z - lastTP.z);
@@ -586,7 +635,14 @@ public class TileEntityAMRailCurved extends TileEntity implements ITrack {
 			TrackPoint lastTP = getTrackPoint(index - 1);
 			Vec3d pointVector = new Vec3d(currentTP.x - lastTP.x, currentTP.y - lastTP.y, currentTP.z - lastTP.z);
 			
-			double angle = Math.acos(motion.dotProduct(pointVector) / (motion.lengthVector() * pointVector.lengthVector()));
+			double numerator = motion.dotProduct(pointVector);
+			double denominator = Math.abs(motion.lengthVector() * pointVector.lengthVector());
+			double angle = Math.acos(numerator / denominator);
+			if(numerator / denominator > 1) {
+				angle = 0;
+			} else if(numerator / denominator < -1) {
+				angle = 180;
+			}
 			if(Math.abs(angle) > (0.5 * Math.PI)) backwards = true;
 			if(!backwards) {
 				dir = new Vec3d(currentTP.x - lastTP.x, 0, currentTP.z - lastTP.z);

@@ -422,10 +422,15 @@ public abstract class EntityRailcar extends Entity {
 					int xEnd;
 					int zEnd;
 					
+					Vec3d forward = new Vec3d(-Math.sin(Math.toRadians(this.rotationYaw)), 0, Math.cos(Math.toRadians(this.rotationYaw)));
+					Vec3d across = forward.crossProduct(new Vec3d(0, 1, 0));
+					
 					ArrayList<BlockPos> possiblePositions = new ArrayList<>(); 
-					for(int i = -3; i < 4; i++) {
-						for(int j = -3; j < 4; j++) {
-							TileEntity nte = this.world.getTileEntity(new BlockPos(this.railBlock.getX() + i, this.railBlock.getY(), this.railBlock.getZ() + j));
+					for(int i = 0; i < 6; i++) {
+						for(int j = 0 - i; j < 2 * i + 1; j++) {
+							Vec3d vectorPos = new Vec3d(x, y, z).add(forward.scale(i)).add(across.scale(j));
+							BlockPos cPos = new BlockPos(vectorPos.x, vectorPos.y, vectorPos.z);
+							TileEntity nte = this.world.getTileEntity(cPos);
 							if(nte instanceof ITrack || this.world.getBlockState(new BlockPos(this.railBlock.getX() + i, this.railBlock.getY(), this.railBlock.getZ() + j)).getBlock() instanceof ITrackBlock) {
 								possiblePositions.add(nte.getPos());
 								br = true;
@@ -489,10 +494,16 @@ public abstract class EntityRailcar extends Entity {
 					int xEnd;
 					int zEnd;
 					
+					Vec3d forward = new Vec3d(-Math.sin(Math.toRadians(this.rotationYaw)), 0, Math.cos(Math.toRadians(this.rotationYaw)));
+					forward = new Vec3d(-forward.x, 0, -forward.z);
+					Vec3d across = forward.crossProduct(new Vec3d(0, 1, 0));
+					
 					ArrayList<BlockPos> possiblePositions = new ArrayList<>(); 
-					for(int i = -3; i < 4; i++) {
-						for(int j = -3; j < 4; j++) {
-							TileEntity nte = this.world.getTileEntity(new BlockPos(rearRailBlock.getX() + i, rearRailBlock.getY(), rearRailBlock.getZ() + j));
+					for(int i = 0; i < 6; i++) {
+						for(int j = 0 - i; j < 2 * i + 1; j++) {
+							Vec3d vectorPos = new Vec3d(x, y, z).add(forward.scale(i)).add(across.scale(j));
+							BlockPos cPos = new BlockPos(vectorPos.x, vectorPos.y, vectorPos.z);
+							TileEntity nte = this.world.getTileEntity(cPos);
 							if(nte instanceof ITrack && !(nte instanceof TileEntityAMRail)) {
 								possiblePositions.add(nte.getPos());
 								br = true;
