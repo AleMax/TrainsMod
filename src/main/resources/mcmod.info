@@ -1,0 +1,16 @@
+[
+{
+  "modid": "trainsmod",
+  "name": "Trains Mod",
+  "description": "Train Mod by Ale_Max",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["Ale_Max", "VinciSchmidt"],
+  "credits": "The Forge and FML guys, for making this example",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
