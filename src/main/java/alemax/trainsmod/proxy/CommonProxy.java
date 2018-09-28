@@ -6,6 +6,8 @@ import alemax.trainsmod.init.ModBlocks;
 import alemax.trainsmod.init.ModEntities;
 import alemax.trainsmod.init.ModItems;
 import alemax.trainsmod.networking.PacketHandler;
+import alemax.trainsmod.networking.TrainClientKeysSendMessage;
+import alemax.trainsmod.networking.TrainKeysSendMessage;
 import alemax.trainsmod.networking.TrainPassengerSyncMessage;
 import alemax.trainsmod.networking.TrainSyncMessage;
 import alemax.trainsmod.networking.TrainSyncSpeedMessage;
@@ -31,6 +33,10 @@ public class CommonProxy {
 		PacketHandler.INSTANCE.registerMessage(TrainSyncMessage.TrainSyncMessageHandler.class, TrainSyncMessage.class, id++, Side.CLIENT);
 		PacketHandler.INSTANCE.registerMessage(TrainSyncSpeedMessage.TrainSyncSpeedMessageHandler.class, TrainSyncSpeedMessage.class, id++, Side.CLIENT);
 		PacketHandler.INSTANCE.registerMessage(TrainPassengerSyncMessage.TrainPassengerSyncMessageHandler.class, TrainPassengerSyncMessage.class, id++, Side.CLIENT);
+		PacketHandler.INSTANCE.registerMessage(TrainKeysSendMessage.TrainKeysSendMessageHandler.class, TrainKeysSendMessage.class, id++, Side.SERVER);
+		PacketHandler.INSTANCE.registerMessage(TrainClientKeysSendMessage.TrainClientKeysSendMessageHandler.class, TrainClientKeysSendMessage.class, id++, Side.CLIENT);
+
+	
 	}
 	
 	public void init(FMLInitializationEvent e) {

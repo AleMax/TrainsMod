@@ -22,6 +22,7 @@ public class TrainSyncMessage implements IMessage {
 	private double speed;
 	private byte direction;
 	private byte movingDirection;
+	private byte movingState;
 	private float rotationYaw;
 	private float rotationPitch;
 	private float trainRotYaw;
@@ -29,7 +30,7 @@ public class TrainSyncMessage implements IMessage {
 	private boolean onRail;
 	private BlockPos railBlock;
 	
-	public TrainSyncMessage(int entityID, double trainPosX, double trainPosY, double trainPosZ, double rearPosX, double rearPosY, double rearPosZ, double speed, byte direction, byte movingDirection, float rotationYaw, float rotationPitch, float trainRotYaw, float trainRotPitch, boolean onRail, BlockPos railBlock) {
+	public TrainSyncMessage(int entityID, double trainPosX, double trainPosY, double trainPosZ, double rearPosX, double rearPosY, double rearPosZ, double speed, byte direction, byte movingDirection, byte movingState, float rotationYaw, float rotationPitch, float trainRotYaw, float trainRotPitch, boolean onRail, BlockPos railBlock) {
 		this.posX = trainPosX;
 		this.posY = trainPosY;
 		this.posZ = trainPosZ;
@@ -40,6 +41,7 @@ public class TrainSyncMessage implements IMessage {
 		this.speed = speed;
 		this.direction = direction;
 		this.movingDirection = movingDirection;
+		this.movingState = movingState;
 		this.rotationYaw = rotationYaw;
 		this.rotationPitch = rotationPitch;
 		this.trainRotYaw = trainRotYaw;
@@ -60,6 +62,7 @@ public class TrainSyncMessage implements IMessage {
 		buf.writeDouble(speed);
 		buf.writeByte(direction);
 		buf.writeByte(movingDirection);
+		buf.writeByte(movingState);
 		buf.writeFloat(rotationYaw);
 		buf.writeFloat(rotationPitch);
 		buf.writeFloat(trainRotYaw);
@@ -82,6 +85,7 @@ public class TrainSyncMessage implements IMessage {
 		speed = buf.readDouble();
 		direction = buf.readByte();
 		movingDirection = buf.readByte();
+		movingState = buf.readByte();
 		rotationYaw = buf.readFloat();
 		rotationPitch = buf.readFloat();
 		trainRotYaw = buf.readFloat();
@@ -100,7 +104,7 @@ public class TrainSyncMessage implements IMessage {
 				Minecraft.getMinecraft().addScheduledTask(() -> {
 					EntityRailcar entity = (EntityRailcar) Minecraft.getMinecraft().world.getEntityByID(message.entityID);
 					if(entity != null)
-						entity.sync(message.posX, message.posY, message.posZ, message.rearPosX, message.rearPosY, message.rearPosZ, message.speed, message.direction, message.movingDirection, message.rotationYaw, message.rotationPitch, message.trainRotYaw, message.trainRotPitch, message.onRail, message.railBlock);
+						entity.sync(message.posX, message.posY, message.posZ, message.rearPosX, message.rearPosY, message.rearPosZ, message.speed, message.direction, message.movingDirection, message.movingState, message.rotationYaw, message.rotationPitch, message.trainRotYaw, message.trainRotPitch, message.onRail, message.railBlock);
 				});
 			
 				return null;

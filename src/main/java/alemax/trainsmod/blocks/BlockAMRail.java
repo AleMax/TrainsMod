@@ -1,7 +1,5 @@
 package alemax.trainsmod.blocks;
 
-import javax.annotation.processing.SupportedOptions;
-
 import alemax.trainsmod.blocks.tileentities.TileEntityAMRail;
 import alemax.trainsmod.init.ModBlocks;
 import alemax.trainsmod.init.ModItems;
@@ -22,10 +20,12 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import trackapi.lib.ITrackBlock;
 
+@net.minecraftforge.fml.common.Optional.Interface(iface = "trackapi.lib.ITrackBlock", modid = "trackapi")
 public class BlockAMRail extends Block implements ITrackBlock {
 	
 	public static final AxisAlignedBB AM_RAIL_AABB_NS = new AxisAlignedBB(-0.625, 0, 0, 1.625, 0.1875, 1);
@@ -59,7 +59,6 @@ public class BlockAMRail extends Block implements ITrackBlock {
 		//te.set(state.getValue(FACING));
 	}
 	
-
 	@Override
 	public Vec3d getNextPosition(World world, BlockPos pos, Vec3d currentPosition, Vec3d motion) {
 		float speed = (float) Math.sqrt(Math.pow(motion.x, 2) + Math.pow(motion.y, 2) + Math.pow(motion.z, 2));

@@ -21,7 +21,8 @@ public class EntityBR143 extends EntityRailcar {
 	public void setup() {
 		setBoundBox(new AxisAlignedBB(-1.5625004768371582, 0.0, -11.0625, 1.5625005960464478, 5.625, 3.65625));
 		this.maxSpeed = 30;
-		this.acceleration = 1.5;
+		this.maxAcceleration = 0.6;
+		this.maxDecceleration = 1.2;
 		this.maxPassengersCount = 4;
 		this.axleDistance = 7.5;
 		this.seats = new Seat[maxPassengersCount];

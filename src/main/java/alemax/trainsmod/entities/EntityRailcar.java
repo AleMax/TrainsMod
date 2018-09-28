@@ -16,7 +16,9 @@ import alemax.trainsmod.networking.PacketHandler;
 import alemax.trainsmod.networking.TrainPassengerSyncMessage;
 import alemax.trainsmod.networking.TrainSyncMessage;
 import alemax.trainsmod.networking.TrainSyncSpeedMessage;
+import alemax.trainsmod.proxy.ClientProxy;
 import alemax.trainsmod.util.AMMaths;
+import alemax.trainsmod.util.ModKeys;
 import alemax.trainsmod.util.Seat;
 import alemax.trainsmod.util.TrackPoint;
 import alemax.trainsmod.util.Train;
@@ -37,6 +39,7 @@ import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
+import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.ForgeChunkManager.Ticket;
 import net.minecraftforge.common.ForgeChunkManager.Type;
@@ -71,10 +74,12 @@ public abstract class EntityRailcar extends Entity {
 	protected double speed = 0;
 	protected byte direction = 0;
 	protected byte movingDirection = 0;
+	protected byte movingState = 0;
 	
 	double maxSpeed;
 	double aimedSpeed;
-	double acceleration;
+	double maxAcceleration;
+	double maxDecceleration;
 	
 	public boolean isInTrain;
 	public boolean isLeadingTrain;
@@ -107,7 +112,8 @@ public abstract class EntityRailcar extends Entity {
 		 }
 		 this.maxSpeed = 30;
 		 this.aimedSpeed = 0;
-		 this.acceleration = 1.5;
+		 this.maxAcceleration = 1.5;
+		 this.maxDecceleration = 1.5;
 		 this.bonusSpeed = 0;
 		 this.lastPartialTick = -1;
 		 this.trainUniqueID = TrainUID.generateID();
@@ -121,6 +127,8 @@ public abstract class EntityRailcar extends Entity {
 		this.posX = railBlock.getX() + 0.5;
 		this.posY = railBlock.getY() + 0.125;
 		this.posZ = railBlock.getZ() + 0.5;
+		
+		
 		
 		byte dir;
 		if(worldIn.getBlockState(railBlock).getValue(BlockAMRail.FACING).equals(EnumFacing.NORTH)) {
@@ -267,6 +275,8 @@ public abstract class EntityRailcar extends Entity {
 	
 	@Override
     public void onUpdate() {
+		
+		
 		if(!this.world.isRemote) {
 			if(this.syncCooldown > 0) this.syncCooldown--;
 			else {
@@ -280,11 +290,45 @@ public abstract class EntityRailcar extends Entity {
 				sendSpeedSync();
 			}
 		}
-				
-		if(speed + (acceleration / 20) < aimedSpeed) {
-			speed += (acceleration / 20);
-		} else if(speed - (acceleration / 20) > aimedSpeed) {
-			speed -= (acceleration / 20);
+		
+		double accel = 0;
+		if(movingState == -2) {
+			accel = -this.maxDecceleration / 20.0;
+		} else if(movingState == -1) {
+			accel = -this.maxDecceleration / 40.0;
+		} else if(this.movingState == 0) {
+			accel = -0.05 / 20.0;
+		} else if(this.movingState == 1) {
+			accel = 0;
+		}else if(this.movingState == 2) {
+			accel = this.maxAcceleration / 40.0;
+		} else if(this.movingState == 3) {
+			accel = this.maxAcceleration / 20.0;
+		}
+		
+		this.speed = this.speed += accel;
+		if(this.speed < 0) this.speed = 0;
+		if(this.speed > this.maxSpeed) this.speed = this.maxSpeed;
+		this.aimedSpeed = this.speed;
+		
+		
+		/*
+		if(!this.world.isRemote) {
+			this.speed += this.currentAcceleration / 20;
+			if(this.speed > this.maxSpeed) this.speed = this.maxSpeed;
+			else if(this.speed < 0) this.speed = 0;
+			this.aimedSpeed = this.speed;
+			
+			this.currentAcceleration = 0;
+			
+			System.out.println(this.speed);
+		}
+		*/
+		
+		if(speed + (maxAcceleration / 20) < aimedSpeed) {
+			speed += (maxAcceleration / 20);
+		} else if(speed - (maxDecceleration / 20) > aimedSpeed) {
+			speed -= (maxDecceleration / 20);
 		} else {
 			speed = aimedSpeed;
 		}
@@ -343,6 +387,10 @@ public abstract class EntityRailcar extends Entity {
 				passenger.setPosition(this.posX + vec3d.x, this.posY + passenger.getYOffset() + vec3d.y, this.posZ + vec3d.z);
 				passenger.rotationYaw += (rotationYaw - prevRotationYaw);
 				passenger.setRenderYawOffset(this.trainRotYaw + seat.yawOffset);
+				if(this.world.isRemote) {
+					
+					
+				}
 			}
 		}
 	}
@@ -592,7 +640,7 @@ public abstract class EntityRailcar extends Entity {
 		}
 		return null;
 	}
-	public void sync(double posX, double posY, double posZ, double rearPosX, double rearPosY, double rearPosZ, double speed, byte direction, byte movingDirection, float rotationYaw, float rotationPitch, float trainRotYaw, float trainRotPitch, boolean onRail, BlockPos railBlock) {
+	public void sync(double posX, double posY, double posZ, double rearPosX, double rearPosY, double rearPosZ, double speed, byte direction, byte movingDirection, byte movingState, float rotationYaw, float rotationPitch, float trainRotYaw, float trainRotPitch, boolean onRail, BlockPos railBlock) {
 		if(this.world.isRemote) {
 			double xDif = posX - this.posX;
 			double zDif = posZ - this.posZ;
@@ -607,6 +655,7 @@ public abstract class EntityRailcar extends Entity {
 			
 			this.direction = direction;
 			this.movingDirection = movingDirection;
+			this.movingState = movingState;
 			double maxRot = speed;
 			if(maxRot > 10) maxRot = 10;
 			this.onRail = onRail;
@@ -667,6 +716,28 @@ public abstract class EntityRailcar extends Entity {
 		
 	}
 	
+	public void userInput(int playerID, byte key) {
+		boolean allowedToSteer = false;
+		for(int i = 0; i < this.seats.length; i++) {
+			if(this.seats[i].sittingEntity != null && this.seats[i].sittingEntity.getEntityId() == playerID && this.seats[i].drivingSeat) allowedToSteer = true;
+		}
+		if(allowedToSteer) {
+			byte change = 0;
+			if(key == ModKeys.TRAIN_ACCELERATION) change = 1;
+			else if(key == ModKeys.TRAIN_BRAKE) change = -1;
+			
+			this.movingState += change;
+			if(this.movingState > 3) this.movingState = 3;
+			else if(this.movingState < -2) this.movingState = -2;
+			
+			if(!this.world.isRemote) {
+				EntityPlayer player = (EntityPlayer) this.world.getEntityByID(playerID);
+				player.sendMessage(new TextComponentString("Set the moving state to " + this.movingState));
+			}
+		}
+	}
+	
+	
 	public void syncSpeed(double speed, double aimedSpeed) {
 		this.speed = speed;
 		this.aimedSpeed = aimedSpeed;
@@ -719,7 +790,7 @@ public abstract class EntityRailcar extends Entity {
 	
 	private void sendSync() {
 		if(onRail == true) {
-			PacketHandler.INSTANCE.sendToAllAround(new TrainSyncMessage(this.getEntityId(), posX, posY, posZ, rearPosX, rearPosY, rearPosZ, speed, direction, movingDirection, rotationYaw, rotationPitch, trainRotYaw, trainRotPitch, onRail, railBlock), new TargetPoint(this.dimension, posX, posY, posZ, 400));
+			PacketHandler.INSTANCE.sendToAllAround(new TrainSyncMessage(this.getEntityId(), posX, posY, posZ, rearPosX, rearPosY, rearPosZ, speed, direction, movingDirection, movingState, rotationYaw, rotationPitch, trainRotYaw, trainRotPitch, onRail, railBlock), new TargetPoint(this.dimension, posX, posY, posZ, 400));
 		}
 		clientCreated = true;
 	}

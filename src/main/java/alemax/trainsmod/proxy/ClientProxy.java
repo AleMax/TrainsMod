@@ -1,5 +1,7 @@
 package alemax.trainsmod.proxy;
 
+import org.lwjgl.input.Keyboard;
+
 import alemax.trainsmod.blocks.models.BakedModelAMRailCurved;
 import alemax.trainsmod.blocks.models.BakedModelLoader;
 import alemax.trainsmod.entities.EntityBR143;
@@ -27,26 +29,40 @@ import alemax.trainsmod.entities.renders.RenderTankWagonYellow;
 import alemax.trainsmod.entities.renders.RenderTrain;
 import alemax.trainsmod.init.ModBlocks;
 import alemax.trainsmod.init.ModItems;
+import alemax.trainsmod.networking.PacketHandler;
+import alemax.trainsmod.networking.TrainClientKeysSendMessage;
+import alemax.trainsmod.networking.TrainKeysSendMessage;
+import alemax.trainsmod.util.ModKeys;
 import alemax.trainsmod.util.Reference;
 import alemax.trainsmod.util.objloader.OBJHandler;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;
+import net.minecraft.client.settings.KeyBinding;
+import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.client.model.obj.OBJLoader;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.InputEvent.KeyInputEvent;
 import net.minecraftforge.fml.relauncher.Side;
 
 @EventBusSubscriber(Side.CLIENT)
 public class ClientProxy extends CommonProxy {
+	
+	public static KeyBinding keyTrainAccelerate;
+	public static KeyBinding keyTrainBrake;
 	
 	@Override
 	public void preInit(FMLPreInitializationEvent e) {
@@ -68,15 +84,20 @@ public class ClientProxy extends CommonProxy {
 		RenderingRegistry.registerEntityRenderingHandler(EntityTankWagonYellow.class, RenderTankWagonYellow.FACTORY);
 
 		
-		
 		MinecraftForge.EVENT_BUS.register(new RenderTrain());
-
 		
-		
+				
 	}
 	
 	@Override
 	public void init(FMLInitializationEvent e) {
+		
+		keyTrainAccelerate = new KeyBinding("key.trainsmod.accel", Keyboard.KEY_W, "key.trainsmod.category");
+		keyTrainBrake = new KeyBinding("key.trainsmod.brake", Keyboard.KEY_S, "key.trainsmod.category");
+		
+		ClientRegistry.registerKeyBinding(keyTrainAccelerate);
+		ClientRegistry.registerKeyBinding(keyTrainBrake);
+
 		
 		super.init(e);
 	}
@@ -99,6 +120,28 @@ public class ClientProxy extends CommonProxy {
 		ModelLoader.setCustomModelResourceLocation(ModItems.item_train_starter, 0, new ModelResourceLocation(ModItems.item_train_starter.getRegistryName(), "inventory"));
 		ModelLoader.setCustomModelResourceLocation(ModItems.item_train_remover, 0, new ModelResourceLocation(ModItems.item_train_remover.getRegistryName(), "inventory"));
 		ModelLoader.setCustomModelResourceLocation(ModItems.item_train_connector, 0, new ModelResourceLocation(ModItems.item_train_connector.getRegistryName(), "inventory"));
+	}
+	
+	@SubscribeEvent
+	public static void onKeyInput(KeyInputEvent event) {
+		
+		//System.out.println("INPUT");
+		
+		KeyBinding keyTrainAccelerate = ClientProxy.keyTrainAccelerate;
+		KeyBinding keyTrainBrake = ClientProxy.keyTrainBrake;
+		
+		EntityPlayerSP player = Minecraft.getMinecraft().player;
+		Entity train = player.getRidingEntity();
+		
+		if(keyTrainAccelerate.isPressed() && train != null) {
+			PacketHandler.INSTANCE.sendToServer(new TrainKeysSendMessage(player.getEntityId(), train.getEntityId(), ModKeys.TRAIN_ACCELERATION));
+			PacketHandler.INSTANCE.sendToAll(new TrainClientKeysSendMessage(player.getEntityId(), train.getEntityId(), ModKeys.TRAIN_ACCELERATION));
+		}
+		if(keyTrainBrake.isPressed() && train != null) {
+			PacketHandler.INSTANCE.sendToServer(new TrainKeysSendMessage(player.getEntityId(), train.getEntityId(), ModKeys.TRAIN_BRAKE));
+			PacketHandler.INSTANCE.sendToAll(new TrainClientKeysSendMessage(player.getEntityId(), train.getEntityId(), ModKeys.TRAIN_BRAKE));
+		}
+		
 	}
 	
 }

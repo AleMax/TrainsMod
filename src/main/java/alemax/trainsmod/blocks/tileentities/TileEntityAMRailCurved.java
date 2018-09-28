@@ -10,6 +10,7 @@ import net.minecraft.util.math.Vec3d;
 import scala.util.Random;
 import trackapi.lib.ITrack;
 
+@net.minecraftforge.fml.common.Optional.Interface(iface = "trackapi.lib.ITrack", modid = "trackapi")
 public class TileEntityAMRailCurved extends TileEntity implements ITrack {
 		
 	private long id;

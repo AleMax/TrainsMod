@@ -33,14 +33,11 @@ public class ItemBR143 extends Item {
 	public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand,
 			EnumFacing facing, float hitX, float hitY, float hitZ) {
 		if(!worldIn.isRemote) {
-			//TileEntity te = worldIn.getTileEntity(pos);
 			if((worldIn.getBlockState(pos).getBlock() instanceof ITrackBlock || worldIn.getTileEntity(pos) instanceof ITrack) && !(worldIn.getBlockState(pos).getBlock().getRegistryName().equals(ModBlocks.AM_RAIL_CURVED.getRegistryName()))) {
 				double posX = pos.getX() + 0.5;
 				double posY = pos.getY() + 0.125;
 				double posZ = pos.getZ() + 0.5;
-				//EntitySubway subway = new EntitySubway(worldIn, pos);
 				EntityBR143 subway = new EntityBR143(worldIn, pos);
-				//subway.setPosition(posX, posY, posZ);
 				AxisAlignedBB subwayBox = subway.getBoundBox().offset(subway.posX, subway.posY, subway.posZ);
 				List<EntityRailcar> trains = worldIn.getEntitiesWithinAABB(EntityRailcar.class, new AxisAlignedBB(-30 + subwayBox.minX, -10 + subwayBox.minY, -30 + subwayBox.minZ, 30 + subwayBox.maxX, 10 + subwayBox.maxY, 30 + subwayBox.maxZ)); 
 				boolean intersect = false;
