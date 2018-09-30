@@ -2,6 +2,7 @@ package alemax.trainsmod.proxy;
 
 import alemax.trainsmod.blocks.tileentities.TileEntityAMRail;
 import alemax.trainsmod.blocks.tileentities.TileEntityAMRailCurved;
+import alemax.trainsmod.init.CreativeTabTrainsMod;
 import alemax.trainsmod.init.ModBlocks;
 import alemax.trainsmod.init.ModEntities;
 import alemax.trainsmod.init.ModItems;
@@ -23,9 +24,12 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
+import scala.tools.nsc.interpreter.Tabulator;
 
 @EventBusSubscriber
 public class CommonProxy {
+	
+	public static final CreativeTabTrainsMod tab_trainsmod = new CreativeTabTrainsMod();
 	
 	public void preInit(FMLPreInitializationEvent e) {
 		ModEntities.init();

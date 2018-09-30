@@ -9,6 +9,7 @@ import alemax.trainsmod.entities.EntitySNexasRailcar;
 import alemax.trainsmod.entities.EntitySNexasWagon;
 import alemax.trainsmod.init.ModBlocks;
 import alemax.trainsmod.init.ModItems;
+import alemax.trainsmod.proxy.CommonProxy;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -27,7 +28,7 @@ public class ItemSNexasRailcar extends Item {
 	public ItemSNexasRailcar() {
 		setRegistryName("s_nexas_railcar");
 		setUnlocalizedName("s_nexas_railcar");
-		setCreativeTab(CreativeTabs.TRANSPORTATION);
+		setCreativeTab(CommonProxy.tab_trainsmod);
 		
 		ModItems.ITEMS.add(this);
 	}

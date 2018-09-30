@@ -3,6 +3,7 @@ package alemax.trainsmod.blocks;
 import alemax.trainsmod.blocks.tileentities.TileEntityAMRail;
 import alemax.trainsmod.init.ModBlocks;
 import alemax.trainsmod.init.ModItems;
+import alemax.trainsmod.proxy.CommonProxy;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyDirection;
@@ -36,7 +37,7 @@ public class BlockAMRail extends Block implements ITrackBlock {
 		super(Material.CIRCUITS);
 		setUnlocalizedName("am_rail");
 		setRegistryName("am_rail");
-		setCreativeTab(CreativeTabs.TRANSPORTATION);
+		setCreativeTab(CommonProxy.tab_trainsmod);
 		setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.EAST));
 		ModBlocks.BLOCKS.add(this);
 		ModItems.ITEMS.add(new ItemBlock(this).setRegistryName(this.getRegistryName()));

@@ -6,6 +6,7 @@ import alemax.trainsmod.entities.EntityBR143;
 import alemax.trainsmod.entities.EntityRailcar;
 import alemax.trainsmod.init.ModBlocks;
 import alemax.trainsmod.init.ModItems;
+import alemax.trainsmod.proxy.CommonProxy;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -24,7 +25,7 @@ public class ItemBR143 extends Item {
 	public ItemBR143() {
 		setRegistryName("item_br143");
 		setUnlocalizedName("item_br143");
-		setCreativeTab(CreativeTabs.TRANSPORTATION);
+		setCreativeTab(CommonProxy.tab_trainsmod);
 		
 		ModItems.ITEMS.add(this);
 	}

@@ -1,5 +1,8 @@
 package alemax.trainsmod.entities;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import alemax.trainsmod.util.Seat;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;

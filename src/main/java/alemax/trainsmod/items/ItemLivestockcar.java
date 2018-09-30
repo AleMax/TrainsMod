@@ -7,6 +7,7 @@ import alemax.trainsmod.entities.EntityLivestockcar;
 import alemax.trainsmod.entities.EntityRailcar;
 import alemax.trainsmod.init.ModBlocks;
 import alemax.trainsmod.init.ModItems;
+import alemax.trainsmod.proxy.CommonProxy;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -24,7 +25,7 @@ public class ItemLivestockcar extends Item {
 	public ItemLivestockcar() {
 		setRegistryName("item_livestockcar");
 		setUnlocalizedName("item_livestockcar");
-		setCreativeTab(CreativeTabs.TRANSPORTATION);
+		setCreativeTab(CommonProxy.tab_trainsmod);
 		
 		ModItems.ITEMS.add(this);
 	}

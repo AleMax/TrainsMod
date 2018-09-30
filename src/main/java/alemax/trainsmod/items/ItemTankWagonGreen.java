@@ -11,6 +11,7 @@ import alemax.trainsmod.entities.EntityTankWagonGray;
 import alemax.trainsmod.entities.EntityTankWagonGreen;
 import alemax.trainsmod.init.ModBlocks;
 import alemax.trainsmod.init.ModItems;
+import alemax.trainsmod.proxy.CommonProxy;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -29,7 +30,7 @@ public class ItemTankWagonGreen extends Item {
 	public ItemTankWagonGreen() {
 		setRegistryName("item_tank_wagon_green");
 		setUnlocalizedName("item_tank_wagon_green");
-		setCreativeTab(CreativeTabs.TRANSPORTATION);
+		setCreativeTab(CommonProxy.tab_trainsmod);
 		
 		ModItems.ITEMS.add(this);
 	}

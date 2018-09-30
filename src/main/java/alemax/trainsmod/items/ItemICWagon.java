@@ -10,6 +10,7 @@ import alemax.trainsmod.entities.EntitySNexasRailcar;
 import alemax.trainsmod.entities.EntitySNexasWagon;
 import alemax.trainsmod.init.ModBlocks;
 import alemax.trainsmod.init.ModItems;
+import alemax.trainsmod.proxy.CommonProxy;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -28,7 +29,7 @@ public class ItemICWagon extends Item {
 	public ItemICWagon() {
 		setRegistryName("item_ic_wagon");
 		setUnlocalizedName("item_ic_wagon");
-		setCreativeTab(CreativeTabs.TRANSPORTATION);
+		setCreativeTab(CommonProxy.tab_trainsmod);
 		
 		ModItems.ITEMS.add(this);
 	}

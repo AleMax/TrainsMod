@@ -8,6 +8,7 @@ import alemax.trainsmod.blocks.properties.UnlistedPropertyRailPoints;
 import alemax.trainsmod.blocks.tileentities.TileEntityAMRailCurved;
 import alemax.trainsmod.init.ModBlocks;
 import alemax.trainsmod.init.ModItems;
+import alemax.trainsmod.proxy.CommonProxy;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
@@ -43,7 +44,7 @@ public class BlockAMRailCurved extends Block {
 		super(Material.CIRCUITS);
 		setUnlocalizedName("am_rail_curved");
 		setRegistryName("am_rail_curved");
-		setCreativeTab(CreativeTabs.TRANSPORTATION);
+		setCreativeTab(CommonProxy.tab_trainsmod);
 		//setDefaultState(state);
 		
 		ModBlocks.BLOCKS.add(this);

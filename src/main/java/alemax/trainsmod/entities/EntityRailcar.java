@@ -276,7 +276,6 @@ public abstract class EntityRailcar extends Entity {
 	@Override
     public void onUpdate() {
 		
-		
 		if(!this.world.isRemote) {
 			if(this.syncCooldown > 0) this.syncCooldown--;
 			else {
@@ -348,6 +347,8 @@ public abstract class EntityRailcar extends Entity {
 	    calculateRearPos();
 	    calculateRotation();
 
+	    
+	    
         this.move(MoverType.SELF, this.frontTrainMotionX, this.motionY, this.frontTrainMotionZ);
         
         if(this.trainRotYaw > 315) this.direction = 0;
@@ -443,6 +444,7 @@ public abstract class EntityRailcar extends Entity {
 		double length = 0;
 		this.railBlock = new BlockPos(posX, posY, posZ);
 		
+		
 		double tickDistance = (speed + bonusSpeed) / 20;
 		do {
 			Block trackBlock = this.world.getBlockState(railBlock).getBlock();
@@ -474,8 +476,8 @@ public abstract class EntityRailcar extends Entity {
 					Vec3d across = forward.crossProduct(new Vec3d(0, 1, 0));
 					
 					ArrayList<BlockPos> possiblePositions = new ArrayList<>(); 
-					for(int i = 0; i < 6; i++) {
-						for(int j = 0 - i; j < 2 * i + 1; j++) {
+					for(double i = 1; i < 6; i += 0.5) {
+						for(double j = 0 - i; j < i + 1; j += 0.5) {
 							Vec3d vectorPos = new Vec3d(x, y, z).add(forward.scale(i)).add(across.scale(j));
 							BlockPos cPos = new BlockPos(vectorPos.x, vectorPos.y, vectorPos.z);
 							TileEntity nte = this.world.getTileEntity(cPos);
@@ -519,7 +521,7 @@ public abstract class EntityRailcar extends Entity {
 		do {
 			Block trackBlock = this.world.getBlockState(rearRailBlock).getBlock();
 			if(trackBlock instanceof ITrackBlock) {
-				Vec3d nPos = ((ITrackBlock) trackBlock).getNextPosition(this.world, rearRailBlock, new Vec3d(x, y, z), new Vec3d(-Math.sin(Math.toRadians(this.rotationYaw + 180)) * (this.axleDistance - length), 0, Math.cos(Math.toRadians(this.rotationYaw + 180)) * (this.axleDistance - length)));
+				Vec3d nPos = ((ITrackBlock) trackBlock).getNextPosition(this.world, rearRailBlock, new Vec3d(x, y, z), new Vec3d(Math.sin(Math.toRadians(this.rotationYaw)) * (this.axleDistance - length), 0, -Math.cos(Math.toRadians(this.rotationYaw)) * (this.axleDistance - length)));
 				length += Math.sqrt(Math.pow(nPos.x - x, 2) + Math.pow(nPos.z - z, 2));
 				x = nPos.x;
 				y = nPos.y;
@@ -528,7 +530,7 @@ public abstract class EntityRailcar extends Entity {
 			} else {
 				TileEntity te = this.world.getTileEntity(rearRailBlock);
 				if(te instanceof ITrack) {
-					Vec3d nPos = ((ITrack) te).getNextPosition(new Vec3d(x, y, z), new Vec3d(-Math.sin(Math.toRadians(this.rotationYaw + 180)) * (this.axleDistance - length), 0, Math.cos(Math.toRadians(this.rotationYaw + 180)) * (this.axleDistance - length)));
+					Vec3d nPos = ((ITrack) te).getNextPosition(new Vec3d(x, y, z), new Vec3d(Math.sin(Math.toRadians(this.rotationYaw)) * (this.axleDistance - length), 0, -Math.cos(Math.toRadians(this.rotationYaw)) * (this.axleDistance - length)));
 					length += Math.sqrt(Math.pow(nPos.x - x, 2) + Math.pow(nPos.z - z, 2));
 					double add = Math.sqrt(Math.pow(nPos.x - x, 2) + Math.pow(nPos.z - z, 2));
 					x = nPos.x;
@@ -547,7 +549,7 @@ public abstract class EntityRailcar extends Entity {
 					Vec3d across = forward.crossProduct(new Vec3d(0, 1, 0));
 					
 					ArrayList<BlockPos> possiblePositions = new ArrayList<>(); 
-					for(int i = 0; i < 6; i++) {
+					for(int i = 1; i < 6; i++) {
 						for(int j = 0 - i; j < 2 * i + 1; j++) {
 							Vec3d vectorPos = new Vec3d(x, y, z).add(forward.scale(i)).add(across.scale(j));
 							BlockPos cPos = new BlockPos(vectorPos.x, vectorPos.y, vectorPos.z);

@@ -151,15 +151,33 @@ public class TileEntityAMRailCurved extends TileEntity implements ITrack {
 		markDirty();
 	}
 	
+	/*
+	public Vec3d nextPosition(Vec3d position, Vec3d motion) {
+		Vec3d[] trackPoints = new Vec3d[this.points.length];
+		for(int i = 0; i < trackPoints.length; i++) {
+			trackPoints[i] = new Vec3d(this.points[i][7].getX() + this.pos.getX(), this.pos.getY() + 0.125, this.points[i][7].getY() + this.pos.getZ());
+		}
+		Vec3d[] nearestPoints = new Vec3d[3];
+		
+		for(int i = 0; i < trackPoints.length; i++) {
+			
+		}
+	}
+	
+	private boolean checkVectorSameDirection(Vec3d firstVector, Vec3d secondVector) {
+		
+	}
+	
+	private double getDistanceToPoint(Vec3d point, Vec3d position) {
+		return Math.sqrt(Math.pow(point.x - position.x, 2) + Math.pow(point.x - position.x, 2) + Math.pow(point.x - position.x, 2));
+	}
+	*/
+	
 	
 	@Override
 	public Vec3d getNextPosition(Vec3d position, Vec3d motion) {
 		//motion = new Vec3d(-motion.x, motion.y, -motion.z);
 		//if(!this.world.isRemote) System.out.println(motion.x + "\t" + motion.z);
-		if(position.x > 516.9) {
-			int j = 5;
-			//System.out.println(j);
-		}
 		int index = 0;
 		float speed = (float) Math.sqrt(Math.pow(motion.x, 2) + Math.pow(motion.y, 2) + Math.pow(motion.z, 2));
 		boolean backwards = false;
@@ -449,7 +467,9 @@ public class TileEntityAMRailCurved extends TileEntity implements ITrack {
 			} else if(numerator / denominator < -1) {
 				angle = 180;
 			}
-			if(Math.abs(angle) > (0.5 * Math.PI)) backwards = true;
+			if(Math.abs(angle) > (0.5 * Math.PI)) {
+				backwards = true;
+			}
 			if(!backwards) {
 				dir = new Vec3d(currentTP.x - lastTP.x, 0, currentTP.z - lastTP.z);
 				dir = dir.normalize().scale(speed);
