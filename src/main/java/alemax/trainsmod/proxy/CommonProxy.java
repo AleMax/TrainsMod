@@ -2,6 +2,7 @@ package alemax.trainsmod.proxy;
 
 import alemax.trainsmod.blocks.tileentities.TileEntityAMRail;
 import alemax.trainsmod.blocks.tileentities.TileEntityAMRailCurved;
+import alemax.trainsmod.blocks.tileentities.TileEntityTrackMarking;
 import alemax.trainsmod.init.CreativeTabTrainsMod;
 import alemax.trainsmod.init.ModBlocks;
 import alemax.trainsmod.init.ModEntities;
@@ -49,10 +50,11 @@ public class CommonProxy {
 	
 	@SubscribeEvent
 	public static void registerBlocks(RegistryEvent.Register<Block> event) {
+		event.getRegistry().registerAll(ModBlocks.BLOCKS.toArray(new Block[0]));
+		
 		GameRegistry.registerTileEntity(TileEntityAMRailCurved.class, new ResourceLocation(Reference.MODID, "am_rail_curved_tile_entity"));
 		GameRegistry.registerTileEntity(TileEntityAMRail.class, new ResourceLocation(Reference.MODID, "am_rail_tile_entity"));
-		
-		event.getRegistry().registerAll(ModBlocks.BLOCKS.toArray(new Block[0]));
+		GameRegistry.registerTileEntity(TileEntityTrackMarking.class, new ResourceLocation(Reference.MODID, "track_marking_tile_entity"));
 	}
 	
 	@SubscribeEvent

@@ -4,6 +4,8 @@ import org.lwjgl.input.Keyboard;
 
 import alemax.trainsmod.blocks.models.BakedModelAMRailCurved;
 import alemax.trainsmod.blocks.models.BakedModelLoader;
+import alemax.trainsmod.blocks.tileentities.TileEntityTrackMarking;
+import alemax.trainsmod.blocks.tileentities.tesr.TileEntitySpecialRendererTrackMarking;
 import alemax.trainsmod.entities.EntityBR143;
 import alemax.trainsmod.entities.EntityFreightcar;
 import alemax.trainsmod.entities.EntityICRailcar;
@@ -47,6 +49,7 @@ import net.minecraft.item.Item;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
+import net.minecraftforge.client.model.animation.AnimationTESR;
 import net.minecraftforge.client.model.obj.OBJLoader;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
@@ -98,6 +101,8 @@ public class ClientProxy extends CommonProxy {
 		ClientRegistry.registerKeyBinding(keyTrainAccelerate);
 		ClientRegistry.registerKeyBinding(keyTrainBrake);
 
+		//ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTrackMarking.class, new TileEntitySpecialRendererTrackMarking());
+		
 		
 		super.init(e);
 	}
