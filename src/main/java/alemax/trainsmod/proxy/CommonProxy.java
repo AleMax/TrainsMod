@@ -1,5 +1,8 @@
 package alemax.trainsmod.proxy;
 
+import alemax.trainsmod.blocks.BlockAMRail;
+import alemax.trainsmod.blocks.BlockAMRailCurved;
+import alemax.trainsmod.blocks.BlockTrackMarking;
 import alemax.trainsmod.blocks.tileentities.TileEntityAMRail;
 import alemax.trainsmod.blocks.tileentities.TileEntityAMRailCurved;
 import alemax.trainsmod.blocks.tileentities.TileEntityTrackMarking;
@@ -16,6 +19,7 @@ import alemax.trainsmod.networking.TrainSyncSpeedMessage;
 import alemax.trainsmod.util.Reference;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
@@ -50,7 +54,10 @@ public class CommonProxy {
 	
 	@SubscribeEvent
 	public static void registerBlocks(RegistryEvent.Register<Block> event) {
-		event.getRegistry().registerAll(ModBlocks.BLOCKS.toArray(new Block[0]));
+		//event.getRegistry().registerAll(ModBlocks.BLOCKS.toArray(new Block[0]));
+		event.getRegistry().register(new BlockAMRail());
+		event.getRegistry().register(new BlockAMRailCurved());
+		event.getRegistry().register(new BlockTrackMarking());
 		
 		GameRegistry.registerTileEntity(TileEntityAMRailCurved.class, new ResourceLocation(Reference.MODID, "am_rail_curved_tile_entity"));
 		GameRegistry.registerTileEntity(TileEntityAMRail.class, new ResourceLocation(Reference.MODID, "am_rail_tile_entity"));
@@ -60,6 +67,7 @@ public class CommonProxy {
 	@SubscribeEvent
 	public static void registerItems(RegistryEvent.Register<Item> event) {
 		event.getRegistry().registerAll(ModItems.ITEMS.toArray(new Item[0]));
+		event.getRegistry().register(new ItemBlock(ModBlocks.track_marking).setRegistryName(ModBlocks.track_marking.getRegistryName()));
 		
 	}
 	

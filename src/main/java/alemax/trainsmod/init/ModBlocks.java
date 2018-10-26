@@ -6,23 +6,23 @@ import java.util.List;
 import alemax.trainsmod.blocks.BlockAMRail;
 import alemax.trainsmod.blocks.BlockAMRailCurved;
 import alemax.trainsmod.blocks.BlockTrackMarking;
+import alemax.trainsmod.util.Reference;
 import net.minecraft.block.Block;
+import net.minecraftforge.fml.common.registry.GameRegistry.ObjectHolder;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ModBlocks {
 
+
 	public static final List<Block> BLOCKS = new ArrayList<Block>();
 	
-	public static final BlockAMRail AM_RAIL = new BlockAMRail();
-	public static final BlockAMRailCurved AM_RAIL_CURVED = new BlockAMRailCurved();
-	public static final BlockTrackMarking TRACK_MARKING = new BlockTrackMarking();
+	@ObjectHolder("trainsmod:am_rail")
+	public static final BlockAMRail am_rail = null;
+	@ObjectHolder("trainsmod:am_rail_curved")
+	public static final BlockAMRailCurved am_rail_curved = null;
+	@ObjectHolder("trainsmod:track_marking")
+	public static final BlockTrackMarking track_marking = null;
 	
-	@SideOnly(Side.CLIENT)
-	public static void initModels() {
-		AM_RAIL.initModel();
-		AM_RAIL_CURVED.initModel();
-		
-	}
 	
 }

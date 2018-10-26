@@ -5,7 +5,7 @@ import org.lwjgl.input.Keyboard;
 import alemax.trainsmod.blocks.models.BakedModelAMRailCurved;
 import alemax.trainsmod.blocks.models.BakedModelLoader;
 import alemax.trainsmod.blocks.tileentities.TileEntityTrackMarking;
-import alemax.trainsmod.blocks.tileentities.tesr.TileEntitySpecialRendererTrackMarking;
+import alemax.trainsmod.blocks.tileentities.tesr.FastTESRTrackMarking;
 import alemax.trainsmod.entities.EntityBR143;
 import alemax.trainsmod.entities.EntityFreightcar;
 import alemax.trainsmod.entities.EntityICRailcar;
@@ -101,7 +101,7 @@ public class ClientProxy extends CommonProxy {
 		ClientRegistry.registerKeyBinding(keyTrainAccelerate);
 		ClientRegistry.registerKeyBinding(keyTrainBrake);
 
-		//ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTrackMarking.class, new TileEntitySpecialRendererTrackMarking());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTrackMarking.class, new FastTESRTrackMarking());
 		
 		
 		super.init(e);
@@ -109,7 +109,9 @@ public class ClientProxy extends CommonProxy {
 	
 	@SubscribeEvent
 	public static void registerModels(ModelRegistryEvent event) {
-		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(ModBlocks.AM_RAIL), 0, new ModelResourceLocation(ModBlocks.AM_RAIL.getRegistryName(), "inventory"));
+		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(ModBlocks.am_rail), 0, new ModelResourceLocation(ModBlocks.am_rail.getRegistryName(), "inventory"));
+		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(ModBlocks.track_marking), 0, new ModelResourceLocation(ModBlocks.track_marking.getRegistryName(), "inventory"));
+		
 		
 		StateMapperBase stateMapper = new StateMapperBase() {
 			@Override
@@ -118,13 +120,16 @@ public class ClientProxy extends CommonProxy {
 			}
 		};
 		
-		ModelLoader.setCustomStateMapper(ModBlocks.AM_RAIL_CURVED, stateMapper);
+		//ModelLoader.setCustomStateMapper(ModBlocks.am_rail_curved, stateMapper);
 		
 		ModelLoader.setCustomModelResourceLocation(ModItems.item_br143, 0, new ModelResourceLocation(ModItems.item_br143.getRegistryName(), "inventory"));
 		ModelLoader.setCustomModelResourceLocation(ModItems.item_train_rotator, 0, new ModelResourceLocation(ModItems.item_train_rotator.getRegistryName(), "inventory"));
 		ModelLoader.setCustomModelResourceLocation(ModItems.item_train_starter, 0, new ModelResourceLocation(ModItems.item_train_starter.getRegistryName(), "inventory"));
 		ModelLoader.setCustomModelResourceLocation(ModItems.item_train_remover, 0, new ModelResourceLocation(ModItems.item_train_remover.getRegistryName(), "inventory"));
 		ModelLoader.setCustomModelResourceLocation(ModItems.item_train_connector, 0, new ModelResourceLocation(ModItems.item_train_connector.getRegistryName(), "inventory"));
+		
+		
+	
 	}
 	
 	@SubscribeEvent

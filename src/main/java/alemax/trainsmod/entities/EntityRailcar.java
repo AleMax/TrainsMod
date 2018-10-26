@@ -629,7 +629,7 @@ public abstract class EntityRailcar extends Entity {
 		for(; ix < ixE; ix++) {
 			for(; iz < izE; iz++) {
 				BlockPos p = new BlockPos(ix, pos.getY(), iz);
-				if(this.world.getBlockState(p).getBlock().getRegistryName().equals(ModBlocks.AM_RAIL_CURVED.getRegistryName())) {
+				if(this.world.getBlockState(p).getBlock().getRegistryName().equals(ModBlocks.am_rail_curved.getRegistryName())) {
 					TileEntityAMRailCurved te = (TileEntityAMRailCurved) this.world.getTileEntity(p);
 					Vector2d[][] allPoints = te.getAllPoints();
 					Vector2d point = allPoints[allPoints.length - 1][6];
@@ -756,7 +756,7 @@ public abstract class EntityRailcar extends Entity {
 	}
 	
 	public boolean isOnStraight() {
-		return this.world.getBlockState(railBlock).getBlock().getRegistryName().equals(ModBlocks.AM_RAIL.getRegistryName());
+		return this.world.getBlockState(railBlock).getBlock().getRegistryName().equals(ModBlocks.am_rail.getRegistryName());
 	}
 	
 	public void setBoundBox(AxisAlignedBB box) {

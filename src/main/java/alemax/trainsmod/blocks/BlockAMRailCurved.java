@@ -6,6 +6,7 @@ import alemax.trainsmod.blocks.properties.UnlistedPropertyByte;
 import alemax.trainsmod.blocks.properties.UnlistedPropertyInteger;
 import alemax.trainsmod.blocks.properties.UnlistedPropertyRailPoints;
 import alemax.trainsmod.blocks.tileentities.TileEntityAMRailCurved;
+import alemax.trainsmod.blocks.tileentities.TileEntityTrackMarking;
 import alemax.trainsmod.init.ModBlocks;
 import alemax.trainsmod.init.ModItems;
 import alemax.trainsmod.proxy.CommonProxy;
@@ -130,7 +131,7 @@ public class BlockAMRailCurved extends Block {
 					x = (long) (Math.floor(points[i * 2 + 1][6].x) + pos.getX());
 					z = (long) (Math.floor(points[i * 2 + 1][6].y) + pos.getZ());
 				}
-				worldIn.setBlockState(new BlockPos(x, y, z), ModBlocks.AM_RAIL_CURVED.getDefaultState());
+				worldIn.setBlockState(new BlockPos(x, y, z), ModBlocks.am_rail_curved.getDefaultState());
 				TileEntityAMRailCurved teN = (TileEntityAMRailCurved) worldIn.getTileEntity(new BlockPos(x, y, z));
 				Vector2d[][] newPoints = new Vector2d[steps + 1][7];
 				int dx = (int) (pos.getX() - x);
@@ -179,6 +180,7 @@ public class BlockAMRailCurved extends Block {
 	@Override
 	public TileEntity createTileEntity(World world, IBlockState state) {
 		return new TileEntityAMRailCurved();
+		//return new TileEntityTrackMarking();
 	}
 	
 	public void initModel() {

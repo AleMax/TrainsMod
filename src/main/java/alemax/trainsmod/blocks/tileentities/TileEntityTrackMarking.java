@@ -6,20 +6,16 @@ import net.minecraft.tileentity.TileEntity;
 public class TileEntityTrackMarking extends TileEntity {
 	
 	
-	int hallo = 0;
+	private int angle;
 	
-	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
-		super.writeToNBT(compound);
-		compound.setInteger("hallo", hallo);
-		
-		return compound;
+	public void increaseAngle() {
+		this.angle += 10;
+		if(this.angle >= 360) this.angle -= 360;
+		markDirty();
 	}
 	
-	@Override
-	public void readFromNBT(NBTTagCompound compound) {
-		super.readFromNBT(compound);
-		this.hallo = compound.getInteger("hallo");
+	public int getAngle() {
+		return angle;
 	}
 	
 	@Override
@@ -38,5 +34,22 @@ public class TileEntityTrackMarking extends TileEntity {
 	public void handleUpdateTag(NBTTagCompound tag) {
 		this.readFromNBT(tag);
 	}
+	
+	@Override
+	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+		super.writeToNBT(compound);
+		compound.setInteger("angle", angle);
+		
+		return compound;
+	}
+	
+	@Override
+	public void readFromNBT(NBTTagCompound compound) {
+		super.readFromNBT(compound);
+		this.angle = compound.getInteger("angle");
+	}
+	
+	
+	
 	
 }

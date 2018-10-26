@@ -36,7 +36,7 @@ public class ItemICRailcar extends Item {
 			EnumFacing facing, float hitX, float hitY, float hitZ) {
 		if(!worldIn.isRemote) {
 			//TileEntity te = worldIn.getTileEntity(pos);
-			if((worldIn.getBlockState(pos).getBlock() instanceof ITrackBlock || worldIn.getTileEntity(pos) instanceof ITrack) && !(worldIn.getBlockState(pos).getBlock().getRegistryName().equals(ModBlocks.AM_RAIL_CURVED.getRegistryName()))) {
+			if((worldIn.getBlockState(pos).getBlock() instanceof ITrackBlock || worldIn.getTileEntity(pos) instanceof ITrack) && !(worldIn.getBlockState(pos).getBlock().getRegistryName().equals(ModBlocks.am_rail_curved.getRegistryName()))) {
 				double posX = pos.getX() + 0.5;
 				double posY = pos.getY() + 0.125;
 				double posZ = pos.getZ() + 0.5;
