@@ -6,7 +6,7 @@ import alemax.trainsmod.blocks.properties.UnlistedPropertyByte;
 import alemax.trainsmod.blocks.properties.UnlistedPropertyInteger;
 import alemax.trainsmod.blocks.properties.UnlistedPropertyRailPoints;
 import alemax.trainsmod.blocks.tileentities.TileEntityAMRailCurved;
-import alemax.trainsmod.blocks.tileentities.TileEntityTrackMarking;
+import alemax.trainsmod.blocks.tileentities.TileEntityTrackMarker;
 import alemax.trainsmod.init.ModBlocks;
 import alemax.trainsmod.init.ModItems;
 import alemax.trainsmod.proxy.CommonProxy;

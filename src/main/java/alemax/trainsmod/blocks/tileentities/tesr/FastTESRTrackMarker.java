@@ -1,6 +1,6 @@
 package alemax.trainsmod.blocks.tileentities.tesr;
 
-import alemax.trainsmod.blocks.tileentities.TileEntityTrackMarking;
+import alemax.trainsmod.blocks.tileentities.TileEntityTrackMarker;
 import net.minecraft.block.BlockColored;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockModelShapes;
@@ -14,10 +14,10 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.client.model.animation.AnimationTESR;
 import net.minecraftforge.client.model.animation.FastTESR;
 
-public class FastTESRTrackMarking extends FastTESR<TileEntityTrackMarking> {
+public class FastTESRTrackMarker extends FastTESR<TileEntityTrackMarker> {
 
 	@Override
-	public void renderTileEntityFast(TileEntityTrackMarking te, double x, double y, double z, float partialTicks,
+	public void renderTileEntityFast(TileEntityTrackMarker te, double x, double y, double z, float partialTicks,
 			int destroyStage, float partial, BufferBuilder buffer) {
 
         BlockModelShapes bm = Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelShapes();

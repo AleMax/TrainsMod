@@ -1,7 +1,7 @@
 package alemax.trainsmod.blocks;
 
 import alemax.trainsmod.blocks.tileentities.TileEntityAMRail;
-import alemax.trainsmod.blocks.tileentities.TileEntityTrackMarking;
+import alemax.trainsmod.blocks.tileentities.TileEntityTrackMarker;
 import alemax.trainsmod.init.ModBlocks;
 import alemax.trainsmod.init.ModItems;
 import alemax.trainsmod.proxy.CommonProxy;

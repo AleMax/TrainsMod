@@ -3,7 +3,7 @@ package alemax.trainsmod.blocks.tileentities;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 
-public class TileEntityTrackMarking extends TileEntity {
+public class TileEntityTrackMarker extends TileEntity {
 	
 	
 	private int angle;

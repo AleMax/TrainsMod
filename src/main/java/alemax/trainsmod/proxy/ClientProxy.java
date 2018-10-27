@@ -4,8 +4,8 @@ import org.lwjgl.input.Keyboard;
 
 import alemax.trainsmod.blocks.models.BakedModelAMRailCurved;
 import alemax.trainsmod.blocks.models.BakedModelLoader;
-import alemax.trainsmod.blocks.tileentities.TileEntityTrackMarking;
-import alemax.trainsmod.blocks.tileentities.tesr.FastTESRTrackMarking;
+import alemax.trainsmod.blocks.tileentities.TileEntityTrackMarker;
+import alemax.trainsmod.blocks.tileentities.tesr.FastTESRTrackMarker;
 import alemax.trainsmod.entities.EntityBR143;
 import alemax.trainsmod.entities.EntityFreightcar;
 import alemax.trainsmod.entities.EntityICRailcar;
@@ -101,7 +101,7 @@ public class ClientProxy extends CommonProxy {
 		ClientRegistry.registerKeyBinding(keyTrainAccelerate);
 		ClientRegistry.registerKeyBinding(keyTrainBrake);
 
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTrackMarking.class, new FastTESRTrackMarking());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTrackMarker.class, new FastTESRTrackMarker());
 		
 		
 		super.init(e);
@@ -110,7 +110,7 @@ public class ClientProxy extends CommonProxy {
 	@SubscribeEvent
 	public static void registerModels(ModelRegistryEvent event) {
 		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(ModBlocks.am_rail), 0, new ModelResourceLocation(ModBlocks.am_rail.getRegistryName(), "inventory"));
-		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(ModBlocks.track_marking), 0, new ModelResourceLocation(ModBlocks.track_marking.getRegistryName(), "inventory"));
+		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(ModBlocks.track_marker), 0, new ModelResourceLocation(ModBlocks.track_marker.getRegistryName(), "inventory"));
 		
 		
 		StateMapperBase stateMapper = new StateMapperBase() {

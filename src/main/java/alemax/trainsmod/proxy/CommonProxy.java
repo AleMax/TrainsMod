@@ -1,12 +1,14 @@
 package alemax.trainsmod.proxy;
 
+import alemax.trainsmod.TrainsMod;
 import alemax.trainsmod.blocks.BlockAMRail;
 import alemax.trainsmod.blocks.BlockAMRailCurved;
-import alemax.trainsmod.blocks.BlockTrackMarking;
+import alemax.trainsmod.blocks.BlockTrackMarker;
 import alemax.trainsmod.blocks.tileentities.TileEntityAMRail;
 import alemax.trainsmod.blocks.tileentities.TileEntityAMRailCurved;
-import alemax.trainsmod.blocks.tileentities.TileEntityTrackMarking;
+import alemax.trainsmod.blocks.tileentities.TileEntityTrackMarker;
 import alemax.trainsmod.init.CreativeTabTrainsMod;
+import alemax.trainsmod.init.GuiHandler;
 import alemax.trainsmod.init.ModBlocks;
 import alemax.trainsmod.init.ModEntities;
 import alemax.trainsmod.init.ModItems;
@@ -27,6 +29,7 @@ import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import scala.tools.nsc.interpreter.Tabulator;
@@ -50,24 +53,25 @@ public class CommonProxy {
 	
 	public void init(FMLInitializationEvent e) {
 		
+		NetworkRegistry.INSTANCE.registerGuiHandler(TrainsMod.instance, new GuiHandler());
 	}
 	
 	@SubscribeEvent
 	public static void registerBlocks(RegistryEvent.Register<Block> event) {
-		//event.getRegistry().registerAll(ModBlocks.BLOCKS.toArray(new Block[0]));
+		
 		event.getRegistry().register(new BlockAMRail());
 		event.getRegistry().register(new BlockAMRailCurved());
-		event.getRegistry().register(new BlockTrackMarking());
+		event.getRegistry().register(new BlockTrackMarker());
 		
 		GameRegistry.registerTileEntity(TileEntityAMRailCurved.class, new ResourceLocation(Reference.MODID, "am_rail_curved_tile_entity"));
 		GameRegistry.registerTileEntity(TileEntityAMRail.class, new ResourceLocation(Reference.MODID, "am_rail_tile_entity"));
-		GameRegistry.registerTileEntity(TileEntityTrackMarking.class, new ResourceLocation(Reference.MODID, "track_marking_tile_entity"));
+		GameRegistry.registerTileEntity(TileEntityTrackMarker.class, new ResourceLocation(Reference.MODID, "track_marker_tile_entity"));
 	}
 	
 	@SubscribeEvent
 	public static void registerItems(RegistryEvent.Register<Item> event) {
 		event.getRegistry().registerAll(ModItems.ITEMS.toArray(new Item[0]));
-		event.getRegistry().register(new ItemBlock(ModBlocks.track_marking).setRegistryName(ModBlocks.track_marking.getRegistryName()));
+		event.getRegistry().register(new ItemBlock(ModBlocks.track_marker).setRegistryName(ModBlocks.track_marker.getRegistryName()));
 		
 	}
 	
