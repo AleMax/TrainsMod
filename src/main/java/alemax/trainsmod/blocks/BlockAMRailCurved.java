@@ -82,9 +82,7 @@ public class BlockAMRailCurved extends Block {
 	@Override
 	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer,
 			ItemStack stack) {	
-		System.out.println("ONPLACED");
 		if(placer instanceof EntityPlayer) {
-			//System.out.println("BLOCK PLACED");
 			byte comingFrom = 0;
 			byte goingTo = 1;
 			float radius = 20.5f;

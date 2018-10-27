@@ -12,7 +12,9 @@ import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -33,6 +35,17 @@ public class BlockTrackMarker extends Block {
 		return true;
 	}
 	
+	@Override
+	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer,
+			ItemStack stack) {
+		if(placer instanceof EntityPlayer) {
+			TileEntity tileEntity = worldIn.getTileEntity(pos);
+			if(tileEntity instanceof TileEntityTrackMarker) {
+				TileEntityTrackMarker teEntity = (TileEntityTrackMarker) tileEntity;
+				teEntity.setup(placer.getName());
+			}
+		}
+	}
 	
 	@Override
 	public TileEntity createTileEntity(World world, IBlockState state) {
@@ -45,9 +58,8 @@ public class BlockTrackMarker extends Block {
 		TileEntity te = worldIn.getTileEntity(pos);
 		if(te instanceof TileEntityTrackMarker) {
 			if(worldIn.isRemote) {
-				playerIn.openGui(TrainsMod.instance, GuiHandler.TRACK_MARKER, worldIn, playerIn.getPosition().getX(), playerIn.getPosition().getY(), playerIn.getPosition().getZ());
+				playerIn.openGui(TrainsMod.instance, GuiHandler.TRACK_MARKER, worldIn, pos.getX(), pos.getY(), pos.getZ());
 			}
-			((TileEntityTrackMarker) te).increaseAngle();
 		}
 		return true;
 	}
