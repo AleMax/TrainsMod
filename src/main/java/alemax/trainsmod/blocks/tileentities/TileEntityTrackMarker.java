@@ -7,8 +7,8 @@ import net.minecraft.tileentity.TileEntity;
 public class TileEntityTrackMarker extends TileEntity {
 	
 	private String channel;
-	private int angle;
-	private int height;
+	private float angle;
+	private byte height;
 	private TrackType trackType;
 	
 	public void setup(String channel) {
@@ -18,11 +18,18 @@ public class TileEntityTrackMarker extends TileEntity {
 		this.trackType = TrackType.CONCRETE;
 	}
 	
+	public void set(String channel, float angle, byte height, TrackType trackType) {
+		this.channel = channel;
+		this.angle = angle;
+		this.height = height;
+		this.trackType = trackType;
+	}
+	
 	public String getChannel() {
 		return channel;
 	}
 	
-	public int getAngle() {
+	public float getAngle() {
 		return angle;
 	}
 	
@@ -55,8 +62,8 @@ public class TileEntityTrackMarker extends TileEntity {
 	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		super.writeToNBT(compound);
 		compound.setString("channel", channel);
-		compound.setInteger("angle", angle);
-		compound.setInteger("height", height);
+		compound.setFloat("angle", angle);
+		compound.setByte("height", height);
 		compound.setByte("trackType", (byte) trackType.ordinal());
 		
 		return compound;
@@ -66,8 +73,8 @@ public class TileEntityTrackMarker extends TileEntity {
 	public void readFromNBT(NBTTagCompound compound) {
 		super.readFromNBT(compound);
 		this.channel = compound.getString("channel");
-		this.angle = compound.getInteger("angle");
-		this.height = compound.getInteger("height");
+		this.angle = compound.getFloat("angle");
+		this.height = compound.getByte("height");
 		byte trackTypeIndex = compound.getByte("trackType");
 		if(trackTypeIndex < 0 || trackTypeIndex > TrackType.values.length - 1) trackTypeIndex = 0;
 		this.trackType = TrackType.values[trackTypeIndex];

@@ -9,6 +9,9 @@ import org.lwjgl.util.Color;
 import com.google.common.base.Predicate;
 
 import alemax.trainsmod.blocks.tileentities.TileEntityTrackMarker;
+import alemax.trainsmod.networking.GUITrackMarkerSaveMessageClient;
+import alemax.trainsmod.networking.GUITrackMarkerSaveMessageServer;
+import alemax.trainsmod.networking.PacketHandler;
 import alemax.trainsmod.util.TrackType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
@@ -31,6 +34,7 @@ public class GUITrackMarker extends GuiScreen {
 	GuiSlider sliderHeight;
 	GuiButton buttonTrackType;
 	GuiButton buttonRailSnap;
+	GuiButton buttonMarkerSnap;
 	GuiButton buttonPreview;
 	GuiButton buttonBuild;
 	
@@ -45,11 +49,12 @@ public class GUITrackMarker extends GuiScreen {
 			tileEntity = (TileEntityTrackMarker) te;
 			this.trackType = tileEntity.getTrackType();
 			this.trackTypeText = getTrackTypeString();
+			this.trackType = ((TileEntityTrackMarker) te).getTrackType();
+			this.trackTypeText = getTrackTypeString();
 		} else {
 			closeGui();
 		}
-		this.trackType = TrackType.CONCRETE;
-		this.trackTypeText = getTrackTypeString();
+		
 	}
 
 	@Override
@@ -76,7 +81,7 @@ public class GUITrackMarker extends GuiScreen {
 		textFieldChannel = new GuiTextField(componentID++, this.fontRenderer, width / 2 - 65, height / 2 - 95, 200, 20);
 		textFieldChannel.setText(tileEntity.getChannel());
 		
-		int startAngle = tileEntity.getAngle();
+		float startAngle = tileEntity.getAngle();
 		if(startAngle < 0) startAngle = 0;
 		else if(startAngle > 179) startAngle = 179;
 		
@@ -95,6 +100,9 @@ public class GUITrackMarker extends GuiScreen {
 		
 		buttonRailSnap = new GuiButton(componentID++, width / 2 - 135, height / 2 + 05, 100, 20, "Snap to Rail");
 		buttonList.add(buttonRailSnap);
+		
+		buttonMarkerSnap = new GuiButton(componentID++, width / 2 - 15, height / 2 + 05, 100, 20, "Snap to Marker");
+		buttonList.add(buttonMarkerSnap);
 		
 		buttonPreview = new GuiButton(componentID++, width / 2 - 135, height / 2 + 40, 100, 20, "Preview");
 		buttonList.add(buttonPreview);
@@ -160,7 +168,7 @@ public class GUITrackMarker extends GuiScreen {
 		KeyBinding keyUse = Minecraft.getMinecraft().gameSettings.keyBindInventory;
 		keyUse.getKeyCode();
 		
-		if(keyCode == 1 || keyCode == keyUse.getKeyCode()) {
+		if(keyCode == 1 || (keyCode == keyUse.getKeyCode() && !textFieldChannel.isFocused())) {
 			updateTileEntity();
 			closeGui();
 		}
@@ -174,7 +182,8 @@ public class GUITrackMarker extends GuiScreen {
     }
 	
 	private void updateTileEntity() {
-		
+		PacketHandler.INSTANCE.sendToAll(new GUITrackMarkerSaveMessageClient(textFieldChannel.getText(), (float) sliderAngle.getValue(), (byte) Math.round(sliderHeight.getValue()), trackType, tileEntity.getPos().getX(), tileEntity.getPos().getY(), tileEntity.getPos().getZ()));
+		PacketHandler.INSTANCE.sendToServer(new GUITrackMarkerSaveMessageServer(textFieldChannel.getText(), (float) sliderAngle.getValue(), (byte) Math.round(sliderHeight.getValue()), trackType, tileEntity.getPos().getX(), tileEntity.getPos().getY(), tileEntity.getPos().getZ()));
 	}
 	
 	private void closeGui() {
