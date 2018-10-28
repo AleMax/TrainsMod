@@ -1,8 +1,13 @@
 package alemax.trainsmod.blocks.tileentities;
 
+import alemax.trainsmod.TrainsMod;
 import alemax.trainsmod.util.TrackType;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.ChunkPos;
+import net.minecraftforge.common.ForgeChunkManager;
+import net.minecraftforge.common.ForgeChunkManager.Ticket;
+import net.minecraftforge.common.ForgeChunkManager.Type;
 
 public class TileEntityTrackMarker extends TileEntity {
 	
@@ -10,12 +15,33 @@ public class TileEntityTrackMarker extends TileEntity {
 	private float angle;
 	private byte height;
 	private TrackType trackType;
+	private Ticket chunkLoaderTicket;
 	
 	public void setup(String channel) {
 		this.channel = channel;
 		this.angle = 0;
 		this.height = 5;
 		this.trackType = TrackType.CONCRETE;
+		markDirty();
+	}
+	
+	public void setTicket(Ticket chunkLoaderTicket) {
+		this.chunkLoaderTicket = chunkLoaderTicket;
+		ChunkPos pos = new ChunkPos(getPos());
+		ForgeChunkManager.forceChunk(chunkLoaderTicket, new ChunkPos(getPos()));
+		System.out.println("FORCE_CHUNK");
+	}
+	
+	public void unloadChunk() {
+		if(chunkLoaderTicket != null) {
+			ForgeChunkManager.unforceChunk(chunkLoaderTicket, new ChunkPos(getPos()));
+			ForgeChunkManager.releaseTicket(chunkLoaderTicket);
+			System.out.println("UNFORCE_CHUNK");
+		}
+	}
+	
+	public Ticket getChunkLoaderTicket() {
+		return chunkLoaderTicket;
 	}
 	
 	public void set(String channel, float angle, byte height, TrackType trackType) {
@@ -23,7 +49,17 @@ public class TileEntityTrackMarker extends TileEntity {
 		this.angle = angle;
 		this.height = height;
 		this.trackType = trackType;
+		markDirty();
 	}
+	
+	@Override
+	public void onLoad() {
+		if(!this.world.isRemote) {
+			setTicket(ForgeChunkManager.requestTicket(TrainsMod.instance, this.world, Type.NORMAL));
+		}
+	}
+	
+	
 	
 	public String getChannel() {
 		return channel;
@@ -61,6 +97,7 @@ public class TileEntityTrackMarker extends TileEntity {
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		super.writeToNBT(compound);
+		if(channel == null) channel = "";
 		compound.setString("channel", channel);
 		compound.setFloat("angle", angle);
 		compound.setByte("height", height);
@@ -78,6 +115,7 @@ public class TileEntityTrackMarker extends TileEntity {
 		byte trackTypeIndex = compound.getByte("trackType");
 		if(trackTypeIndex < 0 || trackTypeIndex > TrackType.values.length - 1) trackTypeIndex = 0;
 		this.trackType = TrackType.values[trackTypeIndex];
+		
 	}
 	
 	

@@ -1,5 +1,7 @@
 package alemax.trainsmod.proxy;
 
+import java.util.List;
+
 import alemax.trainsmod.TrainsMod;
 import alemax.trainsmod.blocks.BlockAMRail;
 import alemax.trainsmod.blocks.BlockAMRailCurved;
@@ -24,9 +26,12 @@ import alemax.trainsmod.util.Reference;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -83,6 +88,19 @@ public class CommonProxy {
 		
 	}
 	
-	
+	@SubscribeEvent
+	public static void worldUnloadEvent(WorldEvent.Unload event) {
+		World world = event.getWorld();
+		if(!world.isRemote) {
+			List<TileEntity> tileEntities = world.loadedTileEntityList;
+			for(TileEntity te : tileEntities) {
+				if(te instanceof TileEntityTrackMarker) {
+					if(((TileEntityTrackMarker) te).getChunkLoaderTicket() != null) {
+						((TileEntityTrackMarker) te).unloadChunk();
+					}
+				}
+			}
+		}
+	}
 
 }

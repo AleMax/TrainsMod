@@ -46,32 +46,4 @@ public class TrainsMod {
 		ForgeChunkManager.setForcedChunkLoadingCallback(instance, new ChunkLoadingCallback());
 	}
 	
-	public static void forceChunkLoad(World w, ChunkPos pos) {
-		System.out.println(ticketList.size());
-		if(!ticketList.containsKey(pos)) {
-			if(chunkLoaderTicket == null) {
-				chunkLoaderTicket = ForgeChunkManager.requestTicket(instance, w, Type.NORMAL);
-			}
-			ticketList.put(pos, 1);
-			ForgeChunkManager.forceChunk(chunkLoaderTicket, pos);
-		}
-		else {
-			ticketList.put(pos, ticketList.get(pos)+1);
-		}
-	}
-	
-	public static void releaseChunkLoad(World w, ChunkPos pos) {
-		if(!ticketList.containsKey(pos) || chunkLoaderTicket == null) {
-			return;
-		}
-		else {
-			int num = ticketList.get(pos)-1;
-			if(num > 0)
-				ticketList.put(pos, num);
-			else
-				ForgeChunkManager.unforceChunk(chunkLoaderTicket, pos);
-		}
-	}
-	
-	
 }

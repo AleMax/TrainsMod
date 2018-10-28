@@ -20,6 +20,8 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeChunkManager;
+import net.minecraftforge.common.ForgeChunkManager.Type;
 
 public class BlockTrackMarker extends Block {
 
@@ -41,9 +43,18 @@ public class BlockTrackMarker extends Block {
 		if(placer instanceof EntityPlayer) {
 			TileEntity tileEntity = worldIn.getTileEntity(pos);
 			if(tileEntity instanceof TileEntityTrackMarker) {
-				TileEntityTrackMarker teEntity = (TileEntityTrackMarker) tileEntity;
-				teEntity.setup(placer.getName());
+				TileEntityTrackMarker te = (TileEntityTrackMarker) tileEntity;
+				te.setup(placer.getName());
 			}
+		}
+	}
+	
+	@Override
+	public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
+		TileEntity tileEntity = worldIn.getTileEntity(pos);
+		if(tileEntity instanceof TileEntityTrackMarker) {
+			TileEntityTrackMarker te = (TileEntityTrackMarker) tileEntity;
+			te.unloadChunk();
 		}
 	}
 	

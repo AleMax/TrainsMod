@@ -1,8 +1,10 @@
 package alemax.trainsmod.proxy;
 
+import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 
 @EventBusSubscriber(Side.SERVER)
@@ -20,10 +22,6 @@ public class ServerProxy extends CommonProxy {
 		super.init(e);
 	}
 	
-	/*
-	public WorldClient getClientWorld() throws Exception {
-		throw new Exception();
-	}
-	*/
+	
 	
 }

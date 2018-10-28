@@ -23,6 +23,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.StringUtils;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.fml.client.config.GuiCheckBox;
 import net.minecraftforge.fml.client.config.GuiSlider;
 import scala.swing.event.Key;
@@ -42,7 +43,7 @@ public class GUITrackMarker extends GuiScreen {
 	TrackType trackType;
 	String trackTypeText;
 	
-
+	
 	public GUITrackMarker(World world, int posX, int posY, int posZ) {
 		TileEntity te = world.getTileEntity(new BlockPos(posX, posY, posZ));
 		if(te instanceof TileEntityTrackMarker) {
