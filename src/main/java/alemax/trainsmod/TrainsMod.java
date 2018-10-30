@@ -32,6 +32,7 @@ public class TrainsMod {
 	
 	@EventHandler
 	public static void preInit(FMLPreInitializationEvent event) {
+		World.MAX_ENTITY_RADIUS = Math.max(World.MAX_ENTITY_RADIUS, 32);
 		proxy.preInit(event);
 	}
 	
