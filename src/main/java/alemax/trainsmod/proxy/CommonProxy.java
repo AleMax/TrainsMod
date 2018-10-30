@@ -16,6 +16,8 @@ import alemax.trainsmod.init.ModEntities;
 import alemax.trainsmod.init.ModItems;
 import alemax.trainsmod.networking.GUITrackMarkerSaveMessageClient;
 import alemax.trainsmod.networking.GUITrackMarkerSaveMessageServer;
+import alemax.trainsmod.networking.GUITrackMarkerSyncMessageClient;
+import alemax.trainsmod.networking.GUITrackMarkerSyncMessageServer;
 import alemax.trainsmod.networking.PacketHandler;
 import alemax.trainsmod.networking.TrainClientKeysSendMessage;
 import alemax.trainsmod.networking.TrainKeysSendMessage;
@@ -56,7 +58,9 @@ public class CommonProxy {
 		PacketHandler.INSTANCE.registerMessage(TrainClientKeysSendMessage.TrainClientKeysSendMessageHandler.class, TrainClientKeysSendMessage.class, id++, Side.CLIENT);
 		PacketHandler.INSTANCE.registerMessage(GUITrackMarkerSaveMessageClient.GUITrackMarkerSaveMessageClientHandler.class, GUITrackMarkerSaveMessageClient.class, id++, Side.CLIENT);
 		PacketHandler.INSTANCE.registerMessage(GUITrackMarkerSaveMessageServer.GUITrackMarkerSaveMessageServerHandler.class, GUITrackMarkerSaveMessageServer.class, id++, Side.SERVER);
-	
+		PacketHandler.INSTANCE.registerMessage(GUITrackMarkerSyncMessageClient.GUITrackMarkerSyncMessageClientHandler.class, GUITrackMarkerSyncMessageClient.class, id++, Side.CLIENT);
+		PacketHandler.INSTANCE.registerMessage(GUITrackMarkerSyncMessageServer.GUITrackMarkerSyncMessageServerHandler.class, GUITrackMarkerSyncMessageServer.class, id++, Side.SERVER);
+		
 	}
 	
 	public void init(FMLInitializationEvent e) {
@@ -86,21 +90,6 @@ public class CommonProxy {
 	@SubscribeEvent
 	public static void EntityJoinWorldEvent(EntityJoinWorldEvent event) {
 		
-	}
-	
-	@SubscribeEvent
-	public static void worldUnloadEvent(WorldEvent.Unload event) {
-		World world = event.getWorld();
-		if(!world.isRemote) {
-			List<TileEntity> tileEntities = world.loadedTileEntityList;
-			for(TileEntity te : tileEntities) {
-				if(te instanceof TileEntityTrackMarker) {
-					if(((TileEntityTrackMarker) te).getChunkLoaderTicket() != null) {
-						((TileEntityTrackMarker) te).unloadChunk();
-					}
-				}
-			}
-		}
 	}
 
 }

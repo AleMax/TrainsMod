@@ -11,6 +11,8 @@ import com.google.common.base.Predicate;
 import alemax.trainsmod.blocks.tileentities.TileEntityTrackMarker;
 import alemax.trainsmod.networking.GUITrackMarkerSaveMessageClient;
 import alemax.trainsmod.networking.GUITrackMarkerSaveMessageServer;
+import alemax.trainsmod.networking.GUITrackMarkerSyncMessageClient;
+import alemax.trainsmod.networking.GUITrackMarkerSyncMessageServer;
 import alemax.trainsmod.networking.PacketHandler;
 import alemax.trainsmod.util.TrackType;
 import net.minecraft.client.Minecraft;
@@ -183,8 +185,10 @@ public class GUITrackMarker extends GuiScreen {
     }
 	
 	private void updateTileEntity() {
-		PacketHandler.INSTANCE.sendToAll(new GUITrackMarkerSaveMessageClient(textFieldChannel.getText(), (float) sliderAngle.getValue(), (byte) Math.round(sliderHeight.getValue()), trackType, tileEntity.getPos().getX(), tileEntity.getPos().getY(), tileEntity.getPos().getZ()));
-		PacketHandler.INSTANCE.sendToServer(new GUITrackMarkerSaveMessageServer(textFieldChannel.getText(), (float) sliderAngle.getValue(), (byte) Math.round(sliderHeight.getValue()), trackType, tileEntity.getPos().getX(), tileEntity.getPos().getY(), tileEntity.getPos().getZ()));
+		PacketHandler.INSTANCE.sendToAll(new GUITrackMarkerSaveMessageClient(textFieldChannel.getText(), (float) sliderAngle.getValue(), (byte) Math.round(sliderHeight.getValue()), tileEntity.getPos().getX(), tileEntity.getPos().getY(), tileEntity.getPos().getZ()));
+		PacketHandler.INSTANCE.sendToServer(new GUITrackMarkerSaveMessageServer(textFieldChannel.getText(), (float) sliderAngle.getValue(), (byte) Math.round(sliderHeight.getValue()), tileEntity.getPos().getX(), tileEntity.getPos().getY(), tileEntity.getPos().getZ()));
+		PacketHandler.INSTANCE.sendToAll(new GUITrackMarkerSyncMessageClient(textFieldChannel.getText(), trackType));
+		PacketHandler.INSTANCE.sendToServer(new GUITrackMarkerSyncMessageServer(textFieldChannel.getText(), trackType));
 	}
 	
 	private void closeGui() {

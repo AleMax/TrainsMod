@@ -1,5 +1,7 @@
 package alemax.trainsmod.networking;
 
+import java.util.List;
+
 import com.google.common.base.Charsets;
 
 import alemax.trainsmod.blocks.tileentities.TileEntityTrackMarker;
@@ -17,26 +19,18 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
-public class GUITrackMarkerSaveMessageServer implements IMessage {
+public class GUITrackMarkerSyncMessageServer implements IMessage {
 	
 	private String channel;
 	private int channelLength;
-	private float angle;
-	private byte height;
-	private int posX;
-	private int posY;
-	private int posZ;
+	private TrackType trackType;
 	
-	public GUITrackMarkerSaveMessageServer() {}
+	public GUITrackMarkerSyncMessageServer() {}
 	
-    public GUITrackMarkerSaveMessageServer(String channel, float angle, byte height, int posX, int posY, int posZ) {
+    public GUITrackMarkerSyncMessageServer(String channel, TrackType trackType) {
 		this.channel = channel;
 		this.channelLength = channel.length();
-		this.angle = angle;
-		this.height = height;
-		this.posX = posX;
-		this.posY = posY;
-		this.posZ = posZ;
+		this.trackType = trackType;
 	}
 	
 	@Override
@@ -45,11 +39,7 @@ public class GUITrackMarkerSaveMessageServer implements IMessage {
 		for(int i = 0; i < channelLength; i++) {
 			buf.writeChar(channel.charAt(i));
 		}
-		buf.writeFloat(angle);
-		buf.writeByte(height);
-		buf.writeInt(posX);
-		buf.writeInt(posY);
-		buf.writeInt(posZ);
+		buf.writeByte((byte) trackType.ordinal());
 	}
 	
 	
@@ -60,27 +50,31 @@ public class GUITrackMarkerSaveMessageServer implements IMessage {
 		for(int i = 0; i < this.channelLength; i++) {
 			this.channel += buf.readChar();
 		}
-		this.angle = buf.readFloat();
-		this.height = buf.readByte();
-		this.posX = buf.readInt();
-		this.posY = buf.readInt();
-		this.posZ = buf.readInt();
+		this.trackType = TrackType.values[buf.readByte()];
 	}
 	
-	public static class GUITrackMarkerSaveMessageServerHandler implements IMessageHandler<GUITrackMarkerSaveMessageServer, IMessage> {
+	public static class GUITrackMarkerSyncMessageServerHandler implements IMessageHandler<GUITrackMarkerSyncMessageServer, IMessage> {
 
 		@Override
-		public IMessage onMessage(GUITrackMarkerSaveMessageServer message, MessageContext ctx) {
+		public IMessage onMessage(GUITrackMarkerSyncMessageServer message, MessageContext ctx) {
 			try {
 				
 				EntityPlayerMP serverPlayer = ctx.getServerHandler().player;
 				WorldServer world = serverPlayer.getServerWorld();
 				
 				world.addScheduledTask(() -> {
-			    	TileEntity tileEntity = world.getTileEntity(new BlockPos(message.posX, message.posY, message.posZ));
-			    	if(tileEntity instanceof TileEntityTrackMarker) {
-			    		((TileEntityTrackMarker) tileEntity).set(message.channel, message.angle, message.height);
-			    	}
+					List<TileEntity> tileEntities = world.loadedTileEntityList;
+					for(TileEntity te : tileEntities) {
+						if(te instanceof TileEntityTrackMarker) {
+							if(((TileEntityTrackMarker) te).getChannel().equalsIgnoreCase(message.channel)) {
+								((TileEntityTrackMarker) te).setTrackType(message.trackType);
+							}
+						}
+					}
+			    	//TileEntity tileEntity = world.getTileEntity(new BlockPos(message.posX, message.posY, message.posZ));
+			    	//if(tileEntity instanceof TileEntityTrackMarker) {
+			    		//((TileEntityTrackMarker) tileEntity).set(message.channel, message.angle, message.height, message.trackType);
+			    	//}
 			    });
 				
 				return null;

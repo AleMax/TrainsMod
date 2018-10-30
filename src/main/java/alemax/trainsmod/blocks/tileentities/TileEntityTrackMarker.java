@@ -29,14 +29,12 @@ public class TileEntityTrackMarker extends TileEntity {
 		this.chunkLoaderTicket = chunkLoaderTicket;
 		ChunkPos pos = new ChunkPos(getPos());
 		ForgeChunkManager.forceChunk(chunkLoaderTicket, new ChunkPos(getPos()));
-		System.out.println("FORCE_CHUNK");
 	}
 	
 	public void unloadChunk() {
 		if(chunkLoaderTicket != null) {
 			ForgeChunkManager.unforceChunk(chunkLoaderTicket, new ChunkPos(getPos()));
 			ForgeChunkManager.releaseTicket(chunkLoaderTicket);
-			System.out.println("UNFORCE_CHUNK");
 		}
 	}
 	
@@ -44,12 +42,15 @@ public class TileEntityTrackMarker extends TileEntity {
 		return chunkLoaderTicket;
 	}
 	
-	public void set(String channel, float angle, byte height, TrackType trackType) {
+	public void set(String channel, float angle, byte height) {
 		this.channel = channel;
 		this.angle = angle;
 		this.height = height;
-		this.trackType = trackType;
 		markDirty();
+	}
+	
+	public void setTrackType(TrackType trackType) {
+		this.trackType = trackType;
 	}
 	
 	@Override
