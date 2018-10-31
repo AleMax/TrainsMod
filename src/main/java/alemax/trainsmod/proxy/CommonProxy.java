@@ -19,6 +19,7 @@ import alemax.trainsmod.networking.GUITrackMarkerSaveMessageServer;
 import alemax.trainsmod.networking.GUITrackMarkerSyncMessageClient;
 import alemax.trainsmod.networking.GUITrackMarkerSyncMessageServer;
 import alemax.trainsmod.networking.PacketHandler;
+import alemax.trainsmod.networking.TrackBuildMessage;
 import alemax.trainsmod.networking.TrainClientKeysSendMessage;
 import alemax.trainsmod.networking.TrainKeysSendMessage;
 import alemax.trainsmod.networking.TrainPassengerSyncMessage;
@@ -60,6 +61,7 @@ public class CommonProxy {
 		PacketHandler.INSTANCE.registerMessage(GUITrackMarkerSaveMessageServer.GUITrackMarkerSaveMessageServerHandler.class, GUITrackMarkerSaveMessageServer.class, id++, Side.SERVER);
 		PacketHandler.INSTANCE.registerMessage(GUITrackMarkerSyncMessageClient.GUITrackMarkerSyncMessageClientHandler.class, GUITrackMarkerSyncMessageClient.class, id++, Side.CLIENT);
 		PacketHandler.INSTANCE.registerMessage(GUITrackMarkerSyncMessageServer.GUITrackMarkerSyncMessageServerHandler.class, GUITrackMarkerSyncMessageServer.class, id++, Side.SERVER);
+		PacketHandler.INSTANCE.registerMessage(TrackBuildMessage.TrackBuildMessageHandler.class, TrackBuildMessage.class, id++, Side.SERVER);
 		
 	}
 	

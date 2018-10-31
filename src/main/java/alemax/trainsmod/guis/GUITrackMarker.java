@@ -1,6 +1,7 @@
 package alemax.trainsmod.guis;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.annotation.Nullable;
 
@@ -14,6 +15,7 @@ import alemax.trainsmod.networking.GUITrackMarkerSaveMessageServer;
 import alemax.trainsmod.networking.GUITrackMarkerSyncMessageClient;
 import alemax.trainsmod.networking.GUITrackMarkerSyncMessageServer;
 import alemax.trainsmod.networking.PacketHandler;
+import alemax.trainsmod.networking.TrackBuildMessage;
 import alemax.trainsmod.util.TrackType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
@@ -26,6 +28,7 @@ import net.minecraft.util.StringUtils;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeChunkManager;
+import net.minecraftforge.event.terraingen.BiomeEvent.GetWaterColor;
 import net.minecraftforge.fml.client.config.GuiCheckBox;
 import net.minecraftforge.fml.client.config.GuiSlider;
 import scala.swing.event.Key;
@@ -139,6 +142,9 @@ public class GUITrackMarker extends GuiScreen {
 				this.buttonTrackType.displayString = trackTypeText;
 				break;
 			}
+		} else if(button == buttonBuild) {
+			updateTileEntity();
+			PacketHandler.INSTANCE.sendToServer(new TrackBuildMessage(tileEntity.getPos().getX(), tileEntity.getPos().getY(), tileEntity.getPos().getZ()));
 		}
 	}
 	

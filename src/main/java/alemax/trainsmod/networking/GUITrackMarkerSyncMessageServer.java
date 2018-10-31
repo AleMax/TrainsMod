@@ -21,6 +21,9 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 public class GUITrackMarkerSyncMessageServer implements IMessage {
 	
+	private int posX;
+	private int posY;
+	private int posZ;
 	private String channel;
 	private int channelLength;
 	private TrackType trackType;
