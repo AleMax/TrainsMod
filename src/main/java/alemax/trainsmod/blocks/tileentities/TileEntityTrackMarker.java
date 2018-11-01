@@ -17,6 +17,8 @@ import net.minecraftforge.common.ForgeChunkManager.Type;
 
 public class TileEntityTrackMarker extends TileEntity {
 	
+	private static double CIRCLE_INCREMENT_STEPS = 0.01;
+	
 	private String channel;
 	private float angle;
 	private byte height;
@@ -92,8 +94,41 @@ public class TileEntityTrackMarker extends TileEntity {
 	private void calculateTrack(TileEntityTrackMarker otherTileEntity, double distance) {
 		synchronizeAngle(otherTileEntity, distance);
 		otherTileEntity.synchronizeAngle(this, distance);
-		byte side = checkSide(otherTileEntity, distance);
-		System.out.println(side);
+		byte firstSide = checkSide(otherTileEntity, distance);
+		byte secondSide = otherTileEntity.checkSide(this, distance);
+
+		
+		if(firstSide < 0 && secondSide < 0 || firstSide > 0 && secondSide > 0) {
+			float radius = 0;
+			float circleMiddleDistance = (float) distance;
+			
+			Vector2d firstSideVector = getLeftRightVector(firstSide);
+			Vector2d secondSideVector = otherTileEntity.getLeftRightVector(secondSide);
+			Vector2d firstMiddlePoint = new Vector2d(getPos().getX(), getPos().getZ());
+			Vector2d secondMiddlePoint = new Vector2d(otherTileEntity.getPos().getX(), otherTileEntity.getPos().getZ());
+			
+			while(2 * radius < circleMiddleDistance) {
+				radius += CIRCLE_INCREMENT_STEPS;
+				firstMiddlePoint.add(firstSideVector);
+				secondMiddlePoint.add(secondSideVector);
+				circleMiddleDistance = (float) Math.sqrt(Math.pow(secondMiddlePoint.x - firstMiddlePoint.x, 2) + Math.pow(secondMiddlePoint.y - firstMiddlePoint.y, 2));
+			}
+			double firstAngle = getAngleBetween(firstMiddlePoint, secondMiddlePoint);
+			double secondAngle = otherTileEntity.getAngleBetween(secondMiddlePoint, firstMiddlePoint);
+			
+			double firstLength = radius * firstAngle;
+			double secondLength = radius * secondAngle;
+			double addedLength = firstLength + secondLength;
+			double scaleFactor = addedLength / Math.round(addedLength);
+			double firstScaled = firstLength / scaleFactor - 0.5;
+			double secondScaled = secondLength / scaleFactor - 0.5;
+			int firstSteps = (int) Math.round(Math.floor(firstScaled));
+			int secondSteps = (int) Math.round(Math.floor(secondScaled));
+			
+			System.out.println(firstScaled);
+			System.out.println(secondScaled);
+
+		}
 	}
 	
 	private byte checkSide(TileEntityTrackMarker otherTileEntity, double distance) {
@@ -123,6 +158,22 @@ public class TileEntityTrackMarker extends TileEntity {
 		} else {
 			this.realAngle = this.angle;
 		}
+	}
+	
+	private Vector2d getLeftRightVector(byte direction) {
+		if(direction == 0) return new Vector2d();
+		Vector2d line1_2 = new Vector2d(-Math.sin(Math.toRadians(this.realAngle)), Math.cos(Math.toRadians(this.realAngle)));
+		Vector2d directionVec = new Vector2d(line1_2.y, -line1_2.x);
+		directionVec.normalize();
+		directionVec.scale(CIRCLE_INCREMENT_STEPS);
+		if(direction == 1) directionVec.scale(-1);
+		return directionVec;
+	}
+	
+	private double getAngleBetween(Vector2d thistMiddlePoint, Vector2d otherdMiddlePoint) {
+		Vector2d middleLine = new Vector2d(otherdMiddlePoint.x - thistMiddlePoint.x, otherdMiddlePoint.y - thistMiddlePoint.y);
+		Vector2d lineToTE = new Vector2d(this.getPos().getX() - thistMiddlePoint.x, this.getPos().getZ() - thistMiddlePoint.y);
+		return middleLine.angle(lineToTE);
 	}
 	
 	@Override
