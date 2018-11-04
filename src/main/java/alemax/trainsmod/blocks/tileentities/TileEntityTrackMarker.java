@@ -92,8 +92,8 @@ public class TileEntityTrackMarker extends TileEntity {
 	}
 	
 	private void calculateTrack(TileEntityTrackMarker otherTileEntity, double distance) {
-		synchronizeAngle(otherTileEntity, distance);
-		otherTileEntity.synchronizeAngle(this, distance);
+		synchronizeAngle(otherTileEntity);
+		otherTileEntity.synchronizeAngle(this);
 		byte firstSide = checkSide(otherTileEntity, distance);
 		byte secondSide = otherTileEntity.checkSide(this, distance);
 
@@ -104,8 +104,8 @@ public class TileEntityTrackMarker extends TileEntity {
 			
 			Vector2d firstSideVector = getLeftRightVector(firstSide);
 			Vector2d secondSideVector = otherTileEntity.getLeftRightVector(secondSide);
-			Vector2d firstMiddlePoint = new Vector2d(getPos().getX(), getPos().getZ());
-			Vector2d secondMiddlePoint = new Vector2d(otherTileEntity.getPos().getX(), otherTileEntity.getPos().getZ());
+			Vector2d firstMiddlePoint = new Vector2d(getPos().getX() + 0.5, getPos().getZ() + 0.5);
+			Vector2d secondMiddlePoint = new Vector2d(otherTileEntity.getPos().getX() + 0.5, otherTileEntity.getPos().getZ() + 0.5);
 			
 			while(2 * radius < circleMiddleDistance) {
 				radius += CIRCLE_INCREMENT_STEPS;
@@ -125,20 +125,77 @@ public class TileEntityTrackMarker extends TileEntity {
 			int firstSteps = (int) Math.round(Math.floor(firstScaled));
 			int secondSteps = (int) Math.round(Math.floor(secondScaled));
 			
-			System.out.println(firstScaled);
-			System.out.println(secondScaled);
-
+			if(Math.abs(firstScaled - Math.round(firstScaled)) < 0.001 && Math.abs(secondScaled - Math.round(secondScaled)) < 0.001) { //FIX IT (10.5, 10.5)
+				firstSteps = (int) Math.round(firstScaled);
+				secondSteps = (int) (Math.round(secondScaled) - 1);
+			}
+			
+			double firstAngleToLastPoint = 0;
+			double secondAngleToLastPoint = 0;
+			if(firstSide > 0) {
+				firstAngleToLastPoint = getAngleBetweenPoints(firstMiddlePoint, new Vector2d(getPos().getX() + 0.5, getPos().getZ() + 0.5)) + ((firstSteps + 0.5) * scaleFactor) / firstLength * Math.toDegrees(firstAngle);
+				double x = getAngleBetweenPoints(firstMiddlePoint, new Vector2d(getPos().getX() + 0.5, getPos().getZ() + 0.5));
+				double y = ((firstSteps + 0.5) * scaleFactor) / firstLength * Math.toDegrees(firstAngle);
+				secondAngleToLastPoint = getAngleBetweenPoints(secondMiddlePoint, new Vector2d(otherTileEntity.getPos().getX() + 0.5, otherTileEntity.getPos().getZ() + 0.5)) + ((secondSteps + 0.5) * scaleFactor) / secondLength * Math.toDegrees(secondAngle);
+				
+			} else {
+				firstAngleToLastPoint = getAngleBetweenPoints(firstMiddlePoint, new Vector2d(getPos().getX() + 0.5, getPos().getZ() + 0.5)) - ((firstSteps + 0.5) * scaleFactor) / firstLength * Math.toDegrees(firstAngle);
+				secondAngleToLastPoint = getAngleBetweenPoints(secondMiddlePoint, new Vector2d(otherTileEntity.getPos().getX() + 0.5, otherTileEntity.getPos().getZ() + 0.5)) - ((secondSteps + 0.5) * scaleFactor) / secondLength * Math.toDegrees(secondAngle);
+			}
+			if(firstAngleToLastPoint < 0) firstAngleToLastPoint += 360;
+			else if(firstAngleToLastPoint > 360) firstAngleToLastPoint -= 360;
+			
+			if(secondAngleToLastPoint < 0) secondAngleToLastPoint += 360;
+			else if(secondAngleToLastPoint > 360) secondAngleToLastPoint -= 360;
+			
+			Vector2d firstLastPoint = new Vector2d(-Math.sin(Math.toRadians(firstAngleToLastPoint)) * radius, Math.cos(Math.toRadians(firstAngleToLastPoint)) * radius);
+			Vector2d secondLastPoint = new Vector2d(-Math.sin(Math.toRadians(secondAngleToLastPoint)) * radius, Math.cos(Math.toRadians(secondAngleToLastPoint)) * radius);
+			
+			double firstAngleDifference = Math.toDegrees(firstLastPoint.angle(new Vector2d(pos.getX() + 0.5 - firstMiddlePoint.x, pos.getZ() + 0.5 - firstMiddlePoint.y)));
+			double secondAngleDifference = Math.toDegrees(secondLastPoint.angle(new Vector2d(otherTileEntity.pos.getX() + 0.5 - secondMiddlePoint.x, otherTileEntity.pos.getZ() + 0.5 - secondMiddlePoint.y)));
+			
+			double fad = this.realAngle - getAngleBetweenPoints(new Vector2d(firstLastPoint.x + firstMiddlePoint.x, firstLastPoint.y + firstMiddlePoint.y), new Vector2d(secondLastPoint.x + secondMiddlePoint.x, secondLastPoint.y + secondMiddlePoint.y));
+			fad = Math.abs(fad);
+			if(fad > 180) fad = 360 - fad;
+			
+			double sad = otherTileEntity.realAngle -  getAngleBetweenPoints(new Vector2d(secondLastPoint.x + secondMiddlePoint.x, secondLastPoint.y + secondMiddlePoint.y), new Vector2d(firstLastPoint.x + firstMiddlePoint.x, firstLastPoint.y + firstMiddlePoint.y));
+			sad = Math.abs(sad);
+			if(sad > 180) sad = 360 - sad;
+			
+			Vector2d currentPoint = new Vector2d(-Math.sin(Math.toRadians(this.realAngle)) * 0.5 * scaleFactor, Math.cos(Math.toRadians(this.realAngle)) * 0.5 * scaleFactor);
+			Vector2d aimedPoint = new Vector2d(firstMiddlePoint.x - pos.getX() + 0.5 + firstLastPoint.x, firstMiddlePoint.y - pos.getZ() + 0.5 + firstLastPoint.y);
+			double currentAngle = this.realAngle;
+			double angleSteps = firstAngleDifference / (firstSteps + 1);
+			
+			for(int i = 0; i < firstSteps; i++) {
+				
+			}
+			
+			System.out.println(firstAngleDifference);
+			System.out.println(fad);
+			System.out.println(sad);
+			System.out.println((firstLastPoint.x + firstMiddlePoint.x) + "\t" + (firstLastPoint.y + firstMiddlePoint.y));
+			System.out.println((secondLastPoint.x + secondMiddlePoint.x) + "\t" + (secondLastPoint.y + secondMiddlePoint.y));
 		}
+	}
+	
+	private double getAngleBetweenPoints(Vector2d firstPoint, Vector2d secondPoint) {
+		Vector2d direction = new Vector2d(secondPoint.x - firstPoint.x, secondPoint.y - firstPoint.y);
+		double angle = Math.toDegrees(direction.angle(new Vector2d(0,1)));
+		double angleTo90 = (float) Math.toDegrees(direction.angle(new Vector2d(-1, 0)));
+		
+		if(angleTo90 > 90) angle = 360 - angle;
+		return angle;
 	}
 	
 	private byte checkSide(TileEntityTrackMarker otherTileEntity, double distance) {
 		//Setup all points
-		Vector2d linePoint1 = new Vector2d(getPos().getX(), getPos().getZ());
+		Vector2d linePoint1 = new Vector2d(getPos().getX() + 0.5, getPos().getZ() + 0.5);
 		Vector2d line1_2 = new Vector2d(-distance * Math.sin(Math.toRadians(this.realAngle)), distance * Math.cos(Math.toRadians(this.realAngle)));
 		Vector2d linePoint2 = new Vector2d(linePoint1);
 		linePoint2.add(line1_2);
 		Vector2d leftPoint = new Vector2d(linePoint1.x + line1_2.y, linePoint1.y - line1_2.x);
-		Vector2d point = new Vector2d(otherTileEntity.getPos().getX(), otherTileEntity.getPos().getZ());
+		Vector2d point = new Vector2d(otherTileEntity.getPos().getX() + 0.5, otherTileEntity.getPos().getZ() + 0.5);
 		
 		//Calculate the real stuff
 		double sidePoint = (point.x - linePoint1.x) * (linePoint2.y - linePoint1.y) - (point.y - linePoint1.y) * (linePoint2.x - linePoint1.x); //Formula to compute the side of a point apparently
@@ -151,13 +208,16 @@ public class TileEntityTrackMarker extends TileEntity {
 		return 0;
 	}
 	
-	private void synchronizeAngle(TileEntityTrackMarker otherTileEntity, double distance) {
-		float angle = (float) Math.toDegrees(Math.acos((otherTileEntity.getPos().getZ() - getPos().getZ()) / distance));
-		if(Math.abs(this.angle - angle) > 90) {
-			this.realAngle = (this.angle + 180) % 360;
-		} else {
+	private void synchronizeAngle(TileEntityTrackMarker otherTileEntity) {
+		Vector2d teVector = new Vector2d(-Math.sin(Math.toRadians(this.angle)), Math.cos(Math.toRadians(this.angle)));
+		Vector2d otherTeVector = new Vector2d(otherTileEntity.pos.getX() - pos.getX(), otherTileEntity.pos.getZ() - pos.getZ());
+		
+		if(Math.toDegrees(teVector.angle(otherTeVector)) < 90) {
 			this.realAngle = this.angle;
+		} else {
+			this.realAngle = (this.angle + 180) % 360;
 		}
+		
 	}
 	
 	private Vector2d getLeftRightVector(byte direction) {
@@ -170,9 +230,9 @@ public class TileEntityTrackMarker extends TileEntity {
 		return directionVec;
 	}
 	
-	private double getAngleBetween(Vector2d thistMiddlePoint, Vector2d otherdMiddlePoint) {
-		Vector2d middleLine = new Vector2d(otherdMiddlePoint.x - thistMiddlePoint.x, otherdMiddlePoint.y - thistMiddlePoint.y);
-		Vector2d lineToTE = new Vector2d(this.getPos().getX() - thistMiddlePoint.x, this.getPos().getZ() - thistMiddlePoint.y);
+	private double getAngleBetween(Vector2d thisMiddlePoint, Vector2d otherMiddlePoint) {
+		Vector2d middleLine = new Vector2d(otherMiddlePoint.x - thisMiddlePoint.x, otherMiddlePoint.y - thisMiddlePoint.y);
+		Vector2d lineToTE = new Vector2d(this.getPos().getX() + 0.5 - thisMiddlePoint.x, this.getPos().getZ() + 0.5 - thisMiddlePoint.y);
 		return middleLine.angle(lineToTE);
 	}
 	
