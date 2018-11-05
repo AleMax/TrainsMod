@@ -162,20 +162,79 @@ public class TileEntityTrackMarker extends TileEntity {
 			sad = Math.abs(sad);
 			if(sad > 180) sad = 360 - sad;
 			
-			Vector2d currentPoint = new Vector2d(-Math.sin(Math.toRadians(this.realAngle)) * 0.5 * scaleFactor, Math.cos(Math.toRadians(this.realAngle)) * 0.5 * scaleFactor);
-			Vector2d aimedPoint = new Vector2d(firstMiddlePoint.x - pos.getX() + 0.5 + firstLastPoint.x, firstMiddlePoint.y - pos.getZ() + 0.5 + firstLastPoint.y);
-			double currentAngle = this.realAngle;
-			double angleSteps = firstAngleDifference / (firstSteps + 1);
+			ArrayList<Vector2d> firstPoints = new ArrayList<>();
+			ArrayList<Vector2d> secondPoints = new ArrayList<>();
 			
+			Vector2d currentPoint = new Vector2d(-Math.sin(Math.toRadians(this.realAngle)) * 0.5 * scaleFactor, Math.cos(Math.toRadians(this.realAngle)) * 0.5 * scaleFactor);
+			Vector2d aimedPoint = new Vector2d(firstMiddlePoint.x - (pos.getX() + 0.5) + firstLastPoint.x, firstMiddlePoint.y - (pos.getZ() + 0.5) + firstLastPoint.y);
+			double currentAngle = this.realAngle;
+			double angleSteps = fad / (firstSteps + 1);
+			byte incrementFactor = 1;
+			
+			if(firstSide < 0) incrementFactor = -1;
+			
+			firstPoints.add(new Vector2d(currentPoint));
 			for(int i = 0; i < firstSteps; i++) {
+				currentAngle = currentAngle + (incrementFactor * angleSteps);
+				currentPoint.x += (- Math.sin(Math.toRadians(currentAngle)));
+				currentPoint.y += Math.cos(Math.toRadians(currentAngle));
 				
+				firstPoints.add(new Vector2d(currentPoint));
 			}
 			
+			double xScale = aimedPoint.x / currentPoint.x;
+			double yScale = aimedPoint.y / currentPoint.y;
+			
+			for(int i = 0; i < firstPoints.size(); i++) {
+				firstPoints.get(i).x *= xScale;
+				firstPoints.get(i).y *= yScale;
+			}
+			
+			currentPoint = new Vector2d(-Math.sin(Math.toRadians(otherTileEntity.realAngle)) * 0.5 * scaleFactor, Math.cos(Math.toRadians(otherTileEntity.realAngle)) * 0.5 * scaleFactor);
+			aimedPoint = new Vector2d(secondMiddlePoint.x - (otherTileEntity.pos.getX() + 0.5) + secondLastPoint.x, secondMiddlePoint.y - (otherTileEntity.pos.getZ() + 0.5) + secondLastPoint.y);
+			currentAngle = otherTileEntity.realAngle;
+			angleSteps = sad / (secondSteps + 1);
+			
+			secondPoints.add(new Vector2d(currentPoint));
+			for(int i = 0; i < secondSteps; i++) {
+				currentAngle = currentAngle + (incrementFactor * angleSteps);
+				currentPoint.x += (- Math.sin(Math.toRadians(currentAngle)));
+				currentPoint.y += Math.cos(Math.toRadians(currentAngle));
+				
+				secondPoints.add(new Vector2d(currentPoint));
+			}
+			
+			xScale = aimedPoint.x / currentPoint.x;
+			yScale = aimedPoint.y / currentPoint.y;
+			
+			for(int i = 0; i < firstPoints.size(); i++) {
+				secondPoints.get(i).x *= xScale;
+				secondPoints.get(i).y *= yScale;
+			}
+			
+			ArrayList<Vector2d> finalPoints = new ArrayList<>();
+			finalPoints.add(new Vector2d(this.pos.getX() + 0.5, this.pos.getZ() + 0.5));
+			for(int i = 0; i < firstPoints.size(); i++) {
+				finalPoints.add(new Vector2d(this.pos.getX() + 0.5 + firstPoints.get(i).x, this.pos.getZ() + 0.5 + firstPoints.get(i).y));
+			}
+			
+			for(int i = secondPoints.size() - 1; i > -1; i--) {
+				finalPoints.add(new Vector2d(otherTileEntity.pos.getX() + 0.5 + secondPoints.get(i).x, otherTileEntity.pos.getZ() + 0.5 + secondPoints.get(i).y));
+			}
+			finalPoints.add(new Vector2d(otherTileEntity.pos.getX() + 0.5, otherTileEntity.pos.getZ() + 0.5));
+			
+			for(int i = 0; i < finalPoints.size(); i++) {
+				System.out.println(finalPoints.get(i).x + "\t" + finalPoints.get(i).y);
+			}
+			
+			System.out.println("smth lol FJIAH");
+			/*
 			System.out.println(firstAngleDifference);
 			System.out.println(fad);
 			System.out.println(sad);
 			System.out.println((firstLastPoint.x + firstMiddlePoint.x) + "\t" + (firstLastPoint.y + firstMiddlePoint.y));
 			System.out.println((secondLastPoint.x + secondMiddlePoint.x) + "\t" + (secondLastPoint.y + secondMiddlePoint.y));
+			*/
 		}
 	}
 	
