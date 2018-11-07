@@ -80,7 +80,10 @@ public class TileEntityTrackMarker extends TileEntity {
 			TileEntity tileEntity = foundTileEntities.get(0);
 			double distance = Math.sqrt(Math.pow(tileEntity.getPos().getX() - getPos().getX(), 2) + Math.pow(tileEntity.getPos().getZ() - getPos().getZ(), 2));
 			if(distance > 1.9) {
-				calculateTrack((TileEntityTrackMarker) tileEntity, distance);
+				List<Vector2d> points = calculateTrack((TileEntityTrackMarker) tileEntity, distance);
+				
+				
+				
 			} else {
 				System.out.println("TO CLOSE TO EACH OTHER");
 				//error message
@@ -247,16 +250,156 @@ public class TileEntityTrackMarker extends TileEntity {
 				if(alpha < 0) alpha += 360;
 				
 				double radius = Math.cos(Math.toRadians(alpha)) * firstDistance / (1 - Math.sin(Math.toRadians(alpha)));
+				sideVector.normalize();
+				Vector2d middlePoint = new Vector2d(this.pos.getX() + 0.5 + sideVector.x * radius, this.pos.getZ() + 0.5 + sideVector.y * radius);
+				Vector2d perp = getPerpendicularPoint(new Vector2d(otherTileEntity.pos.getX() + 0.5, otherTileEntity.pos.getZ() + 0.5), new Vector2d(otherTileEntity.pos.getX() + 0.5 - Math.sin(Math.toRadians(otherTileEntity.realAngle)), otherTileEntity.pos.getZ() + 0.5 + Math.cos(Math.toRadians(otherTileEntity.realAngle))), middlePoint);
 				
+				double angleDifference = this.realAngle - (otherTileEntity.realAngle + 180) % 360;
+				angleDifference = Math.abs(angleDifference);
+				if(angleDifference > 180) angleDifference = 360 - angleDifference;
 				
+				double circleLength = 2 * radius * Math.PI * angleDifference / 360.0;
+				double scaleFactor = circleLength / Math.round(circleLength);
+				double circleScaled = circleLength / scaleFactor - 0.5;
+				int circleSteps = (int) Math.round(Math.floor(circleScaled));
 				
+				Vector2d currentPoint = new Vector2d(-Math.sin(Math.toRadians(this.realAngle)) * 0.5 * scaleFactor, Math.cos(Math.toRadians(this.realAngle)) * 0.5 * scaleFactor);
+				Vector2d aimedPoint = new Vector2d(perp.x - (this.pos.getX()), perp.y - (this.pos.getZ()));
+				double currentAngle = this.realAngle;
+				double angleSteps = angleDifference / (circleSteps + 1);
+				byte incrementFactor = 1;
+				
+				ArrayList<Vector2d> circlePoints = new ArrayList<Vector2d>();
+				
+				if(firstSide < 0) incrementFactor = -1;
+				
+				circlePoints.add(new Vector2d(currentPoint));
+				for(int i = 0; i < circleSteps; i++) {
+					currentAngle = currentAngle + (incrementFactor * angleSteps);
+					currentPoint.x += (- Math.sin(Math.toRadians(currentAngle)));
+					currentPoint.y += Math.cos(Math.toRadians(currentAngle));
+					
+					circlePoints.add(new Vector2d(currentPoint));
+				}
+				
+				double xScale = aimedPoint.x / currentPoint.x;
+				double yScale = aimedPoint.y / currentPoint.y;
+				
+				for(int i = 0; i < circlePoints.size(); i++) {
+					circlePoints.get(i).x *= xScale;
+					circlePoints.get(i).y *= yScale;
+				}
+				
+				ArrayList<Vector2d> linePoints = new ArrayList<>();
+				
+				int steps = (int) Math.round(secondDistance);
+				if(steps == 0) steps = 1;
+				Vector2d lineDirection = new Vector2d(otherTileEntity.pos.getX() + 0.5 - intersect.x, otherTileEntity.pos.getZ() + 0.5 - intersect.y);
+				lineDirection.scale(1.0 / steps);
+				for(int i = 1; i < steps + 1; i++) {
+					linePoints.add(new Vector2d(intersect.x + (lineDirection.x * i), intersect.y + (lineDirection.y * i)));
+				}
+				
+				ArrayList<Vector2d> finalPoints = new ArrayList<>();
+				finalPoints.add(new Vector2d(this.pos.getX() + 0.5, this.pos.getZ() + 0.5));
+				for(int i = 0; i < circlePoints.size(); i++) {
+					finalPoints.add(new Vector2d(this.pos.getX() + 0.5 + circlePoints.get(i).x, this.pos.getZ() + 0.5 + circlePoints.get(i).y));
+				}
+				
+				for(int i = 0; i < linePoints.size(); i++) {
+					finalPoints.add(new Vector2d(linePoints.get(i).x,linePoints.get(i).y));
+				}
+				
+				return finalPoints;	
+			} else {
+				Vector2d sideVector = otherTileEntity.getLeftRightVector(secondSide);
+				Vector2d otherLineVector = new Vector2d(Math.sin(Math.toRadians(this.realAngle)), -Math.cos(Math.toRadians(this.realAngle)));
+				double alpha = 0;
+				if(firstSide < 1) alpha = getCounterClockwiseAngle(otherLineVector, sideVector);
+				else alpha = getCounterClockwiseAngle(sideVector, otherLineVector);
+				alpha *= -1;
+				if(alpha < 0) alpha += 360;
+				
+				double radius = Math.cos(Math.toRadians(alpha)) * secondDistance / (1 - Math.sin(Math.toRadians(alpha)));
+				sideVector.normalize();
+				Vector2d middlePoint = new Vector2d(otherTileEntity.pos.getX() + 0.5 + sideVector.x * radius, otherTileEntity.pos.getZ() + 0.5 + sideVector.y * radius);
+				Vector2d perp = getPerpendicularPoint(new Vector2d(this.pos.getX() + 0.5, this.pos.getZ() + 0.5), new Vector2d(this.pos.getX() + 0.5 - Math.sin(Math.toRadians(this.realAngle)), this.pos.getZ() + 0.5 + Math.cos(Math.toRadians(this.realAngle))), middlePoint);
+				
+				double angleDifference = otherTileEntity.realAngle - (this.realAngle + 180) % 360;
+				angleDifference = Math.abs(angleDifference);
+				if(angleDifference > 180) angleDifference = 360 - angleDifference;
+				
+				double circleLength = 2 * radius * Math.PI * angleDifference / 360.0;
+				double scaleFactor = circleLength / Math.round(circleLength);
+				double circleScaled = circleLength / scaleFactor - 0.5;
+				int circleSteps = (int) Math.round(Math.floor(circleScaled));
+				
+				Vector2d currentPoint = new Vector2d(-Math.sin(Math.toRadians(otherTileEntity.realAngle)) * 0.5 * scaleFactor, Math.cos(Math.toRadians(otherTileEntity.realAngle)) * 0.5 * scaleFactor);
+				Vector2d aimedPoint = new Vector2d(perp.x - (otherTileEntity.pos.getX()), perp.y - (otherTileEntity.pos.getZ()));
+				double currentAngle = otherTileEntity.realAngle;
+				double angleSteps = angleDifference / (circleSteps + 1);
+				byte incrementFactor = 1;
+				
+				ArrayList<Vector2d> circlePoints = new ArrayList<Vector2d>();
+				
+				if(secondSide < 0) incrementFactor = -1;
+				
+				circlePoints.add(new Vector2d(currentPoint));
+				for(int i = 0; i < circleSteps; i++) {
+					currentAngle = currentAngle + (incrementFactor * angleSteps);
+					currentPoint.x += (- Math.sin(Math.toRadians(currentAngle)));
+					currentPoint.y += Math.cos(Math.toRadians(currentAngle));
+					
+					circlePoints.add(new Vector2d(currentPoint));
+				}
+				
+				double xScale = aimedPoint.x / currentPoint.x;
+				double yScale = aimedPoint.y / currentPoint.y;
+				
+				for(int i = 0; i < circlePoints.size(); i++) {
+					circlePoints.get(i).x *= xScale;
+					circlePoints.get(i).y *= yScale;
+				}
+				
+				ArrayList<Vector2d> linePoints = new ArrayList<>();
+				
+				int steps = (int) Math.round(firstDistance);
+				if(steps == 0) steps = 1;
+				Vector2d lineDirection = new Vector2d(this.pos.getX() + 0.5 - intersect.x, this.pos.getZ() + 0.5 - intersect.y);
+				lineDirection.scale(1.0 / steps);
+				for(int i = 1; i < steps + 1; i++) {
+					linePoints.add(new Vector2d(intersect.x + (lineDirection.x * i), intersect.y + (lineDirection.y * i)));
+				}
+				
+				ArrayList<Vector2d> finalPoints = new ArrayList<>();
+				finalPoints.add(new Vector2d(this.pos.getX() + 0.5, this.pos.getZ() + 0.5));
+				for(int i = 0; i < circlePoints.size(); i++) {
+					finalPoints.add(new Vector2d(this.pos.getX() + 0.5 + circlePoints.get(i).x, this.pos.getZ() + 0.5 + circlePoints.get(i).y));
+				}
+				
+				for(int i = 0; i < linePoints.size(); i++) {
+					finalPoints.add(new Vector2d(linePoints.get(i).x, linePoints.get(i).y));
+				}
+				
+				ArrayList<Vector2d> flippedFinalPoints = new ArrayList<>();
+				
+				for(int i = finalPoints.size() - 1; i > -1; i--) {
+					flippedFinalPoints.add(finalPoints.get(i));
+				}
+				
+				return flippedFinalPoints;	
 			}
 			
-			
-			return null;
 		}
 		
 		
+	}
+	
+	private Vector2d getPerpendicularPoint(Vector2d linePoint1, Vector2d linePoint2, Vector2d point) {
+		double k = ((linePoint2.y - linePoint1.y) * (point.x - linePoint1.x) - (linePoint2.x - linePoint1.x) * (point.y - linePoint1.y)) / (Math.pow(linePoint2.y - linePoint1.y, 2) + Math.pow(linePoint2.x - linePoint1.x, 2));
+		double x = point.x - k * (linePoint2.y - linePoint1.y);
+		double y = point.y + k * (linePoint2.x - linePoint1.x);
+		return new Vector2d(x, y);
 	}
 	
 	private double getCounterClockwiseAngle(Vector2d firstVector, Vector2d secondVector) {
