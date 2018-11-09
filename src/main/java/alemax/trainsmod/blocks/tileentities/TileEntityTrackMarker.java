@@ -484,6 +484,22 @@ public class TileEntityTrackMarker extends TileEntity {
 		return middleLine.angle(lineToTE);
 	}
 	
+	private List<Vector2d> getLeftRightPoints(List<Vector2d> points, double direction) {
+		
+	}
+	
+	private Vector2d getLeftRightPoint(Vector2d[] point, double direction) {
+		if(point.length == 3) {
+			Vector2d ab = new Vector2d(point[0].x - point[1].x, point[0].y - point[1].y);
+			Vector2d bc = new Vector2d(point[2].x - point[1].x, point[2].y - point[1].y);
+			double angleDifference = getCounterClockwiseAngle(ab, bc);
+			double angle = getAngleBetweenPoints(point[1], point[0]);
+			double newAngle = angle + (angleDifference / 2.0);
+			return new Vector2d(point[1].x - Math.sin(Math.toRadians(newAngle)) * direction, point[1].y + Math.cos(Math.toRadians(newAngle)) * direction);
+		}
+		return null;
+	}
+	
 	@Override
 	public void onLoad() {
 		if(!this.world.isRemote) {
