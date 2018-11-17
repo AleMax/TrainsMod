@@ -15,6 +15,7 @@ public class BlockTrack extends Block {
 		super(Material.IRON);
 		setUnlocalizedName(Reference.MODID + ".track");
 		setRegistryName("track");
+		//If you now thought i seriously added it you are funny
 	}
 	
 	@Override
