@@ -7,6 +7,7 @@ import javax.vecmath.Vector2d;
 import javax.vecmath.Vector3d;
 
 import alemax.trainsmod.TrainsMod;
+import alemax.trainsmod.init.ModBlocks;
 import alemax.trainsmod.util.TrackType;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
@@ -92,9 +93,7 @@ public class TileEntityTrackMarker extends TileEntity {
 				//System.out.println(nextPoints.size());
 				
 				for(int i = 0; i < points.size(); i++) {
-					this.world.setBlockState(new BlockPos(nextPoints[i].x, nextPoints[i].y, nextPoints[i].z), Blocks.DIAMOND_BLOCK.getDefaultState());
-					this.world.setBlockState(new BlockPos(next2Points[i].x, next2Points[i].y, next2Points[i].z), Blocks.DIAMOND_BLOCK.getDefaultState());
-					this.world.setBlockState(new BlockPos(points3d[i].x, points3d[i].y, points3d[i].z), Blocks.COAL_BLOCK.getDefaultState());
+					this.world.setBlockState(new BlockPos(points3d[i].x, points3d[i].y, points3d[i].z), ModBlocks.track.getDefaultState());
 				}
 				
 			} else {

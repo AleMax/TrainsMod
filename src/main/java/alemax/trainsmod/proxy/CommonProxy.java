@@ -5,9 +5,11 @@ import java.util.List;
 import alemax.trainsmod.TrainsMod;
 import alemax.trainsmod.blocks.BlockAMRail;
 import alemax.trainsmod.blocks.BlockAMRailCurved;
+import alemax.trainsmod.blocks.BlockTrack;
 import alemax.trainsmod.blocks.BlockTrackMarker;
 import alemax.trainsmod.blocks.tileentities.TileEntityAMRail;
 import alemax.trainsmod.blocks.tileentities.TileEntityAMRailCurved;
+import alemax.trainsmod.blocks.tileentities.TileEntityTrack;
 import alemax.trainsmod.blocks.tileentities.TileEntityTrackMarker;
 import alemax.trainsmod.init.CreativeTabTrainsMod;
 import alemax.trainsmod.init.GuiHandler;
@@ -76,10 +78,12 @@ public class CommonProxy {
 		event.getRegistry().register(new BlockAMRail());
 		event.getRegistry().register(new BlockAMRailCurved());
 		event.getRegistry().register(new BlockTrackMarker());
+		event.getRegistry().register(new BlockTrack());
 		
 		GameRegistry.registerTileEntity(TileEntityAMRailCurved.class, new ResourceLocation(Reference.MODID, "am_rail_curved_tile_entity"));
 		GameRegistry.registerTileEntity(TileEntityAMRail.class, new ResourceLocation(Reference.MODID, "am_rail_tile_entity"));
 		GameRegistry.registerTileEntity(TileEntityTrackMarker.class, new ResourceLocation(Reference.MODID, "track_marker_tile_entity"));
+		GameRegistry.registerTileEntity(TileEntityTrack.class, new ResourceLocation(Reference.MODID, "track_tile_entity"));
 	}
 	
 	@SubscribeEvent

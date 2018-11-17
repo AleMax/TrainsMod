@@ -41,7 +41,6 @@ public class BlockAMRail extends Block implements ITrackBlock {
 		setRegistryName("am_rail");
 		setCreativeTab(CommonProxy.tab_trainsmod);
 		setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.EAST));
-		ModBlocks.BLOCKS.add(this);
 		ModItems.ITEMS.add(new ItemBlock(this).setRegistryName(this.getRegistryName()));
 	}
 	
