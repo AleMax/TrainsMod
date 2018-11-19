@@ -14,6 +14,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
+import net.minecraft.util.math.Vec3i;
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.ForgeChunkManager.Ticket;
 import net.minecraftforge.common.ForgeChunkManager.Type;
@@ -86,14 +87,67 @@ public class TileEntityTrackMarker extends TileEntity {
 				List<Vector2d> points = calculateTrack((TileEntityTrackMarker) tileEntity, distance);
 				Vector3d[] points3d = getPointsWithHeight(points, (TileEntityTrackMarker) tileEntity);
 				
-				Vector3d[] nextPoints = getLeftRightPoints(points3d, 1);
-				Vector3d[] next2Points = getLeftRightPoints(points3d, -1);
+				Vector3d[] rightPoints = getLeftRightPoints(points3d, 1.45);
+				Vector3d[] leftPoints = getLeftRightPoints(points3d, -1.45);
 				
-				//System.out.println(points.size());
-				//System.out.println(nextPoints.size());
+				ArrayList<BlockPos> trackPositions = new ArrayList<BlockPos>();
 				
-				for(int i = 0; i < points.size(); i++) {
-					this.world.setBlockState(new BlockPos(points3d[i].x, points3d[i].y, points3d[i].z), ModBlocks.track.getDefaultState());
+				for(int i = 0; i < rightPoints.length - 1; i++) {
+					double maxX = -Double.MAX_VALUE;
+					double minX = Double.MAX_VALUE;
+					double maxZ = -Double.MAX_VALUE;
+					double minZ = Double.MAX_VALUE;
+					if(rightPoints[i].x > maxX) maxX = rightPoints[i].x;
+					if(rightPoints[i].x < minX) minX = rightPoints[i].x;
+					if(rightPoints[i].z > maxZ) maxZ = rightPoints[i].z;
+					if(rightPoints[i].z < minZ) minZ = rightPoints[i].z;
+					if(rightPoints[i+1].x > maxX) maxX = rightPoints[i+1].x;
+					if(rightPoints[i+1].x < minX) minX = rightPoints[i+1].x;
+					if(rightPoints[i+1].z > maxZ) maxZ = rightPoints[i+1].z;
+					if(rightPoints[i+1].z < minZ) minZ = rightPoints[i+1].z;
+					if(leftPoints[i].x > maxX) maxX = leftPoints[i].x;
+					if(leftPoints[i].x < minX) minX = leftPoints[i].x;
+					if(leftPoints[i].z > maxZ) maxZ = leftPoints[i].z;
+					if(leftPoints[i].z < minZ) minZ = leftPoints[i].z;
+					if(leftPoints[i+1].x > maxX) maxX = leftPoints[i+1].x;
+					if(leftPoints[i+1].x < minX) minX = leftPoints[i+1].x;
+					if(leftPoints[i+1].z > maxZ) maxZ = leftPoints[i+1].z;
+					if(leftPoints[i+1].z < minZ) minZ = leftPoints[i+1].z;
+					
+					int maxXInt = (int) Math.round(Math.ceil(maxX));
+					int minXInt = (int) Math.round(Math.floor(minX));
+					int maxZInt = (int) Math.round(Math.ceil(maxZ));
+					int minZInt = (int) Math.round(Math.floor(minZ));
+					
+					ArrayList<Vec3i> eligibleList = new ArrayList<Vec3i>();
+					
+					for(int ix = minXInt; ix < maxXInt + 1; ix++) {
+						for(int iz = minZInt; iz < maxZInt + 1; iz++) {
+							boolean inner = true;
+							if(checkSide(rightPoints[i], rightPoints[i + 1], new Vector2d(ix, iz)) > 0) {
+								inner = false;
+							}
+							else if(checkSide(rightPoints[i + 1], leftPoints[i + 1], new Vector2d(ix, iz)) > 0) inner = false;
+							else if(checkSide(leftPoints[i + 1], leftPoints[i], new Vector2d(ix, iz)) > 0) inner = false;
+							else if(checkSide(leftPoints[i], rightPoints[i], new Vector2d(ix, iz)) > 0) inner = false;
+							else if(inner) eligibleList.add(new Vec3i(ix, 0, iz));
+							System.out.println("-------------");
+						}
+					}
+					
+					System.out.println(eligibleList.size());
+					
+					for(int j = 0; j < eligibleList.size(); j++) {
+						addToBlockList(trackPositions, eligibleList.get(j), points3d);
+						addToBlockList(trackPositions, new Vec3i(eligibleList.get(j).getX() - 1, 0, eligibleList.get(j).getZ()), points3d);
+						addToBlockList(trackPositions, new Vec3i(eligibleList.get(j).getX(), 0, eligibleList.get(j).getZ() - 1), points3d);
+						addToBlockList(trackPositions, new Vec3i(eligibleList.get(j).getX() - 1, 0, eligibleList.get(j).getZ() - 1), points3d);
+					}
+					
+				}
+				
+				for(int i = 0; i < trackPositions.size(); i++) {
+					this.world.setBlockState(trackPositions.get(i), ModBlocks.track.getDefaultState());
 				}
 				
 			} else {
@@ -104,6 +158,26 @@ public class TileEntityTrackMarker extends TileEntity {
 			System.out.println("NO 2 MARKERS");
 			//error message
 		}
+	}
+	
+	private void addToBlockList(ArrayList<BlockPos> trackPositions, Vec3i pos, Vector3d[] points3d) {
+		for(BlockPos currentPos : trackPositions) {
+			if(pos.getX() == currentPos.getX() && pos.getZ() == currentPos.getZ()) {
+				return;
+			}
+		}
+		double nearestDistance = Double.MAX_VALUE;
+		double nearestHeight = 0;
+		for(Vector3d point : points3d) {
+			double dis = Math.sqrt(Math.pow(point.x - pos.getX(), 2) + Math.pow(point.z - pos.getZ(), 2));
+			if(dis < nearestDistance) {
+				nearestDistance = dis;
+				nearestHeight = point.y;
+			}
+		}
+		trackPositions.add(new BlockPos(pos.getX(), nearestHeight, pos.getZ()));
+		if(nearestHeight % 1 < (3.0 / 16.0)) trackPositions.add(new BlockPos(pos.getX(), nearestHeight - 1, pos.getZ()));
+		
 	}
 	
 	private Vector3d[] getPointsWithHeight(List<Vector2d> points2d, TileEntityTrackMarker otherTileEntity) {
@@ -453,8 +527,10 @@ public class TileEntityTrackMarker extends TileEntity {
 	
 	private double getCounterClockwiseAngle(Vector2d firstVector, Vector2d secondVector) {
 		double dot = firstVector.x * secondVector.x + firstVector.y * secondVector.y;     
-		double det = firstVector.x * secondVector.y - firstVector.y * secondVector.x; 
-		return Math.toDegrees(Math.atan2(det, dot));
+		double det = firstVector.x * secondVector.y - firstVector.y * secondVector.x;
+		double angle = Math.toDegrees(Math.atan2(det, dot));
+		if(angle < 0) angle += 360;
+		return angle;
 	}
 	
 	private Vector2d getLineIntersection(Vector2d pointA, Vector2d pointB, Vector2d pointC, Vector2d pointD) { 
@@ -502,6 +578,28 @@ public class TileEntityTrackMarker extends TileEntity {
 		if(sidePoint > 0.001 && sideLeft < 0) return 1;
 		if(sidePoint < -0.001 && sideLeft > 0) return 1;
 		if(sidePoint > 0.001 && sideLeft > 0) return -1;
+		return 0;
+	}
+	
+	private byte checkSide(Vector3d firstPoint, Vector3d secondPoint, Vector2d point) {
+		//Setup all points
+		Vector2d line1_2 = new Vector2d(secondPoint.x - firstPoint.x, secondPoint.z - firstPoint.z);
+		Vector2d leftPoint = new Vector2d(firstPoint.x + line1_2.y, firstPoint.z - line1_2.x);
+		
+		//Calculate the real stuff
+		double sidePoint = (point.x - firstPoint.x) * (secondPoint.z - firstPoint.z) - (point.y - firstPoint.z) * (secondPoint.x - firstPoint.x); //Formula to compute the side of a point apparently
+		double sideLeft = (leftPoint.x - firstPoint.x) * (secondPoint.z - firstPoint.z) - (leftPoint.y - firstPoint.z) * (secondPoint.x - firstPoint.x);
+		
+		if(sidePoint < -0.001 && sideLeft < 0) System.out.println("Left");
+		if(sidePoint > 0.001 && sideLeft < 0) System.out.println("Right");
+		if(sidePoint < -0.001 && sideLeft > 0) System.out.println("Right");
+		if(sidePoint > 0.001 && sideLeft > 0) System.out.println("Left");
+		
+		if(sidePoint < -0.001 && sideLeft < 0) return -1;
+		if(sidePoint > 0.001 && sideLeft < 0) return 1;
+		if(sidePoint < -0.001 && sideLeft > 0) return 1;
+		if(sidePoint > 0.001 && sideLeft > 0) return -1;
+		System.out.println("Straight");
 		return 0;
 	}
 	
