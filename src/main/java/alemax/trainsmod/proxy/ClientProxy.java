@@ -4,6 +4,7 @@ import org.lwjgl.input.Keyboard;
 
 import alemax.trainsmod.blocks.models.BakedModelAMRailCurved;
 import alemax.trainsmod.blocks.models.BakedModelLoader;
+import alemax.trainsmod.blocks.models.BakedModelTrack;
 import alemax.trainsmod.blocks.tileentities.TileEntityTrackMarker;
 import alemax.trainsmod.blocks.tileentities.tesr.FastTESRTrackMarker;
 import alemax.trainsmod.entities.EntityBR143;
@@ -112,7 +113,7 @@ public class ClientProxy extends CommonProxy {
 		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(ModBlocks.am_rail), 0, new ModelResourceLocation(ModBlocks.am_rail.getRegistryName(), "inventory"));
 		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(ModBlocks.track_marker), 0, new ModelResourceLocation(ModBlocks.track_marker.getRegistryName(), "inventory"));
 		
-		
+		//DO THIS FOR TRACK TOO
 		StateMapperBase stateMapper = new StateMapperBase() {
 			@Override
 			protected ModelResourceLocation getModelResourceLocation(IBlockState state) {
@@ -120,7 +121,16 @@ public class ClientProxy extends CommonProxy {
 			}
 		};
 		
-		//ModelLoader.setCustomStateMapper(ModBlocks.am_rail_curved, stateMapper);
+		ModelLoader.setCustomStateMapper(ModBlocks.am_rail_curved, stateMapper);
+		
+		StateMapperBase stateMapperTrack = new StateMapperBase() {
+			@Override
+			protected ModelResourceLocation getModelResourceLocation(IBlockState state) {
+				return BakedModelTrack.BAKED_MODEL;
+			}
+		};
+		
+		ModelLoader.setCustomStateMapper(ModBlocks.track, stateMapperTrack);
 		
 		ModelLoader.setCustomModelResourceLocation(ModItems.item_br143, 0, new ModelResourceLocation(ModItems.item_br143.getRegistryName(), "inventory"));
 		ModelLoader.setCustomModelResourceLocation(ModItems.item_train_rotator, 0, new ModelResourceLocation(ModItems.item_train_rotator.getRegistryName(), "inventory"));

@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.google.common.base.Charsets;
 
+import alemax.trainsmod.blocks.tileentities.TileEntityTrack;
 import alemax.trainsmod.blocks.tileentities.TileEntityTrackMarker;
 import alemax.trainsmod.entities.EntityRailcar;
 import alemax.trainsmod.util.TrackType;

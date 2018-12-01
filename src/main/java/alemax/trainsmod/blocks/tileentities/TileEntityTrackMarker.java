@@ -8,6 +8,10 @@ import javax.vecmath.Vector3d;
 
 import alemax.trainsmod.TrainsMod;
 import alemax.trainsmod.init.ModBlocks;
+import alemax.trainsmod.networking.PacketHandler;
+import alemax.trainsmod.networking.TrackDataMessage;
+import alemax.trainsmod.networking.TrackSuperPosMessage;
+import alemax.trainsmod.util.TrackData;
 import alemax.trainsmod.util.TrackType;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
@@ -131,11 +135,8 @@ public class TileEntityTrackMarker extends TileEntity {
 							else if(checkSide(leftPoints[i + 1], leftPoints[i], new Vector2d(ix, iz)) > 0) inner = false;
 							else if(checkSide(leftPoints[i], rightPoints[i], new Vector2d(ix, iz)) > 0) inner = false;
 							else if(inner) eligibleList.add(new Vec3i(ix, 0, iz));
-							System.out.println("-------------");
 						}
 					}
-					
-					System.out.println(eligibleList.size());
 					
 					for(int j = 0; j < eligibleList.size(); j++) {
 						addToBlockList(trackPositions, eligibleList.get(j), points3d);
@@ -149,6 +150,28 @@ public class TileEntityTrackMarker extends TileEntity {
 				for(int i = 0; i < trackPositions.size(); i++) {
 					this.world.setBlockState(trackPositions.get(i), ModBlocks.track.getDefaultState());
 				}
+				
+				BlockPos mainPos = new BlockPos(points3d[(int) ((points3d.length - 1) / 2.0)].x,points3d[(int) ((points3d.length - 1) / 2.0)].y, points3d[(int) ((points3d.length - 1) / 2.0)].z);
+				if(this.world.getBlockState(mainPos).getBlock().getRegistryName().getResourcePath().equals(ModBlocks.track.getRegistryName().getResourcePath())) {
+					for(int i = 0; i < trackPositions.size(); i++) {
+						TileEntity te = this.world.getTileEntity(trackPositions.get(i));
+						if(te instanceof TileEntityTrack) {
+							System.out.println("Equals");
+							((TileEntityTrack) te).setSuperPos(mainPos);
+							PacketHandler.INSTANCE.sendToAll(new TrackSuperPosMessage(trackPositions.get(i), mainPos));
+						} else {
+							System.out.println("Not");
+						}
+					}
+					TrackData trackData = new TrackData();
+					trackData.trackPoints = points3d;
+					TileEntity ste = this.world.getTileEntity(mainPos);
+					((TileEntityTrack) ste).setTrackData(trackData);
+					PacketHandler.INSTANCE.sendToAll(new TrackDataMessage(mainPos, trackData));
+					
+				}
+				
+				System.out.println("ALL DONE");
 				
 			} else {
 				System.out.println("TO CLOSE TO EACH OTHER");
@@ -259,7 +282,7 @@ public class TileEntityTrackMarker extends TileEntity {
 			fad = Math.abs(fad);
 			if(fad > 180) fad = 360 - fad;
 			
-			double sad = otherTileEntity.realAngle -  getAngleBetweenPoints(new Vector2d(secondLastPoint.x + secondMiddlePoint.x, secondLastPoint.y + secondMiddlePoint.y), new Vector2d(firstLastPoint.x + firstMiddlePoint.x, firstLastPoint.y + firstMiddlePoint.y));
+			double sad = otherTileEntity.realAngle - getAngleBetweenPoints(new Vector2d(secondLastPoint.x + secondMiddlePoint.x, secondLastPoint.y + secondMiddlePoint.y), new Vector2d(firstLastPoint.x + firstMiddlePoint.x, firstLastPoint.y + firstMiddlePoint.y));
 			sad = Math.abs(sad);
 			if(sad > 180) sad = 360 - sad;
 			
@@ -281,8 +304,9 @@ public class TileEntityTrackMarker extends TileEntity {
 				currentPoint.y += Math.cos(Math.toRadians(currentAngle));
 				
 				firstPoints.add(new Vector2d(currentPoint));
-			}
+			}	
 			
+			//BUGS WITH THE SCALING --> get the points on the circle differently
 			double xScale = aimedPoint.x / currentPoint.x;
 			double yScale = aimedPoint.y / currentPoint.y;
 			
@@ -589,11 +613,6 @@ public class TileEntityTrackMarker extends TileEntity {
 		//Calculate the real stuff
 		double sidePoint = (point.x - firstPoint.x) * (secondPoint.z - firstPoint.z) - (point.y - firstPoint.z) * (secondPoint.x - firstPoint.x); //Formula to compute the side of a point apparently
 		double sideLeft = (leftPoint.x - firstPoint.x) * (secondPoint.z - firstPoint.z) - (leftPoint.y - firstPoint.z) * (secondPoint.x - firstPoint.x);
-		
-		if(sidePoint < -0.001 && sideLeft < 0) System.out.println("Left");
-		if(sidePoint > 0.001 && sideLeft < 0) System.out.println("Right");
-		if(sidePoint < -0.001 && sideLeft > 0) System.out.println("Right");
-		if(sidePoint > 0.001 && sideLeft > 0) System.out.println("Left");
 		
 		if(sidePoint < -0.001 && sideLeft < 0) return -1;
 		if(sidePoint > 0.001 && sideLeft < 0) return 1;

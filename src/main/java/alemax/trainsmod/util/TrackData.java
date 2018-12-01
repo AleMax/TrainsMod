@@ -4,6 +4,6 @@ import javax.vecmath.Vector3d;
 
 public class TrackData {
 	
-	Vector3d[] trackPoints;
+	public Vector3d[] trackPoints;
 	
 }
