@@ -156,11 +156,8 @@ public class TileEntityTrackMarker extends TileEntity {
 					for(int i = 0; i < trackPositions.size(); i++) {
 						TileEntity te = this.world.getTileEntity(trackPositions.get(i));
 						if(te instanceof TileEntityTrack) {
-							System.out.println("Equals");
 							((TileEntityTrack) te).setSuperPos(mainPos);
 							PacketHandler.INSTANCE.sendToAll(new TrackSuperPosMessage(trackPositions.get(i), mainPos));
-						} else {
-							System.out.println("Not");
 						}
 					}
 					TrackData trackData = new TrackData();

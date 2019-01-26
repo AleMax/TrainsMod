@@ -1,11 +1,17 @@
 package alemax.trainsmod.blocks;
 
+import java.util.ArrayList;
+import java.util.Collections;
+
+import javax.vecmath.Vector3d;
+
 import alemax.trainsmod.blocks.properties.UnlistedPropertyBlockPos;
 import alemax.trainsmod.blocks.properties.UnlistedPropertyVector3d;
 import alemax.trainsmod.blocks.tileentities.TileEntityAMRailCurved;
 import alemax.trainsmod.blocks.tileentities.TileEntityTrack;
 import alemax.trainsmod.proxy.CommonProxy;
 import alemax.trainsmod.util.Reference;
+import alemax.trainsmod.util.TrackData;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
@@ -57,14 +63,41 @@ public class BlockTrack extends Block {
 	    IExtendedBlockState ext = (IExtendedBlockState) state;
 	    TileEntity te = world.getTileEntity(pos);
 	    
-	    
-	    if (te instanceof TileEntityTrack) {
-	    	TileEntity teSuper = world.getTileEntity(((TileEntityTrack) te).getSuperPos());
+	    if (te instanceof TileEntityTrack && te != null) {
+	    	BlockPos superPos = ((TileEntityTrack) te).getSuperPos();
+	    	TileEntity teSuper = null;
+	    	if(superPos != null) {
+	    		teSuper = world.getTileEntity(((TileEntityTrack) te).getSuperPos());
+	    	}
 	    	if(teSuper instanceof TileEntityTrack) {
-	    		if(((((TileEntityTrack) teSuper).getTrackData()).trackPoints) == null) {
-	    			System.out.println("smh´th");
+	    		TrackData td = ((TileEntityTrack) teSuper).getTrackData();
+	    		if(td == null) ext = ext.withProperty(TRACK_POINTS, new Vector3d[0]);
+	    		else {
+	    			ArrayList<Integer> trackPointsIndices = new ArrayList<>();
+	    			for(int i = 0; i < td.trackPoints.length - 1; i++) {
+	    	        	Vector3d middlePoint = new Vector3d((td.trackPoints[i].x + td.trackPoints[i + 1].x) / 2.0, (td.trackPoints[i].y + td.trackPoints[i + 1].y) / 2.0, (td.trackPoints[i].z + td.trackPoints[i + 1].z) / 2.0);
+	    	        	if(new BlockPos(middlePoint.x, middlePoint.y, middlePoint.z).equals(pos)) {
+	    	        		int index = i;
+	    	        		boolean add = true;
+	    	        		for(int j = 0; j < trackPointsIndices.size(); j++) {
+	    	        			if(trackPointsIndices.get(j).intValue() == index) add = false;
+	    	        		}
+	    	        		if(add) trackPointsIndices.add(index);
+	    	        		index = i + 1;
+	    	        		add = true;
+	    	        		for(int j = 0; j < trackPointsIndices.size(); j++) {
+	    	        			if(trackPointsIndices.get(j).intValue() == index) add = false;
+	    	        		}
+	    	        		if(add) trackPointsIndices.add(index);
+	    	        	}
+	    	        }
+	    			Vector3d[] sendTrackPoints = new Vector3d[trackPointsIndices.size()];
+	    			Collections.sort(trackPointsIndices);
+	    			for(int i = 0; i < trackPointsIndices.size(); i++) {
+	    				sendTrackPoints[i] = td.trackPoints[trackPointsIndices.get(i)];
+	    			}
+	    			ext = ext.withProperty(TRACK_POINTS, sendTrackPoints);
 	    		}
-	    		ext = ext.withProperty(TRACK_POINTS, (((TileEntityTrack) teSuper).getTrackData().trackPoints));
 	    	}
 	    }
 	    return ext;

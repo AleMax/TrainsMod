@@ -114,6 +114,7 @@ public class ClientProxy extends CommonProxy {
 		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(ModBlocks.track_marker), 0, new ModelResourceLocation(ModBlocks.track_marker.getRegistryName(), "inventory"));
 		
 		//DO THIS FOR TRACK TOO
+		/*
 		StateMapperBase stateMapper = new StateMapperBase() {
 			@Override
 			protected ModelResourceLocation getModelResourceLocation(IBlockState state) {
@@ -122,6 +123,7 @@ public class ClientProxy extends CommonProxy {
 		};
 		
 		ModelLoader.setCustomStateMapper(ModBlocks.am_rail_curved, stateMapper);
+		*/
 		
 		StateMapperBase stateMapperTrack = new StateMapperBase() {
 			@Override

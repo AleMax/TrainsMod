@@ -64,11 +64,11 @@ public class TrackDataMessage implements IMessage {
 		public IMessage onMessage(TrackDataMessage message, MessageContext ctx) {
 			try {
 				Minecraft.getMinecraft().addScheduledTask(() -> {
+					System.out.println("SYNCED TRACK DATA");
 					WorldClient world = Minecraft.getMinecraft().world;
 					TileEntity te = world.getTileEntity(message.pos);
 					if(te instanceof TileEntityTrack) {
 						((TileEntityTrack) te).setTrackData(message.data);
-						System.out.println("SYNCED TRACK DATA");
 					}
 			    });
 				return null;

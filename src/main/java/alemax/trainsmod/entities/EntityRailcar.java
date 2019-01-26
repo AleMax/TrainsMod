@@ -308,7 +308,7 @@ public abstract class EntityRailcar extends Entity {
 		this.speed = this.speed += accel;
 		if(this.speed < 0) this.speed = 0;
 		if(this.speed > this.maxSpeed) this.speed = this.maxSpeed;
-		this.aimedSpeed = this.speed;
+		//else this.aimedSpeed = this.speed;
 		
 		
 		/*
