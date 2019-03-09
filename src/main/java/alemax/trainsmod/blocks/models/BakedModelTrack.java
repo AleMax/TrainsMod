@@ -50,7 +50,7 @@ public class BakedModelTrack implements IBakedModel {
         //Vector3d[] leftPoints = getLeftRightPoints(trackPoints, -1.25);
         //Vector3d[] rightPoints = getLeftRightPoints(trackPoints, 1.25);
         
-        System.out.println(trackPoints.length);
+        //System.out.println(trackPoints.length);
         
         
         
