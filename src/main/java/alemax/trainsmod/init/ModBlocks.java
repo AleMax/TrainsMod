@@ -22,7 +22,11 @@ public class ModBlocks {
 	public static final BlockAMRailCurved am_rail_curved = null;
 	@ObjectHolder("trainsmod:track_marker")
 	public static final BlockTrackMarker track_marker = null;
-	@ObjectHolder("trainsmod:track")
-	public static final BlockTrack track = null;
+	//@ObjectHolder("trainsmod:track")
+	//public static final BlockTrack track = null;
+	@ObjectHolder("trainsmod:track_super")
+	public static final BlockTrack track_super = null;
+	@ObjectHolder("trainsmod:track_basic")
+	public static final BlockTrack track_basic = null;
 	
 }

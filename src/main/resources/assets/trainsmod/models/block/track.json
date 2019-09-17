@@ -1,6 +1,3 @@
 {
-  "parent": "block/cube_all",
-  "textures": {
-    "all": "trainsmod:blocks/am_rail"
-  }
+  "parent": "block/cube_all"
 }

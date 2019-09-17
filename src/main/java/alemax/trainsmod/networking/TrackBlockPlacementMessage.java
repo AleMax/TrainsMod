@@ -2,7 +2,6 @@ package alemax.trainsmod.networking;
 
 import java.util.ArrayList;
 
-import alemax.trainsmod.blocks.tileentities.TileEntityTrack;
 import alemax.trainsmod.init.ModBlocks;
 import alemax.trainsmod.util.TrackData;
 import io.netty.buffer.ByteBuf;
@@ -55,7 +54,7 @@ public class TrackBlockPlacementMessage implements IMessage {
 				Minecraft.getMinecraft().addScheduledTask(() -> {
 					WorldClient world = Minecraft.getMinecraft().world;
 					for(int i = 0; i < message.size; i++) {
-						world.setBlockState(message.trackPositions.get(i), ModBlocks.track.getDefaultState());
+						world.setBlockState(message.trackPositions.get(i), ModBlocks.track_basic.getDefaultState());
 					}
 					
 			    });

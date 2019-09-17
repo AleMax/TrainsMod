@@ -6,9 +6,10 @@ import javax.vecmath.Vector3d;
 
 import com.google.common.base.Charsets;
 
-import alemax.trainsmod.blocks.tileentities.TileEntityTrack;
 import alemax.trainsmod.blocks.tileentities.TileEntityTrackMarker;
+import alemax.trainsmod.blocks.tileentities.TileEntityTrackSuper;
 import alemax.trainsmod.entities.EntityRailcar;
+import alemax.trainsmod.init.ModBlocks;
 import alemax.trainsmod.util.TrackData;
 import alemax.trainsmod.util.TrackType;
 import io.netty.buffer.ByteBuf;
@@ -64,11 +65,13 @@ public class TrackDataMessage implements IMessage {
 		public IMessage onMessage(TrackDataMessage message, MessageContext ctx) {
 			try {
 				Minecraft.getMinecraft().addScheduledTask(() -> {
-					System.out.println("SYNCED TRACK DATA");
 					WorldClient world = Minecraft.getMinecraft().world;
+					world.setBlockState(message.pos, ModBlocks.track_super.getDefaultState());
 					TileEntity te = world.getTileEntity(message.pos);
-					if(te instanceof TileEntityTrack) {
-						((TileEntityTrack) te).setTrackData(message.data);
+					System.out.println(world.getTileEntity(message.pos).getClass().toString());
+					if(te instanceof TileEntityTrackSuper) {
+						((TileEntityTrackSuper) te).setTrackData(message.data);
+						System.out.println("set data");
 					}
 			    });
 				return null;

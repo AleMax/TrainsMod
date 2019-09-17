@@ -3,12 +3,10 @@ package alemax.trainsmod.proxy;
 import org.lwjgl.input.Keyboard;
 
 import alemax.trainsmod.blocks.models.BakedModelAMRailCurved;
-import alemax.trainsmod.blocks.models.BakedModelLoader;
-import alemax.trainsmod.blocks.models.BakedModelTrack;
-import alemax.trainsmod.blocks.tileentities.TileEntityTrack;
 import alemax.trainsmod.blocks.tileentities.TileEntityTrackMarker;
-import alemax.trainsmod.blocks.tileentities.tesr.FastTESRTrack;
+import alemax.trainsmod.blocks.tileentities.TileEntityTrackSuper;
 import alemax.trainsmod.blocks.tileentities.tesr.FastTESRTrackMarker;
+import alemax.trainsmod.blocks.tileentities.tesr.FastTESRTrackSuper;
 import alemax.trainsmod.entities.EntityBR143;
 import alemax.trainsmod.entities.EntityFreightcar;
 import alemax.trainsmod.entities.EntityICRailcar;
@@ -105,7 +103,8 @@ public class ClientProxy extends CommonProxy {
 		ClientRegistry.registerKeyBinding(keyTrainBrake);
 
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTrackMarker.class, new FastTESRTrackMarker());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTrack.class, new FastTESRTrack());
+		//ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTrack.class, new FastTESRTrack());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTrackSuper.class, new FastTESRTrackSuper());
 		
 		super.init(e);
 	}
@@ -114,30 +113,6 @@ public class ClientProxy extends CommonProxy {
 	public static void registerModels(ModelRegistryEvent event) {
 		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(ModBlocks.am_rail), 0, new ModelResourceLocation(ModBlocks.am_rail.getRegistryName(), "inventory"));
 		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(ModBlocks.track_marker), 0, new ModelResourceLocation(ModBlocks.track_marker.getRegistryName(), "inventory"));
-		
-		//DO THIS FOR TRACK TOO
-		/*
-		StateMapperBase stateMapper = new StateMapperBase() {
-			@Override
-			protected ModelResourceLocation getModelResourceLocation(IBlockState state) {
-				return BakedModelAMRailCurved.BAKED_MODEL;
-			}
-		};
-		
-		ModelLoader.setCustomStateMapper(ModBlocks.am_rail_curved, stateMapper);
-		*/
-		
-		/*
-		StateMapperBase stateMapperTrack = new StateMapperBase() {
-			@Override
-			protected ModelResourceLocation getModelResourceLocation(IBlockState state) {
-				return BakedModelTrack.BAKED_MODEL;
-			}
-		};
-		
-		ModelLoader.setCustomStateMapper(ModBlocks.track, stateMapperTrack);
-		*/
-		
 		
 		ModelLoader.setCustomModelResourceLocation(ModItems.item_br143, 0, new ModelResourceLocation(ModItems.item_br143.getRegistryName(), "inventory"));
 		ModelLoader.setCustomModelResourceLocation(ModItems.item_train_rotator, 0, new ModelResourceLocation(ModItems.item_train_rotator.getRegistryName(), "inventory"));

@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.google.common.base.Charsets;
 
-import alemax.trainsmod.blocks.tileentities.TileEntityTrack;
+import alemax.trainsmod.blocks.tileentities.TileEntityTrackBasic;
 import alemax.trainsmod.blocks.tileentities.TileEntityTrackMarker;
 import alemax.trainsmod.entities.EntityRailcar;
 import alemax.trainsmod.util.TrackType;
@@ -55,8 +55,8 @@ public class TrackSuperPosMessage implements IMessage {
 				Minecraft.getMinecraft().addScheduledTask(() -> {
 					WorldClient world = Minecraft.getMinecraft().world;
 					TileEntity te = world.getTileEntity(message.pos);
-					if(te instanceof TileEntityTrack) {
-						((TileEntityTrack) te).setSuperPos(message.superPos);
+					if(te instanceof TileEntityTrackBasic) {
+						((TileEntityTrackBasic) te).setSuperPos(message.superPos);
 					}
 			    });
 				return null;

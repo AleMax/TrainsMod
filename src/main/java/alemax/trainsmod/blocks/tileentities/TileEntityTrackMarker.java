@@ -149,28 +149,29 @@ public class TileEntityTrackMarker extends TileEntity {
 				}
 				
 				for(int i = 0; i < trackPositions.size(); i++) {
-					this.world.setBlockState(trackPositions.get(i), ModBlocks.track.getDefaultState());
+					this.world.setBlockState(trackPositions.get(i), ModBlocks.track_basic.getDefaultState());
 				}
 				PacketHandler.INSTANCE.sendToAll(new TrackBlockPlacementMessage(trackPositions));
 				
 				BlockPos mainPos = new BlockPos(points3d[(int) ((points3d.length - 1) / 2.0)].x,points3d[(int) ((points3d.length - 1) / 2.0)].y, points3d[(int) ((points3d.length - 1) / 2.0)].z);
-				if(this.world.getBlockState(mainPos).getBlock().getRegistryName().getResourcePath().equals(ModBlocks.track.getRegistryName().getResourcePath())) {
-					for(int i = 0; i < trackPositions.size(); i++) {
-						TileEntity te = this.world.getTileEntity(trackPositions.get(i));
-						if(te instanceof TileEntityTrack) {
-							((TileEntityTrack) te).setSuperPos(mainPos);
-							PacketHandler.INSTANCE.sendToAll(new TrackSuperPosMessage(trackPositions.get(i), mainPos));
-						}
-					}
-					TrackData trackData = new TrackData();
-					trackData.trackPoints = points3d;
-					TileEntity ste = this.world.getTileEntity(mainPos);
-					((TileEntityTrack) ste).setTrackData(trackData);
-					PacketHandler.INSTANCE.sendToAll(new TrackDataMessage(mainPos, trackData));
-					
-				}
 				
-				System.out.println("ALL DONE");
+				this.world.setBlockState(mainPos, ModBlocks.track_super.getDefaultState());
+				
+				System.out.println(this.world.getTileEntity(mainPos).getClass().toString());
+				
+				for(int i = 0; i < trackPositions.size(); i++) {
+					TileEntity te = this.world.getTileEntity(trackPositions.get(i));
+					if(te instanceof TileEntityTrackBasic) {
+						((TileEntityTrackBasic) te).setSuperPos(mainPos);
+						PacketHandler.INSTANCE.sendToAll(new TrackSuperPosMessage(trackPositions.get(i), mainPos));
+					}
+				}
+				TrackData trackData = new TrackData();
+				trackData.trackPoints = points3d;
+				TileEntity ste = this.world.getTileEntity(mainPos);
+				((TileEntityTrackSuper) ste).setTrackData(trackData);
+				PacketHandler.INSTANCE.sendToAll(new TrackDataMessage(mainPos, trackData));
+					
 				
 			} else {
 				System.out.println("TO CLOSE TO EACH OTHER");
