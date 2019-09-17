@@ -20,6 +20,7 @@ public class ModelTrack implements IModel {
 	@Override
 	public IBakedModel bake(IModelState state, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
 		return new BakedModelTrack(state, format, bakedTextureGetter);
+		//return null;
 	}
 	
 	@Override

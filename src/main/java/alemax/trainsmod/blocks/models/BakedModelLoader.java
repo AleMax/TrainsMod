@@ -16,6 +16,7 @@ public class BakedModelLoader implements ICustomModelLoader {
     	if(modelLocation.getResourceDomain().equals(Reference.MODID)) {
     		//if("am_rail_curved".equals(modelLocation.getResourcePath())) return true;
     		if("track".equals(modelLocation.getResourcePath())) return true;
+    		else if((Reference.MODID + ":track").equals(modelLocation.getResourcePath()));
     	}
     	return false;
     }
@@ -23,7 +24,7 @@ public class BakedModelLoader implements ICustomModelLoader {
     @Override
     public IModel loadModel(ResourceLocation modelLocation) throws Exception {
     	return TRACK_MODEL = new ModelTrack();
-    	
+    	//return null;
     }
 
     @Override

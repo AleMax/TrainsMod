@@ -47,19 +47,22 @@ public class BakedModelTrack implements IBakedModel {
 		
         IExtendedBlockState extendedBlockState = (IExtendedBlockState) state;
         Vector3d[] trackPoints = extendedBlockState.getValue(BlockTrack.TRACK_POINTS);
-        //Vector3d[] leftPoints = getLeftRightPoints(trackPoints, -1.25);
-        //Vector3d[] rightPoints = getLeftRightPoints(trackPoints, 1.25);
-        
-        System.out.println(trackPoints.length);
-        
-        
-        
-        quads.add(createQuad(new Vec3d(0, 1, 1), new Vec3d(1, 1, 1), new Vec3d(1, 1, 0), new Vec3d(0, 1, 0), sprite));
-        
-        
+        if(trackPoints != null) {
+	        Vector3d[] leftPoints = getLeftRightPoints(trackPoints, -1.25);
+	        Vector3d[] rightPoints = getLeftRightPoints(trackPoints, 1.25);
+	        
+	        System.out.println(trackPoints.length);
+	        
+	        for(int i = 0; i < trackPoints.length - 1; i++) {
+	        	quads.add(createQuad(leftPoints[i + 1], leftPoints[i], rightPoints[i], rightPoints[i + 1], sprite));
+	        }
+	        
+	        //quads.add(createQuad(new Vec3d(0, 1, 1), new Vec3d(1, 1, 1), new Vec3d(1, 1, 0), new Vec3d(0, 1, 0), sprite));
+        }
+	        
         return quads;
     }
-	
+
 	private void putVertex(UnpackedBakedQuad.Builder builder, Vec3d normal, double x, double y, double z, float u, float v) {
 		for (int e = 0; e < format.getElementCount(); e++) {
 			switch (format.getElement(e).getUsage()) {
@@ -85,6 +88,14 @@ public class BakedModelTrack implements IBakedModel {
 			}
 		}
 	}
+	
+	private BakedQuad createQuad(Vector3d v1, Vector3d v2, Vector3d v3, Vector3d v4, TextureAtlasSprite sprite) {
+        Vec3d ve1 = new Vec3d(v1.x, v1.y, v1.z);
+        Vec3d ve2 = new Vec3d(v2.x, v2.y, v2.z);
+        Vec3d ve3 = new Vec3d(v3.x, v3.y, v3.z);
+        Vec3d ve4 = new Vec3d(v4.x, v4.y, v4.z);
+        return createQuad(ve1, ve2, ve3, ve4, sprite);
+    }
 	
 	private BakedQuad createQuad(Vec3d v1, Vec3d v2, Vec3d v3, Vec3d v4, TextureAtlasSprite sprite) {
         Vec3d normal = v3.subtract(v2).crossProduct(v1.subtract(v2)).normalize();

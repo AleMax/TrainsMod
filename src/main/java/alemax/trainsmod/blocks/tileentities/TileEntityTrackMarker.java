@@ -9,6 +9,7 @@ import javax.vecmath.Vector3d;
 import alemax.trainsmod.TrainsMod;
 import alemax.trainsmod.init.ModBlocks;
 import alemax.trainsmod.networking.PacketHandler;
+import alemax.trainsmod.networking.TrackBlockPlacementMessage;
 import alemax.trainsmod.networking.TrackDataMessage;
 import alemax.trainsmod.networking.TrackSuperPosMessage;
 import alemax.trainsmod.util.TrackData;
@@ -150,6 +151,7 @@ public class TileEntityTrackMarker extends TileEntity {
 				for(int i = 0; i < trackPositions.size(); i++) {
 					this.world.setBlockState(trackPositions.get(i), ModBlocks.track.getDefaultState());
 				}
+				PacketHandler.INSTANCE.sendToAll(new TrackBlockPlacementMessage(trackPositions));
 				
 				BlockPos mainPos = new BlockPos(points3d[(int) ((points3d.length - 1) / 2.0)].x,points3d[(int) ((points3d.length - 1) / 2.0)].y, points3d[(int) ((points3d.length - 1) / 2.0)].z);
 				if(this.world.getBlockState(mainPos).getBlock().getRegistryName().getResourcePath().equals(ModBlocks.track.getRegistryName().getResourcePath())) {

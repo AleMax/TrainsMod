@@ -59,6 +59,21 @@ public class BlockTrack extends Block {
 	}
 	
 	@Override
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn,
+			EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+		
+		TileEntity te = worldIn.getTileEntity(pos);
+		if(te instanceof TileEntityTrack) {
+			if(worldIn.isRemote) System.out.print("Client:\t");
+			else System.out.print("Server:\t");
+			BlockPos superPos = ((TileEntityTrack) te).getSuperPos();
+			System.out.println(superPos.getX() + "\t" + superPos.getY() + "\t" + superPos.getZ());
+		}
+		
+		return super.onBlockActivated(worldIn, pos, state, playerIn, hand, facing, hitX, hitY, hitZ);
+	}
+	
+	@Override
 	public IExtendedBlockState getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos) {
 	    IExtendedBlockState ext = (IExtendedBlockState) state;
 	    TileEntity te = world.getTileEntity(pos);
@@ -76,7 +91,15 @@ public class BlockTrack extends Block {
 	    			ArrayList<Integer> trackPointsIndices = new ArrayList<>();
 	    			for(int i = 0; i < td.trackPoints.length - 1; i++) {
 	    	        	Vector3d middlePoint = new Vector3d((td.trackPoints[i].x + td.trackPoints[i + 1].x) / 2.0, (td.trackPoints[i].y + td.trackPoints[i + 1].y) / 2.0, (td.trackPoints[i].z + td.trackPoints[i + 1].z) / 2.0);
+	    	        	if(i % 2 != 0) {
+	    	        		if(middlePoint.x < 10) {
+	    	        			//System.out.println(middlePoint.x + "\t" + middlePoint.y + "\t" + middlePoint.z + "\t");
+	    	        		}
+	    	        	}
 	    	        	if(new BlockPos(middlePoint.x, middlePoint.y, middlePoint.z).equals(pos)) {
+	    	        		if(i == 1) {
+	    	        			//System.out.println("NOW");
+	    	        		}
 	    	        		int index = i;
 	    	        		boolean add = true;
 	    	        		for(int j = 0; j < trackPointsIndices.size(); j++) {
@@ -94,8 +117,16 @@ public class BlockTrack extends Block {
 	    			Vector3d[] sendTrackPoints = new Vector3d[trackPointsIndices.size()];
 	    			Collections.sort(trackPointsIndices);
 	    			for(int i = 0; i < trackPointsIndices.size(); i++) {
+	    				//System.out.println(trackPointsIndices.get(i));
 	    				sendTrackPoints[i] = td.trackPoints[trackPointsIndices.get(i)];
+	    				//sendTrackPoints[i].x -= superPos.getX();
+	    				//sendTrackPoints[i].y -= superPos.getY();
+	    				//sendTrackPoints[i].z -= superPos.getZ();
+	    				sendTrackPoints[i].x -= pos.getX();
+	    				sendTrackPoints[i].y -= pos.getY();
+	    				sendTrackPoints[i].z -= pos.getZ();
 	    			}
+	    			//System.out.println("------------");
 	    			ext = ext.withProperty(TRACK_POINTS, sendTrackPoints);
 	    		}
 	    	}

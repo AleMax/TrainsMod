@@ -145,7 +145,7 @@ public class GUITrackMarker extends GuiScreen {
 		} else if(button == buttonBuild) {
 			updateTileEntity();
 			PacketHandler.INSTANCE.sendToServer(new TrackBuildMessage(tileEntity.getPos().getX(), tileEntity.getPos().getY(), tileEntity.getPos().getZ()));
-			tileEntity.buildTrack();
+			//tileEntity.buildTrack();
 		} else if(button == buttonMarkerSnap) {
 			updateTileEntity();
 			

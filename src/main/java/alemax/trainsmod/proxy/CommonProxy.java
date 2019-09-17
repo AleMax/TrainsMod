@@ -21,6 +21,7 @@ import alemax.trainsmod.networking.GUITrackMarkerSaveMessageServer;
 import alemax.trainsmod.networking.GUITrackMarkerSyncMessageClient;
 import alemax.trainsmod.networking.GUITrackMarkerSyncMessageServer;
 import alemax.trainsmod.networking.PacketHandler;
+import alemax.trainsmod.networking.TrackBlockPlacementMessage;
 import alemax.trainsmod.networking.TrackBuildMessage;
 import alemax.trainsmod.networking.TrackDataMessage;
 import alemax.trainsmod.networking.TrackSuperPosMessage;
@@ -68,7 +69,7 @@ public class CommonProxy {
 		PacketHandler.INSTANCE.registerMessage(TrackBuildMessage.TrackBuildMessageHandler.class, TrackBuildMessage.class, id++, Side.SERVER);
 		PacketHandler.INSTANCE.registerMessage(TrackSuperPosMessage.TrackSuperPosMessageHandler.class, TrackSuperPosMessage.class, id++, Side.CLIENT);
 		PacketHandler.INSTANCE.registerMessage(TrackDataMessage.TrackDataMessageHandler.class, TrackDataMessage.class, id++, Side.CLIENT);
-
+		PacketHandler.INSTANCE.registerMessage(TrackBlockPlacementMessage.TrackBlockPlacementMessageHandler.class, TrackBlockPlacementMessage.class, id++, Side.CLIENT);
 	}
 	
 	public void init(FMLInitializationEvent e) {

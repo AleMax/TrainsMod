@@ -5,7 +5,9 @@ import org.lwjgl.input.Keyboard;
 import alemax.trainsmod.blocks.models.BakedModelAMRailCurved;
 import alemax.trainsmod.blocks.models.BakedModelLoader;
 import alemax.trainsmod.blocks.models.BakedModelTrack;
+import alemax.trainsmod.blocks.tileentities.TileEntityTrack;
 import alemax.trainsmod.blocks.tileentities.TileEntityTrackMarker;
+import alemax.trainsmod.blocks.tileentities.tesr.FastTESRTrack;
 import alemax.trainsmod.blocks.tileentities.tesr.FastTESRTrackMarker;
 import alemax.trainsmod.entities.EntityBR143;
 import alemax.trainsmod.entities.EntityFreightcar;
@@ -72,7 +74,7 @@ public class ClientProxy extends CommonProxy {
 	public void preInit(FMLPreInitializationEvent e) {
 		super.preInit(e);
 		OBJHandler.INSTANCE = new alemax.trainsmod.util.objloader.OBJLoader();
-		ModelLoaderRegistry.registerLoader(new BakedModelLoader());
+		//ModelLoaderRegistry.registerLoader(new BakedModelLoader());
 		OBJLoader.INSTANCE.addDomain(Reference.MODID);
 		
 		RenderingRegistry.registerEntityRenderingHandler(EntityBR143.class, RenderBR143.FACTORY);
@@ -103,7 +105,7 @@ public class ClientProxy extends CommonProxy {
 		ClientRegistry.registerKeyBinding(keyTrainBrake);
 
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTrackMarker.class, new FastTESRTrackMarker());
-		
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTrack.class, new FastTESRTrack());
 		
 		super.init(e);
 	}
@@ -125,6 +127,7 @@ public class ClientProxy extends CommonProxy {
 		ModelLoader.setCustomStateMapper(ModBlocks.am_rail_curved, stateMapper);
 		*/
 		
+		/*
 		StateMapperBase stateMapperTrack = new StateMapperBase() {
 			@Override
 			protected ModelResourceLocation getModelResourceLocation(IBlockState state) {
@@ -133,6 +136,8 @@ public class ClientProxy extends CommonProxy {
 		};
 		
 		ModelLoader.setCustomStateMapper(ModBlocks.track, stateMapperTrack);
+		*/
+		
 		
 		ModelLoader.setCustomModelResourceLocation(ModItems.item_br143, 0, new ModelResourceLocation(ModItems.item_br143.getRegistryName(), "inventory"));
 		ModelLoader.setCustomModelResourceLocation(ModItems.item_train_rotator, 0, new ModelResourceLocation(ModItems.item_train_rotator.getRegistryName(), "inventory"));
