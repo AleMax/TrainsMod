@@ -18,6 +18,8 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
+//I wonder if anyone actually reads this, and if yes: Hi! :)
+
 @Mod(modid = Reference.MODID, name = Reference.NAME, version = Reference.VERSION)
 public class TrainsMod {
 	
