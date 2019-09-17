@@ -47,6 +47,7 @@ public class BakedModelTrack implements IBakedModel {
 		
         IExtendedBlockState extendedBlockState = (IExtendedBlockState) state;
         Vector3d[] trackPoints = extendedBlockState.getValue(BlockTrack.TRACK_POINTS);
+        
         if(trackPoints != null) {
 	        Vector3d[] leftPoints = getLeftRightPoints(trackPoints, -1.25);
 	        Vector3d[] rightPoints = getLeftRightPoints(trackPoints, 1.25);
@@ -60,6 +61,16 @@ public class BakedModelTrack implements IBakedModel {
 	        //quads.add(createQuad(new Vec3d(0, 1, 1), new Vec3d(1, 1, 1), new Vec3d(1, 1, 0), new Vec3d(0, 1, 0), sprite));
         }
 	        
+        //Vector3d[] leftPoints = getLeftRightPoints(trackPoints, -1.25);
+        //Vector3d[] rightPoints = getLeftRightPoints(trackPoints, 1.25);
+        
+        //System.out.println(trackPoints.length);
+        
+        
+        
+        quads.add(createQuad(new Vec3d(0, 1, 1), new Vec3d(1, 1, 1), new Vec3d(1, 1, 0), new Vec3d(0, 1, 0), sprite));
+        
+        
         return quads;
     }
 
