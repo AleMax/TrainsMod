@@ -3,6 +3,7 @@ package alemax.trainsmod.blocks.tileentities;
 import javax.vecmath.Vector3d;
 
 import alemax.trainsmod.util.TrackData;
+import alemax.trainsmod.util.objloader.Obj;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
@@ -12,6 +13,7 @@ import net.minecraft.util.math.BlockPos;
 public class TileEntityTrackSuper extends TileEntity {
 	
 	private TrackData trackData;
+	public static Obj MODEL;
 	
 	public void setTrackData(TrackData trackData) {
 		//TODO: Probieren ob es auch ohne diesen Workaround, also nur mit this.trackData = trackData geht

@@ -153,23 +153,48 @@ public class OBJLoader extends Object {
                         ));
                         break;
                     case "f":
-                        model.getFaces().add(new Obj.Face(
-                                new int[]{
-                                    Integer.parseInt(split[1].split("/")[0]),
-                                    Integer.parseInt(split[2].split("/")[0]),
-                                    Integer.parseInt(split[3].split("/")[0])
-                                },
-                                new int[]{
-                                    Integer.parseInt(split[1].split("/")[1]),
-                                    Integer.parseInt(split[2].split("/")[1]),
-                                    Integer.parseInt(split[3].split("/")[1])
-                                },
-                                new int[]{
-                                    Integer.parseInt(split[1].split("/")[2]),
-                                    Integer.parseInt(split[2].split("/")[2]),
-                                    Integer.parseInt(split[3].split("/")[2])
-                                }
-                        ));
+                    	if(split.length == 5) {
+                    		model.getFaces().add(new Obj.Face(
+                                    new int[]{
+                                        Integer.parseInt(split[1].split("/")[0]),
+                                        Integer.parseInt(split[2].split("/")[0]),
+                                        Integer.parseInt(split[3].split("/")[0]),
+                                        Integer.parseInt(split[4].split("/")[0])
+                                    },
+                                    new int[]{
+                                        Integer.parseInt(split[1].split("/")[1]),
+                                        Integer.parseInt(split[2].split("/")[1]),
+                                        Integer.parseInt(split[3].split("/")[1]),
+                                        Integer.parseInt(split[4].split("/")[1])
+                                    },
+                                    new int[]{
+                                        Integer.parseInt(split[1].split("/")[2]),
+                                        Integer.parseInt(split[2].split("/")[2]),
+                                        Integer.parseInt(split[3].split("/")[2]),
+                                        Integer.parseInt(split[4].split("/")[2])
+                                    }
+                            ));
+                    	}
+                    	else {
+                    		model.getFaces().add(new Obj.Face(
+                                    new int[]{
+                                        Integer.parseInt(split[1].split("/")[0]),
+                                        Integer.parseInt(split[2].split("/")[0]),
+                                        Integer.parseInt(split[3].split("/")[0])
+                                    },
+                                    new int[]{
+                                        Integer.parseInt(split[1].split("/")[1]),
+                                        Integer.parseInt(split[2].split("/")[1]),
+                                        Integer.parseInt(split[3].split("/")[1])
+                                    },
+                                    new int[]{
+                                        Integer.parseInt(split[1].split("/")[2]),
+                                        Integer.parseInt(split[2].split("/")[2]),
+                                        Integer.parseInt(split[3].split("/")[2])
+                                    }
+                            ));
+                		}
+                        
                         break;
                     case "s":
                         model.setSmoothShadingEnabled(!ln.contains("off"));

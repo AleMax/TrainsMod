@@ -106,6 +106,8 @@ public class ClientProxy extends CommonProxy {
 		//ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTrack.class, new FastTESRTrack());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTrackSuper.class, new FastTESRTrackSuper());
 		
+		TileEntityTrackSuper.MODEL = OBJHandler.INSTANCE.loadModel(getClass().getResourceAsStream("/assets/trainsmod/models/block/rail.obj"));
+		
 		super.init(e);
 	}
 	

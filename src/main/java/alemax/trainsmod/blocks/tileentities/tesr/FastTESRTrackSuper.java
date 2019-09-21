@@ -6,15 +6,24 @@ import java.util.Collections;
 import javax.vecmath.Vector2d;
 import javax.vecmath.Vector3d;
 
+import org.lwjgl.util.vector.Vector3f;
+
 import alemax.trainsmod.blocks.tileentities.TileEntityTrackSuper;
 import alemax.trainsmod.util.TrackData;
+import alemax.trainsmod.util.objloader.Obj.Face;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.BlockModelRenderer;
 import net.minecraft.client.renderer.BlockModelShapes;
+import net.minecraft.client.renderer.BlockRendererDispatcher;
 import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.EntityRenderer;
+import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureUtil;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.client.model.animation.FastTESR;
 
 public class FastTESRTrackSuper extends FastTESR<TileEntityTrackSuper>{
@@ -30,35 +39,91 @@ public class FastTESRTrackSuper extends FastTESR<TileEntityTrackSuper>{
 		if(trackData == null || trackData.trackPoints == null) return;
 			
     	Vector3d[] transTrackPoints = new Vector3d[trackData.trackPoints.length];
+    	Vector3d[] middlePoints = new Vector3d[transTrackPoints.length - 1];
     	
     	for(int i = 0; i < transTrackPoints.length; i++) {
     		transTrackPoints[i] = trackData.trackPoints[i];
-    		transTrackPoints[i].x -= pos.getX();
-    		transTrackPoints[i].y -= pos.getY();
-    		transTrackPoints[i].z -= pos.getZ();
+    		//transTrackPoints[i].x -= pos.getX();
+    		//transTrackPoints[i].y -= pos.getY();
+    		//transTrackPoints[i].z -= pos.getZ();
+    	}
+    	
+    	for(int i = 0; i < middlePoints.length; i++) {
+    		middlePoints[i] = new Vector3d(
+    				(transTrackPoints[i].x + transTrackPoints[i+1].x) / 2 - pos.getX(), 
+    				(transTrackPoints[i].y + transTrackPoints[i+1].y) / 2 - pos.getY(), 
+    				(transTrackPoints[i].z + transTrackPoints[i+1].z) / 2 - pos.getZ());
     	}
     		
     		
     		
-    	Vector3d[] leftPoints = getLeftRightPoints(transTrackPoints, -1.25);
-    	Vector3d[] rightPoints = getLeftRightPoints(transTrackPoints, 1.25);
+    	//Vector3d[] leftPoints = getLeftRightPoints(transTrackPoints, -1.25);
+    	//Vector3d[] rightPoints = getLeftRightPoints(transTrackPoints, 1.25);
     	
     	//TODO: Checken, ob man die trans hier und oben beide einfach weglassen kann
     	buffer.setTranslation(x,y,z);
     	    
-    	int lmCombined = getWorld().getCombinedLight(te.getPos().up(), 0);
-        int lmA = lmCombined >> 16 & 65535;
-        int lmB = lmCombined & 65535;
+    	//int lmCombined = getWorld().getCombinedLight(te.getPos().up(), 0);
+        //int lmA = lmCombined >> 16 & 65535;
+        //int lmB = lmCombined & 65535;
     	    
         BlockModelShapes bm = Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelShapes();
     	TextureAtlasSprite redTexture =  bm.getTexture(Blocks.GRAVEL.getDefaultState());
-    	    
+    	
+    	for(int i = 0; i < middlePoints.length; i++) {
+    		//buffer.setTranslation(middlePoints[i].x, middlePoints[i].y, middlePoints[i].z);
+    		
+    		int lmCombined = getWorld().getCombinedLight(new BlockPos(middlePoints[i].x + pos.getX(), middlePoints[i].y + pos.getY(), middlePoints[i].z + pos.getZ()), 0);
+	        int lmA = lmCombined >> 16 & 65535;
+	        int lmB = lmCombined & 65535;
+    		
+    		for(Face face : te.MODEL.getFaces()) {
+    			
+    			
+    			
+    			if(face.getVertices().length == 4) {
+    				
+	    			Vector3f[] vertices = {
+	    				new Vector3f(te.MODEL.getVertices().get(face.getVertices()[0] - 1)),
+	    			    new Vector3f(te.MODEL.getVertices().get(face.getVertices()[1] - 1)),
+	    				new Vector3f(te.MODEL.getVertices().get(face.getVertices()[2] - 1)),
+	    				new Vector3f(te.MODEL.getVertices().get(face.getVertices()[3] - 1))
+	                };
+	    			
+	    			
+	    			
+	    			buffer.pos(vertices[0].x + middlePoints[i].x, vertices[0].y + middlePoints[i].y, vertices[0].z + middlePoints[i].z).color(1f,1f,1f,1f).tex(redTexture.getMinU(), redTexture.getMinV()).lightmap(lmA,lmB).endVertex();
+	    			buffer.pos(vertices[1].x + middlePoints[i].x, vertices[1].y + middlePoints[i].y, vertices[1].z + middlePoints[i].z).color(1f,1f,1f,1f).tex(redTexture.getMinU(), redTexture.getMinV()).lightmap(lmA,lmB).endVertex();
+	    			buffer.pos(vertices[2].x + middlePoints[i].x, vertices[2].y + middlePoints[i].y, vertices[2].z + middlePoints[i].z).color(1f,1f,1f,1f).tex(redTexture.getMinU(), redTexture.getMinV()).lightmap(lmA,lmB).endVertex();
+	    			buffer.pos(vertices[3].x + middlePoints[i].x, vertices[3].y + middlePoints[i].y, vertices[3].z + middlePoints[i].z).color(1f,1f,1f,1f).tex(redTexture.getMinU(), redTexture.getMinV()).lightmap(lmA,lmB).endVertex();
+    				
+	    			
+    			} else {
+	    			Vector3f[] vertices = {
+	    				new Vector3f(te.MODEL.getVertices().get(face.getVertices()[0] - 1)),
+	    				new Vector3f(te.MODEL.getVertices().get(face.getVertices()[1] - 1)),
+		    			new Vector3f(te.MODEL.getVertices().get(face.getVertices()[2] - 1))
+		            };
+	    			
+	    				
+	    				
+		    		buffer.pos(vertices[0].x + middlePoints[i].x, vertices[0].y + middlePoints[i].y, vertices[0].z + middlePoints[i].z).color(1f,1f,1f,1f).tex(redTexture.getMinU(), redTexture.getMinV()).lightmap(lmA,lmB).endVertex();
+		    		buffer.pos((vertices[0].x + vertices[1].x) / 2 + middlePoints[i].x,(vertices[0].y + vertices[1].y) / 2 + middlePoints[i].y,(vertices[0].z + vertices[1].z) / 2 + middlePoints[i].z).color(1f,1f,1f,1f).tex(redTexture.getMinU(), redTexture.getMinV()).lightmap(lmA,lmB).endVertex();
+		    		buffer.pos(vertices[1].x + middlePoints[i].x, vertices[1].y + middlePoints[i].y, vertices[1].z + middlePoints[i].z).color(1f,1f,1f,1f).tex(redTexture.getMinU(), redTexture.getMinV()).lightmap(lmA,lmB).endVertex();
+		    		buffer.pos(vertices[2].x + middlePoints[i].x, vertices[2].y + middlePoints[i].y, vertices[2].z + middlePoints[i].z).color(1f,1f,1f,1f).tex(redTexture.getMinU(), redTexture.getMinV()).lightmap(lmA,lmB).endVertex();
+		    			
+    			}
+    		}
+    	}
+    	
+    	/*
     	for(int i = 0; i < transTrackPoints.length - 1; i++) {
     	    buffer.pos(leftPoints[i + 1].x, leftPoints[i + 1].y, leftPoints[i + 1].z).color(1f,1f,1f,1f).tex(redTexture.getMinU(), redTexture.getMinV()).lightmap(lmA,lmB).endVertex();
     	    buffer.pos(leftPoints[i].x, leftPoints[i].y, leftPoints[i].z).color(1f,1f,1f,1f).tex(redTexture.getMinU(), redTexture.getMinV()).lightmap(lmA,lmB).endVertex();
     	    buffer.pos(rightPoints[i].x, rightPoints[i].y, rightPoints[i].z).color(1f,1f,1f,1f).tex(redTexture.getMinU(), redTexture.getMinV()).lightmap(lmA,lmB).endVertex();
     	    buffer.pos(rightPoints[i + 1].x, rightPoints[i + 1].y, rightPoints[i + 1].z).color(1f,1f,1f,1f).tex(redTexture.getMinU(), redTexture.getMinV()).lightmap(lmA,lmB).endVertex();
     	}
+    	*/
 		
 	}
 	
