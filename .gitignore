@@ -1,0 +1,31 @@
+# eclipse
+*.launch
+.settings
+.metadata
+.classpath
+.project
+
+# idea
+out
+*.ipr
+*.iws
+*.iml
+.idea
+
+# gradle
+*gradle*
+build
+
+# other
+eclipse
+run
+
+# sketchup
+*.skb
+
+*.jar
+
+# Projects
+TrackAPI
+UniversalModCore
+src/main/java/alemax/trainsmod/Mod.java
