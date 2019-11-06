@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "id": "trainsmod",
+  "version": "${version}",
+
+  "name": "TrainsMod",
+  "description": "",
+  "authors": [
+    "AleMax"
+  ],
+  "contact": {
+    "homepage": "",
+    "sources": ""
+  },
+
+  "license": "",
+  "icon": "assets/trainsmod/icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "alemax.trainsmod.TrainsMod"
+    ]
+  },
+  "mixins": [
+    "trainsmod.mixins.json"
+  ],
+
+  "depends": {
+    "fabricloader": ">=0.4.0",
+    "fabric": "*"
+  },
+  "suggests": {
+    "flamingo": "*"
+  }
+}
