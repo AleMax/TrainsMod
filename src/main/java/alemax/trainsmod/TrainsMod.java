@@ -1,11 +1,8 @@
 package alemax.trainsmod;
 
+import alemax.trainsmod.init.TMBlocks;
+import alemax.trainsmod.init.TMItemGroups;
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
-import net.minecraft.block.Blocks;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Identifier;
 
 public class TrainsMod implements ModInitializer {
 
@@ -16,10 +13,13 @@ public class TrainsMod implements ModInitializer {
 	@Override
 	public void onInitialize() {
 		System.out.println("Starting TrainsMod");
+
+		//Register ItemGroups
+		TMItemGroups.registerAll();
+
+		//Register Blocks
+		TMBlocks.registerAll();
+
 	}
-
-	//ItemGroups:
-	public static final ItemGroup ITEM_GROUP_TRAINSMOD = FabricItemGroupBuilder.build(new Identifier("trainsmod", "general"), () -> new ItemStack(Blocks.POWERED_RAIL));
-
 
 }
