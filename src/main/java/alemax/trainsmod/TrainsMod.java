@@ -1,5 +1,6 @@
 package alemax.trainsmod;
 
+import alemax.trainsmod.init.TMBlockEntities;
 import alemax.trainsmod.init.TMBlocks;
 import alemax.trainsmod.init.TMItemGroups;
 import net.fabricmc.api.ModInitializer;
@@ -19,6 +20,9 @@ public class TrainsMod implements ModInitializer {
 
 		//Register Blocks
 		TMBlocks.registerAll();
+
+		//Register BlockEntities
+		TMBlockEntities.registerAll();
 
 	}
 
