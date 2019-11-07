@@ -1,0 +1,12 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "particle": "trainsmod:block/track_marker_side",
+    "down": "trainsmod:block/track_marker_down",
+    "up": "trainsmod:block/track_marker_up",
+    "east": "trainsmod:block/track_marker_side",
+    "west": "trainsmod:block/track_marker_side",
+    "north": "trainsmod:block/track_marker_side",
+    "south": "trainsmod:block/track_marker_side"
+  }
+}
