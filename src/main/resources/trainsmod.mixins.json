@@ -3,7 +3,8 @@
   "package": "alemax.trainsmod.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-    "MixinLevelProperties"
+    "MixinLevelProperties",
+    "MixinPlayerManager"
   ],
   "client": [
   ],

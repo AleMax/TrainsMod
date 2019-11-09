@@ -10,11 +10,12 @@ import net.minecraft.util.registry.Registry;
 
 public abstract class TMBlock extends Block {
 
-    public String name;
+    public final String name;
     public ItemGroup itemGroup;
 
-    public TMBlock(Settings block$Settings_1) {
+    public TMBlock(Settings block$Settings_1, String name) {
         super(block$Settings_1);
+        this.name = name;
     }
 
     public void register() {

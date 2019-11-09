@@ -3,6 +3,8 @@ package alemax.trainsmod;
 import alemax.trainsmod.init.TMBlockEntities;
 import alemax.trainsmod.init.TMBlocks;
 import alemax.trainsmod.init.TMItemGroups;
+import alemax.trainsmod.init.TMPackets;
+import alemax.trainsmod.networking.PacketS2CSyncGlobalOnPlayerJoin;
 import net.fabricmc.api.ModInitializer;
 
 public class TrainsMod implements ModInitializer {
@@ -24,6 +26,8 @@ public class TrainsMod implements ModInitializer {
 		//Register BlockEntities
 		TMBlockEntities.registerAll();
 
+		//Packets
+		TMPackets.initAll();
 	}
 
 }

@@ -17,8 +17,7 @@ import net.minecraft.world.World;
 public class BlockTrackMarker extends TMBlock implements BlockEntityProvider {
 
     public BlockTrackMarker() {
-        super(Settings.of(Material.STONE));
-        this.name = "track_marker";
+        super(Settings.of(Material.STONE), "track_marker");
         this.itemGroup = TMItemGroups.ITEM_GROUP_TRAINSMOD;
     }
 

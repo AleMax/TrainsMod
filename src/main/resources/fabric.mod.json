@@ -20,6 +20,12 @@
   "entrypoints": {
     "main": [
       "alemax.trainsmod.TrainsMod"
+    ],
+    "client": [
+      "alemax.trainsmod.TrainsModClient"
+    ],
+    "server": [
+      "alemax.trainsmod.TrainsModServer"
     ]
   },
   "mixins": [
