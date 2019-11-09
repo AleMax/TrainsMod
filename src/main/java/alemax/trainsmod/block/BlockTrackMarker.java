@@ -1,7 +1,8 @@
 package alemax.trainsmod.block;
 
 import alemax.trainsmod.block.blockentity.BlockEntityTrackMarker;
-import alemax.trainsmod.global.trackmarker.TrackMarker;
+import alemax.trainsmod.global.trackmarker.TrackMarkerHandler;
+import alemax.trainsmod.global.trackmarker.TrackMarkerInstances;
 import alemax.trainsmod.init.TMItemGroups;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
@@ -30,14 +31,11 @@ public class BlockTrackMarker extends TMBlock implements BlockEntityProvider {
     @Override
     public void onPlaced(World world_1, BlockPos blockPos_1, BlockState blockState_1, LivingEntity livingEntity_1, ItemStack itemStack_1) {
         super.onPlaced(world_1, blockPos_1, blockState_1, livingEntity_1, itemStack_1);
-        if(world_1.isClient()) {
-            if(TrackMarker.test.equals(""))
-                TrackMarker.test = "CLIIEEEEENT";
-            System.out.println("Client: " + TrackMarker.test);
-        } else {
-            if(TrackMarker.test.equals(""))
-                TrackMarker.test = "SERVER";
-            System.out.println("Server: " + TrackMarker.test);
+        if(true) {
+            if(TrackMarkerInstances.HANDLER == null) {
+                TrackMarkerInstances.HANDLER = new TrackMarkerHandler(0);
+            }
+            System.out.println(++TrackMarkerInstances.HANDLER.count);
         }
 
     }

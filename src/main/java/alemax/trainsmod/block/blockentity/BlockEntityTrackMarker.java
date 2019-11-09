@@ -10,8 +10,12 @@ public class BlockEntityTrackMarker extends BlockEntity {
     public BlockEntityTrackMarker() {
         super(TMBlockEntities.BLOCK_ENTITY_TRACK_MARKER);
 
-
     }
 
+    @Override
+    public boolean onBlockAction(int int_1, int int_2) {
+        System.out.println(int_1 + "\t" + int_2);
+        return true;
+    }
 
 }

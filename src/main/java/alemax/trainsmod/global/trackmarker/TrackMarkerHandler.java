@@ -8,9 +8,10 @@ import java.util.List;
 public class TrackMarkerHandler {
 
     private List<TrackMarker> trackMarkers;
+    public int count;
 
-    public TrackMarkerHandler() {
-
+    public TrackMarkerHandler(int count) {
+        this.count = count;
     }
 
     public void addTrackMarker(TrackMarker trackMarker) {

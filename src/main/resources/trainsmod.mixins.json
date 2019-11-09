@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "package": "alemax.trainsmod.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "MixinLevelProperties"
+  ],
+  "client": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
