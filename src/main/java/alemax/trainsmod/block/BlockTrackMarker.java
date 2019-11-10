@@ -3,11 +3,13 @@ package alemax.trainsmod.block;
 import alemax.trainsmod.block.blockentity.BlockEntityTrackMarker;
 import alemax.trainsmod.global.trackmarker.TrackMarkerHandler;
 import alemax.trainsmod.global.trackmarker.TrackMarkerInstances;
+import alemax.trainsmod.gui.ScreenTrackMarker;
 import alemax.trainsmod.init.TMItemGroups;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Material;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
@@ -30,11 +32,8 @@ public class BlockTrackMarker extends TMBlock implements BlockEntityProvider {
     @Override
     public void onPlaced(World world_1, BlockPos blockPos_1, BlockState blockState_1, LivingEntity livingEntity_1, ItemStack itemStack_1) {
         super.onPlaced(world_1, blockPos_1, blockState_1, livingEntity_1, itemStack_1);
-        if(true) {
-            if(TrackMarkerInstances.HANDLER == null) {
-                TrackMarkerInstances.HANDLER = new TrackMarkerHandler(0);
-            }
-            System.out.println(++TrackMarkerInstances.HANDLER.count);
+        if(world_1.isClient) {
+            MinecraftClient.getInstance().openScreen(new ScreenTrackMarker());
         }
 
     }

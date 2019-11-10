@@ -19,7 +19,7 @@ public class PacketS2CSyncGlobalOnPlayerJoin extends TMPacket {
 
     public void send(int count, ServerPlayerEntity player) {
         PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
-        buf.writeInt(count);
+        //buf.writeInt(count);
         player.networkHandler.sendPacket(new CustomPayloadS2CPacket(this.identifier, buf));
     }
 
@@ -29,7 +29,7 @@ public class PacketS2CSyncGlobalOnPlayerJoin extends TMPacket {
             System.out.println("SEND");
             int count = packetByteBuf.readInt();
             packetContext.getTaskQueue().execute(() -> {
-                TrackMarkerInstances.HANDLER = new TrackMarkerHandler(count);
+                //TrackMarkerInstances.OVERWORLD = new TrackMarkerHandler(count);
             });
         });
     }

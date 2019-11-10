@@ -25,8 +25,7 @@ public class MixinLevelProperties {
 
     @Inject(at = @At("RETURN"), method = "<init>(Lnet/minecraft/nbt/CompoundTag;Lcom/mojang/datafixers/DataFixer;ILnet/minecraft/nbt/CompoundTag;)V")
     private void onConstructed(CompoundTag compoundTag_1, DataFixer dataFixer_1, int int_1, CompoundTag compoundTag_2, CallbackInfo info) {
-        TrackMarkerInstances.HANDLER = new TrackMarkerHandler(compoundTag_1.getInt("trackMarkerCount"));
-        System.out.println("Created new Handler with count of " + TrackMarkerInstances.HANDLER.count);
+        //TrackMarkerInstances.OVERWORLD = new TrackMarkerHandler(compoundTag_1.getInt("trackMarkerCount"));
     }
 
 
@@ -35,8 +34,8 @@ public class MixinLevelProperties {
 
     @Inject(at = @At("RETURN"), method = "updateProperties")
     private void updateProperties(CompoundTag compoundTag_1, CompoundTag compoundTag_2, CallbackInfo info) {
-        compoundTag_1.putInt("trackMarkerCount" , TrackMarkerInstances.HANDLER.count);
-        System.out.println("Saved Count of: " + TrackMarkerInstances.HANDLER.count);
+        //compoundTag_1.putInt("trackMarkerCount" , TrackMarkerInstances.OVERWORLD.count);
+        //System.out.println("Saved Count of: " + TrackMarkerInstances.OVERWORLD.count);
     }
 
 
