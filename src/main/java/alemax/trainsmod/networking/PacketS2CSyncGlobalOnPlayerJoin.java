@@ -1,7 +1,9 @@
 package alemax.trainsmod.networking;
 
+import alemax.trainsmod.global.trackmarker.TrackMarker;
 import alemax.trainsmod.global.trackmarker.TrackMarkerHandler;
 import alemax.trainsmod.global.trackmarker.TrackMarkerInstances;
+import alemax.trainsmod.util.TrackType;
 import io.netty.buffer.Unpooled;
 import net.fabricmc.fabric.api.network.ClientSidePacketRegistry;
 import net.fabricmc.fabric.api.network.ServerSidePacketRegistry;
@@ -10,6 +12,9 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.PacketByteBuf;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class PacketS2CSyncGlobalOnPlayerJoin extends TMPacket {
 
 
@@ -17,16 +22,37 @@ public class PacketS2CSyncGlobalOnPlayerJoin extends TMPacket {
         super("sync_global_on_player_join");
     }
 
-    public void send(ServerPlayerEntity player) {
+    public void send(ServerPlayerEntity player, TrackMarkerHandler overworld) {
         PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
+
+        buf.writeInt(overworld.trackMarkers.size());
+        for(int i = 0; i < overworld.trackMarkers.size(); i++) {
+            TrackMarker marker = overworld.trackMarkers.get(i);
+            buf.writeBlockPos(marker.getPos());
+            buf.writeString(marker.channel);
+            buf.writeFloat(marker.angle);
+            buf.writeByte(marker.height);
+            buf.writeByte(marker.trackType.ordinal());
+        }
         player.networkHandler.sendPacket(new CustomPayloadS2CPacket(this.identifier, buf));
     }
 
     @Override
     public void register() {
-        ClientSidePacketRegistry.INSTANCE.register(this.identifier, (packetContext, packetByteBuf) -> {
+        ClientSidePacketRegistry.INSTANCE.register(this.identifier, (packetContext, buf) -> {
+            int count = buf.readInt();
+            List<TrackMarker> markers = new ArrayList<TrackMarker>();
+            for(int i = 0; i < count; i++) {
+                TrackMarker marker = new TrackMarker(buf.readBlockPos());
+                marker.channel = buf.readString();
+                marker.angle = buf.readFloat();
+                marker.height = buf.readByte();
+                marker.trackType = TrackType.values[buf.readByte()];
+                markers.add(marker);
+            }
             packetContext.getTaskQueue().execute(() -> {
                 TrackMarkerInstances.OVERWORLD = new TrackMarkerHandler();
+                TrackMarkerInstances.OVERWORLD.trackMarkers = markers;
             });
         });
     }
