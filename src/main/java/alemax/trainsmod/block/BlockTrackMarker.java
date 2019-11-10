@@ -13,9 +13,14 @@ import net.minecraft.block.Material;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.Hand;
+import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.BlockView;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 
 public class BlockTrackMarker extends TMBlock implements BlockEntityProvider {
@@ -41,6 +46,42 @@ public class BlockTrackMarker extends TMBlock implements BlockEntityProvider {
             TrackMarkerInstances.OVERWORLD.addTrackMarker(trackMarker);
             TMPackets.packetS2CTrackMarkerPlacement.send(world_1.getServer(), trackMarker);
         }
-        System.out.println(world_1.isClient + "\t" + TrackMarkerInstances.OVERWORLD.trackMarkers.size());
+        //System.out.println(world_1.isClient + "\t" + TrackMarkerInstances.OVERWORLD.trackMarkers.size());
+    }
+
+    @Override
+    public void onBroken(IWorld iWorld_1, BlockPos blockPos_1, BlockState blockState_1) {
+
+    }
+
+    @Override
+    public void onBlockRemoved(BlockState blockState_1, World world_1, BlockPos blockPos_1, BlockState blockState_2, boolean boolean_1) {
+        super.onBlockRemoved(blockState_1, world_1, blockPos_1, blockState_2, boolean_1);
+        if(!world_1.isClient) {
+            TrackMarkerInstances.OVERWORLD.removeTrackMarker(blockPos_1);
+            TMPackets.packetS2CTrackMarkerRemoval.send(world_1.getServer(), blockPos_1);
+        }
+    }
+
+
+    /*
+    @Override
+    public void onBreak(World world_1, BlockPos blockPos_1, BlockState blockState_1, PlayerEntity playerEntity_1) {
+        if(!world_1.isClient) {
+            TrackMarkerInstances.OVERWORLD.removeTrackMarker(blockPos_1);
+            TrackMarker trackMarker = new TrackMarker(blockPos_1);
+            trackMarker.setStandardValues(livingEntity_1.getName().toString());
+            TrackMarkerInstances.OVERWORLD.addTrackMarker(trackMarker);
+            TMPackets.packetS2CTrackMarkerPlacement.send(world_1.getServer(), trackMarker);
+        }
+    }
+    */
+
+    @Override
+    public boolean activate(BlockState blockState_1, World world_1, BlockPos blockPos_1, PlayerEntity playerEntity_1, Hand hand_1, BlockHitResult blockHitResult_1) {
+        if(world_1.isClient && hand_1.equals(Hand.MAIN_HAND)) {
+            MinecraftClient.getInstance().openScreen(new ScreenTrackMarker());
+        }
+        return false;
     }
 }
