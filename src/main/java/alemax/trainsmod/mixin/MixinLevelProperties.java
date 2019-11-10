@@ -25,7 +25,7 @@ public class MixinLevelProperties {
 
     @Inject(at = @At("RETURN"), method = "<init>(Lnet/minecraft/nbt/CompoundTag;Lcom/mojang/datafixers/DataFixer;ILnet/minecraft/nbt/CompoundTag;)V")
     private void onConstructed(CompoundTag compoundTag_1, DataFixer dataFixer_1, int int_1, CompoundTag compoundTag_2, CallbackInfo info) {
-        //TrackMarkerInstances.OVERWORLD = new TrackMarkerHandler(compoundTag_1.getInt("trackMarkerCount"));
+        TrackMarkerInstances.OVERWORLD = new TrackMarkerHandler();
     }
 
 

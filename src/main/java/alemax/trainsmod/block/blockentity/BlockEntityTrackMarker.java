@@ -10,7 +10,6 @@ public class BlockEntityTrackMarker extends BlockEntity {
 
     public BlockEntityTrackMarker() {
         super(TMBlockEntities.BLOCK_ENTITY_TRACK_MARKER);
-
     }
 
     @Override

@@ -7,4 +7,6 @@ public enum TrackType {
     LEVEL_CROSSING,
     TRAM;
 
+    public static final TrackType values[] = values();
+
 }

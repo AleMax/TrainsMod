@@ -17,19 +17,16 @@ public class PacketS2CSyncGlobalOnPlayerJoin extends TMPacket {
         super("sync_global_on_player_join");
     }
 
-    public void send(int count, ServerPlayerEntity player) {
+    public void send(ServerPlayerEntity player) {
         PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
-        //buf.writeInt(count);
         player.networkHandler.sendPacket(new CustomPayloadS2CPacket(this.identifier, buf));
     }
 
     @Override
     public void register() {
         ClientSidePacketRegistry.INSTANCE.register(this.identifier, (packetContext, packetByteBuf) -> {
-            System.out.println("SEND");
-            int count = packetByteBuf.readInt();
             packetContext.getTaskQueue().execute(() -> {
-                //TrackMarkerInstances.OVERWORLD = new TrackMarkerHandler(count);
+                TrackMarkerInstances.OVERWORLD = new TrackMarkerHandler();
             });
         });
     }
