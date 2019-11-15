@@ -1,48 +1,79 @@
 package alemax.trainsmod.gui;
 
+import alemax.trainsmod.global.trackmarker.TrackMarker;
+import alemax.trainsmod.global.trackmarker.TrackMarkerInstances;
 import io.github.cottonmc.cotton.gui.client.BackgroundPainter;
 import io.github.cottonmc.cotton.gui.client.LightweightGuiDescription;
 import io.github.cottonmc.cotton.gui.widget.*;
 import net.minecraft.client.gui.widget.SliderWidget;
 import net.minecraft.text.LiteralText;
+import net.minecraft.util.math.BlockPos;
 
 public class GUITrackMarker extends LightweightGuiDescription {
 
-    public GUITrackMarker() {
+    private BlockPos pos;
+    private TrackMarker marker;
 
-        WPlainPanel root = new WPlainPanel();
+
+    WPlainPanel root;
+
+    WLabel labelChannel;
+    WLabel labelAngle;
+    WLabel labelHeight;
+    WLabel labelTrackType;
+
+    WTextField textFieldChannel;
+    WLabeledSlider sliderAngle;
+    WLabeledSlider sliderHeight;
+    WButton buttonTrackType;
+
+    WButton buttonSnapRail;
+    WButton buttonSnapMarker;
+
+    WButton buttonPreview;
+    WButton buttonBuild;
+
+    public GUITrackMarker(BlockPos pos) {
+        this.pos = pos;
+        this.marker = TrackMarkerInstances.OVERWORLD.getTrackMarker(pos);
+
+        root = new WPlainPanel();
         root.setSize(280,160);
         setRootPanel(root);
 
-        WLabel labelChannel = new WLabel(new LiteralText("Channel:"), WLabel.DEFAULT_TEXT_COLOR);
+        labelChannel = new WLabel(new LiteralText("Channel:"), WLabel.DEFAULT_TEXT_COLOR);
         root.add(labelChannel, 5,5,2,1);
 
-        WLabel labelAngle = new WLabel(new LiteralText("Angle:"), WLabel.DEFAULT_TEXT_COLOR);
+        labelAngle = new WLabel(new LiteralText("Angle:"), WLabel.DEFAULT_TEXT_COLOR);
         root.add(labelAngle, 5,30,2,1);
 
-        WLabel labelHeight = new WLabel(new LiteralText("Height:"), WLabel.DEFAULT_TEXT_COLOR);
+        labelHeight = new WLabel(new LiteralText("Height:"), WLabel.DEFAULT_TEXT_COLOR);
         root.add(labelHeight, 5,55,2,1);
 
-        WLabel labelTrackType = new WLabel(new LiteralText("TrackType:"), WLabel.DEFAULT_TEXT_COLOR);
+        labelTrackType = new WLabel(new LiteralText("TrackType:"), WLabel.DEFAULT_TEXT_COLOR);
         root.add(labelTrackType, 5,80,2,1);
 
-        WTextField textFieldChannel = new WTextField();
+        textFieldChannel = new WTextField();
         root.add(textFieldChannel, 75, 0, 200,20);
         textFieldChannel.setEditable(true);
 
-        WLabeledSlider sliderAngle = new WLabeledSlider(0,180);
+        sliderAngle = new WLabeledSlider(0,180);
         root.add(sliderAngle, 75, 25, 200,20);
 
-        WLabeledSlider sliderHeight = new WLabeledSlider(0,16);
+        sliderHeight = new WLabeledSlider(0,16);
         root.add(sliderHeight, 75, 50, 200,20);
 
-        WButton buttonTrackType = new WButton(new LiteralText("Concrete Rails"));
+        buttonTrackType = new WButton(new LiteralText("Concrete Rails"));
         root.add(buttonTrackType, 75, 75, 100, 20);
 
-        WButton buttonSnapRail = new WButton(new LiteralText("Snap to Rail"));
+        buttonSnapRail = new WButton(new LiteralText("Snap to Rail"));
         root.add(buttonSnapRail, 5, 100, 100, 20);
 
-        WButton buttonSnapMarker = new WButton(new LiteralText("Snap to Marker"));
+        buttonSnapMarker = new WButton(new LiteralText("Snap to Marker"));
+        buttonSnapMarker.setOnClick(new Runnable() {
+            @Override
+            public void run() { }
+        });
         root.add(buttonSnapMarker, 125, 100, 100, 20);
 
         WButton buttonPreview = new WButton(new LiteralText("Preview"));

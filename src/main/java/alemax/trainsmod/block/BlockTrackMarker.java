@@ -46,7 +46,7 @@ public class BlockTrackMarker extends TMBlock implements BlockEntityProvider {
             TrackMarkerInstances.OVERWORLD.addTrackMarker(trackMarker);
             TMPackets.packetS2CTrackMarkerPlacement.send(world_1.getServer(), trackMarker);
         }
-        //System.out.println(world_1.isClient + "\t" + TrackMarkerInstances.OVERWORLD.trackMarkers.size());
+        System.out.println(world_1.isClient + "\t" + TrackMarkerInstances.OVERWORLD.trackMarkers.size());
     }
 
     @Override
@@ -80,7 +80,7 @@ public class BlockTrackMarker extends TMBlock implements BlockEntityProvider {
     @Override
     public boolean activate(BlockState blockState_1, World world_1, BlockPos blockPos_1, PlayerEntity playerEntity_1, Hand hand_1, BlockHitResult blockHitResult_1) {
         if(world_1.isClient && hand_1.equals(Hand.MAIN_HAND)) {
-            MinecraftClient.getInstance().openScreen(new ScreenTrackMarker());
+            MinecraftClient.getInstance().openScreen(new ScreenTrackMarker(blockPos_1));
         }
         return false;
     }
