@@ -8,6 +8,7 @@ import com.mojang.datafixers.DataFixer;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.level.LevelInfo;
 import net.minecraft.world.level.LevelProperties;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
@@ -19,13 +20,18 @@ import java.util.ArrayList;
 @Mixin(LevelProperties.class)
 public class MixinLevelProperties {
 
-    /*
+
     @Inject(at = @At("RETURN"), method = "<init>")
     private void onConstructed(CallbackInfo info) {
-        TrackMarkerInstances.SERVER_HANDLER = new TrackMarkerHandler(0);
-        System.out.println("Created new Handler");
+        if(TrackMarkerInstances.OVERWORLD == null)
+            TrackMarkerInstances.OVERWORLD = new TrackMarkerHandler();
     }
-     */
+
+    @Inject(at = @At("RETURN"), method = "<init>(Lnet/minecraft/world/level/LevelInfo;Ljava/lang/String;)V")
+    private void onConstructed(LevelInfo levelInfo_1, String string_1, CallbackInfo info) {
+        if(TrackMarkerInstances.OVERWORLD == null)
+            TrackMarkerInstances.OVERWORLD = new TrackMarkerHandler();
+    }
 
 
 

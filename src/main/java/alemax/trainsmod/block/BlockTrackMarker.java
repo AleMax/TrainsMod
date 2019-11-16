@@ -2,7 +2,6 @@ package alemax.trainsmod.block;
 
 import alemax.trainsmod.block.blockentity.BlockEntityTrackMarker;
 import alemax.trainsmod.global.trackmarker.TrackMarker;
-import alemax.trainsmod.global.trackmarker.TrackMarkerHandler;
 import alemax.trainsmod.global.trackmarker.TrackMarkerInstances;
 import alemax.trainsmod.gui.ScreenTrackMarker;
 import alemax.trainsmod.init.TMItemGroups;
@@ -11,11 +10,9 @@ import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Material;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
@@ -42,7 +39,7 @@ public class BlockTrackMarker extends TMBlock implements BlockEntityProvider {
         if(!world_1.isClient) {
             TrackMarkerInstances.OVERWORLD.removeTrackMarker(blockPos_1);
             TrackMarker trackMarker = new TrackMarker(blockPos_1);
-            trackMarker.setStandardValues(livingEntity_1.getName().toString());
+            trackMarker.setStandardValues(livingEntity_1.getName().getString());
             TrackMarkerInstances.OVERWORLD.addTrackMarker(trackMarker);
             TMPackets.packetS2CTrackMarkerPlacement.send(world_1.getServer(), trackMarker);
         }
@@ -80,7 +77,7 @@ public class BlockTrackMarker extends TMBlock implements BlockEntityProvider {
     @Override
     public boolean activate(BlockState blockState_1, World world_1, BlockPos blockPos_1, PlayerEntity playerEntity_1, Hand hand_1, BlockHitResult blockHitResult_1) {
         if(world_1.isClient && hand_1.equals(Hand.MAIN_HAND)) {
-            MinecraftClient.getInstance().openScreen(new ScreenTrackMarker(blockPos_1));
+            new ScreenTrackMarker(blockPos_1);
         }
         return false;
     }

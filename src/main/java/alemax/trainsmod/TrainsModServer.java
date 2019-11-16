@@ -8,7 +8,5 @@ public class TrainsModServer implements DedicatedServerModInitializer {
     @Override
     public void onInitializeServer() {
 
-        //Register Server Packets
-        TMPackets.registerServer();
     }
 }
