@@ -98,6 +98,13 @@ public class GUITrackMarker extends LightweightGuiDescription {
         root.add(buttonPreview, 5, 135, 100, 20);
 
         WButton buttonBuild = new WButton(new LiteralText("Build"));
+        buttonBuild.setOnClick(new Runnable() {
+            @Override
+            public void run() {
+                saveChanges();
+
+            }
+        });
         root.add(buttonBuild, 175, 135, 100, 20);
 
 

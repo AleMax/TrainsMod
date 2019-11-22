@@ -28,4 +28,11 @@ public class BlockEntityTrackMarker extends BlockEntity {
         return true;
     }
 
+
+    @Override
+    public double getSquaredRenderDistance() {
+        return 4096.0D;
+    }
+
+
 }
