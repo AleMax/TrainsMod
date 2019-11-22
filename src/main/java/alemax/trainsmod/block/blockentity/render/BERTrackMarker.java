@@ -27,8 +27,8 @@ public class BERTrackMarker extends BlockEntityRenderer<BlockEntityTrackMarker> 
 		builder.begin(GL11.GL_TRIANGLES, VertexFormats.POSITION);
 		
 		builder.vertex(+0.0, 0, +0.25).next();
-		builder.vertex(-0.1, 0, -0.25).next();
 		builder.vertex(+0.1, 0, -0.25).next();
+		builder.vertex(-0.1, 0, -0.25).next();
 		
 		GlStateManager.color3f(0, 0, 0);
 		tessellator.draw();
