@@ -15,11 +15,11 @@ public class TrackNetwork {
         this.trackPoints = new ArrayList<TrackPoint>();
     }
 
-    public void addTrackMarker(TrackPoint trackPoint) {
+    public void addTrackPoint(TrackPoint trackPoint) {
         trackPoints.add(trackPoint);
     }
 
-    public TrackMarker getNearestTrackMarker(Vec3d pos) {
+    public TrackMarker getNearestTrackPoint(Vec3d pos) {
         if(trackPoints.size() > 0) {
             TrackPoint closest = trackPoints.get(0);
             double distance = Math.sqrt(Math.pow(pos.x - closest.getPos().x, 2) + Math.pow(pos.y - closest.getPos().y, 2) + Math.pow(pos.z - closest.getPos().z, 2));

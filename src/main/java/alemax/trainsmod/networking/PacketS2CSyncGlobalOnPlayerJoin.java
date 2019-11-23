@@ -3,6 +3,7 @@ package alemax.trainsmod.networking;
 import alemax.trainsmod.global.trackmarker.TrackMarker;
 import alemax.trainsmod.global.trackmarker.TrackMarkerHandler;
 import alemax.trainsmod.global.trackmarker.TrackMarkerInstances;
+import alemax.trainsmod.global.tracknetwork.TrackNetwork;
 import alemax.trainsmod.util.TrackType;
 import io.netty.buffer.Unpooled;
 import net.fabricmc.api.EnvType;
@@ -24,12 +25,13 @@ public class PacketS2CSyncGlobalOnPlayerJoin extends TMPacket {
         super("sync_global_on_player_join");
     }
 
-    public void send(PlayerEntity player, TrackMarkerHandler overworld) {
+    public void send(PlayerEntity player, TrackMarkerHandler markerOverworld, TrackNetwork networkOverworld) {
         PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
 
-        buf.writeInt(overworld.trackMarkers.size());
-        for(int i = 0; i < overworld.trackMarkers.size(); i++) {
-            TrackMarker marker = overworld.trackMarkers.get(i);
+        //TRACKMARKERS
+        buf.writeInt(markerOverworld.trackMarkers.size());
+        for(int i = 0; i < markerOverworld.trackMarkers.size(); i++) {
+            TrackMarker marker = markerOverworld.trackMarkers.get(i);
             buf.writeBlockPos(marker.getPos());
             buf.writeString(marker.channel, TrackMarker.MAX_CHANNEL_LENGTH);
             buf.writeFloat(marker.angle);
@@ -38,6 +40,11 @@ public class PacketS2CSyncGlobalOnPlayerJoin extends TMPacket {
             buf.writeEnumConstant(marker.trackType);
         }
         ServerSidePacketRegistry.INSTANCE.sendToPlayer(player, new CustomPayloadS2CPacket(this.identifier, buf));
+
+        //TRACKNETWORK:
+
+
+
     }
 
     @Override

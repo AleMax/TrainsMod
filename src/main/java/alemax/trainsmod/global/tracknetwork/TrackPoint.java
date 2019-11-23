@@ -5,6 +5,7 @@ import net.minecraft.util.math.Vec3d;
 public abstract class TrackPoint {
 
     protected Vec3d pos;
+    protected int uniqueID;
 
     public abstract TrackPoint getNextTrackPoint(TrackPoint previous);
 
@@ -14,6 +15,11 @@ public abstract class TrackPoint {
         return this.pos;
     }
 
+    public int getUniqueID() {
+        return uniqueID;
+    }
 
-
+    public void setUniqueID(int uniqueID) {
+        this.uniqueID = uniqueID;
+    }
 }

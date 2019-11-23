@@ -7,8 +7,9 @@ public class TrackPointEnd extends TrackPoint {
     private TrackPoint previous;
     private TrackPointEnd next; //The next here is the one which is "outside" the other one, should be another End Point
 
-    public TrackPointEnd(Vec3d pos) {
+    public TrackPointEnd(Vec3d pos, int uniqueID) {
         this(pos, null);
+        this.uniqueID = uniqueID;
     }
 
     public TrackPointEnd(Vec3d pos, TrackPoint previous) {
@@ -31,4 +32,19 @@ public class TrackPointEnd extends TrackPoint {
         return null;
     }
 
+    public TrackPointEnd getNext() {
+        return next;
+    }
+
+    public TrackPoint getPrevious() {
+        return previous;
+    }
+
+    public void setNext(TrackPointEnd next) {
+        this.next = next;
+    }
+
+    public void setPrevious(TrackPoint previous) {
+        this.previous = previous;
+    }
 }

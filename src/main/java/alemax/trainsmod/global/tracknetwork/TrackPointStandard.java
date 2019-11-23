@@ -7,8 +7,9 @@ public class TrackPointStandard extends TrackPoint {
     private TrackPoint previous;
     private TrackPoint next;
 
-    public TrackPointStandard(Vec3d pos) {
+    public TrackPointStandard(Vec3d pos, int uniqueID) {
         this(pos, null, null);
+        this.uniqueID = uniqueID;
     }
 
     public TrackPointStandard(Vec3d pos, TrackPoint previous, TrackPoint next) {
@@ -27,5 +28,20 @@ public class TrackPointStandard extends TrackPoint {
         return null;
     }
 
+    public TrackPoint getNext() {
+        return next;
+    }
+
+    public TrackPoint getPrevious() {
+        return previous;
+    }
+
+    public void setNext(TrackPoint next) {
+        this.next = next;
+    }
+
+    public void setPrevious(TrackPoint previous) {
+        this.previous = previous;
+    }
 
 }
