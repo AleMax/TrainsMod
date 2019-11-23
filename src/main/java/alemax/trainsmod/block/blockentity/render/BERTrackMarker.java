@@ -17,7 +17,7 @@ public class BERTrackMarker extends BlockEntityRenderer<BlockEntityTrackMarker> 
 		GlStateManager.pushMatrix();
 		
 		GlStateManager.translated(x + 0.5, y + 1.01, z + 0.5);
-		GlStateManager.rotatef(marker.angle, 0, 1, 0); // yes, GL takes degrees, not radians. yes, it's ridiculous.
+		GlStateManager.rotatef(360 - marker.angle, 0, 1, 0); // yes, GL takes degrees, not radians. yes, it's ridiculous.
 		
 		GlStateManager.bindTexture(0); // unbind current texture, since we're drawing without one
 		

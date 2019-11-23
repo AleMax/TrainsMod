@@ -14,6 +14,8 @@ public class TrackMarker {
     public byte height;
     public TrackType trackType;
 
+    public float realAngle;
+
     public TrackMarker(BlockPos pos) {
         this.pos = pos;
     }
@@ -27,6 +29,8 @@ public class TrackMarker {
         this.angle = 0;
         this.height = 5;
         this.trackType = TrackType.CONCRETE;
+
+        this.realAngle = 0;
     }
 
 

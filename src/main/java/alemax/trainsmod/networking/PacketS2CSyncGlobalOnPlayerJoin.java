@@ -4,14 +4,11 @@ import alemax.trainsmod.global.trackmarker.TrackMarker;
 import alemax.trainsmod.global.trackmarker.TrackMarkerHandler;
 import alemax.trainsmod.global.trackmarker.TrackMarkerInstances;
 import alemax.trainsmod.global.tracknetwork.*;
-import alemax.trainsmod.util.TrackPointsUtil;
+import alemax.trainsmod.util.TrackPointsUtils;
 import alemax.trainsmod.util.TrackType;
 import io.netty.buffer.Unpooled;
-import net.fabricmc.api.EnvType;
 import net.fabricmc.fabric.api.network.ClientSidePacketRegistry;
 import net.fabricmc.fabric.api.network.ServerSidePacketRegistry;
-import net.fabricmc.loader.api.FabricLoader;
-import net.fabricmc.loader.util.sat4j.core.Vec;
 import net.minecraft.client.network.packet.CustomPayloadS2CPacket;
 import net.minecraft.entity.player.PlayerEntity;
 
@@ -52,7 +49,7 @@ public class PacketS2CSyncGlobalOnPlayerJoin extends TMPacket {
         }
 
         buf.writeInt(networkOverworld.trackPoints.size());
-        for(int i = 0; i < markerOverworld.trackMarkers.size(); i++) {
+        for(int i = 0; i < networkOverworld.trackPoints.size(); i++) {
             TrackPoint point = networkOverworld.trackPoints.get(i);
             buf.writeDouble(point.getPos().x);
             buf.writeDouble(point.getPos().y);
@@ -130,12 +127,12 @@ public class PacketS2CSyncGlobalOnPlayerJoin extends TMPacket {
                     int next = buf.readInt();
 
                     if(previous > 0) {
-                        point.setPrevious(TrackPointsUtil.matchID(points, previous));
+                        point.setPrevious(TrackPointsUtils.matchID(points, previous));
                     } else {
                         //TODO: Throw some Exception some day
                     }
                     if(next > 0) {
-                        point.setNext(TrackPointsUtil.matchID(points, next));
+                        point.setNext(TrackPointsUtils.matchID(points, next));
                     } else {
                         //TODO: Throw some Exception some day
                     }
@@ -145,12 +142,12 @@ public class PacketS2CSyncGlobalOnPlayerJoin extends TMPacket {
                     int next = buf.readInt();
 
                     if(previous > 0) {
-                        point.setPrevious(TrackPointsUtil.matchID(points, previous));
+                        point.setPrevious(TrackPointsUtils.matchID(points, previous));
                     } else {
                         //TODO: Throw some Exception some day
                     }
                     if(next > 0) {
-                        point.setNext((TrackPointEnd) TrackPointsUtil.matchID(points, next));
+                        point.setNext((TrackPointEnd) TrackPointsUtils.matchID(points, next));
                     } else {
                         point.setNext(null);
                     }

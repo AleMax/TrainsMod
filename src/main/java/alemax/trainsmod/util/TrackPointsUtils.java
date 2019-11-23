@@ -5,7 +5,7 @@ import alemax.trainsmod.global.tracknetwork.TrackPoint;
 
 import java.util.List;
 
-public class TrackPointsUtil {
+public class TrackPointsUtils {
 
     public static TrackPoint matchID(List<TrackPoint> list, int id) {
         for(int i = 0; i < list.size(); i++) {

@@ -70,6 +70,8 @@ public class GUITrackMarker extends LightweightGuiDescription {
         textFieldChannel.setText(currentChannel);
         root.add(textFieldChannel, 75, 0, 200,20);
 
+        //TODO: Add markings on angle and height slider
+
         sliderAngle = new WLabeledSlider(0,179);
         sliderAngle.setValue(Math.round(angle));
         sliderAngle.setValueChangeListener(new IntConsumer() {
@@ -102,7 +104,7 @@ public class GUITrackMarker extends LightweightGuiDescription {
             @Override
             public void run() {
                 saveChanges();
-
+                TMPackets.packetC2STrackBuild.send(marker.channel);
             }
         });
         root.add(buttonBuild, 175, 135, 100, 20);

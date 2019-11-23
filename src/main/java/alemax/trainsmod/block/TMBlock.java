@@ -27,8 +27,10 @@ public abstract class TMBlock extends Block {
         //Register the ItemBlock
         if(itemGroup != null)
             Registry.register(Registry.ITEM, identifier, new BlockItem(this, new Item.Settings().group(itemGroup)));
+        /*
         else
             Registry.register(Registry.ITEM, identifier, new BlockItem(this, new Item.Settings()));
+        */
 
     }
 

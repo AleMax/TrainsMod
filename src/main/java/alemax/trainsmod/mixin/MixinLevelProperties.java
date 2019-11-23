@@ -4,7 +4,7 @@ import alemax.trainsmod.global.trackmarker.TrackMarker;
 import alemax.trainsmod.global.trackmarker.TrackMarkerHandler;
 import alemax.trainsmod.global.trackmarker.TrackMarkerInstances;
 import alemax.trainsmod.global.tracknetwork.*;
-import alemax.trainsmod.util.TrackPointsUtil;
+import alemax.trainsmod.util.TrackPointsUtils;
 import alemax.trainsmod.util.TrackType;
 import com.mojang.datafixers.DataFixer;
 import net.minecraft.nbt.CompoundTag;
@@ -86,12 +86,12 @@ public class MixinLevelProperties {
                 int next = compoundTag.getInt("next");
 
                 if(previous > 0) {
-                    point.setPrevious(TrackPointsUtil.matchID(TrackNetworkInstances.OVERWORLD.trackPoints, previous));
+                    point.setPrevious(TrackPointsUtils.matchID(TrackNetworkInstances.OVERWORLD.trackPoints, previous));
                 } else {
                     //TODO: Throw some Exception some day
                 }
                 if(next > 0) {
-                    point.setNext(TrackPointsUtil.matchID(TrackNetworkInstances.OVERWORLD.trackPoints, next));
+                    point.setNext(TrackPointsUtils.matchID(TrackNetworkInstances.OVERWORLD.trackPoints, next));
                 } else {
                     //TODO: Throw some Exception some day
                 }
@@ -102,12 +102,12 @@ public class MixinLevelProperties {
                 int next = compoundTag.getInt("next");
 
                 if(previous > 0) {
-                    point.setPrevious(TrackPointsUtil.matchID(TrackNetworkInstances.OVERWORLD.trackPoints, previous));
+                    point.setPrevious(TrackPointsUtils.matchID(TrackNetworkInstances.OVERWORLD.trackPoints, previous));
                 } else {
                     //TODO: Throw some Exception some day
                 }
                 if(next > 0) {
-                    point.setNext((TrackPointEnd) TrackPointsUtil.matchID(TrackNetworkInstances.OVERWORLD.trackPoints, next));
+                    point.setNext((TrackPointEnd) TrackPointsUtils.matchID(TrackNetworkInstances.OVERWORLD.trackPoints, next));
                 } else {
                     point.setNext(null);
                 }
