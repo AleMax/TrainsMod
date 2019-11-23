@@ -4,6 +4,7 @@ import alemax.trainsmod.global.trackmarker.TrackMarker;
 import alemax.trainsmod.global.trackmarker.TrackMarkerHandler;
 import alemax.trainsmod.global.trackmarker.TrackMarkerInstances;
 import alemax.trainsmod.global.tracknetwork.*;
+import alemax.trainsmod.util.TrackPointsUtil;
 import alemax.trainsmod.util.TrackType;
 import com.mojang.datafixers.DataFixer;
 import net.minecraft.nbt.CompoundTag;
@@ -43,6 +44,7 @@ public class MixinLevelProperties {
 
     @Inject(at = @At("RETURN"), method = "<init>(Lnet/minecraft/nbt/CompoundTag;Lcom/mojang/datafixers/DataFixer;ILnet/minecraft/nbt/CompoundTag;)V")
     private void onConstructed(CompoundTag compoundTag_1, DataFixer dataFixer_1, int int_1, CompoundTag compoundTag_2, CallbackInfo info) {
+        //TRACKMARKERS:
         TrackMarkerInstances.OVERWORLD = new TrackMarkerHandler();
         int count = compoundTag_1.getInt("trackMarkerCount");
         for(int i = 0; i < count; i++) {
@@ -56,6 +58,7 @@ public class MixinLevelProperties {
             TrackMarkerInstances.OVERWORLD.trackMarkers.add(marker);
         }
 
+        //TRACKNETWORK:
         TrackNetworkInstances.OVERWORLD = new TrackNetwork();
         count = compoundTag_1.getInt("trackPointCount");
         for(int i = 0; i < count; i++) {
@@ -83,12 +86,12 @@ public class MixinLevelProperties {
                 int next = compoundTag.getInt("next");
 
                 if(previous > 0) {
-                    point.setPrevious(matchID(previous));
+                    point.setPrevious(TrackPointsUtil.matchID(TrackNetworkInstances.OVERWORLD.trackPoints, previous));
                 } else {
                     //TODO: Throw some Exception some day
                 }
                 if(next > 0) {
-                    point.setNext(matchID(next));
+                    point.setNext(TrackPointsUtil.matchID(TrackNetworkInstances.OVERWORLD.trackPoints, next));
                 } else {
                     //TODO: Throw some Exception some day
                 }
@@ -99,12 +102,12 @@ public class MixinLevelProperties {
                 int next = compoundTag.getInt("next");
 
                 if(previous > 0) {
-                    point.setPrevious(matchID(previous));
+                    point.setPrevious(TrackPointsUtil.matchID(TrackNetworkInstances.OVERWORLD.trackPoints, previous));
                 } else {
                     //TODO: Throw some Exception some day
                 }
                 if(next > 0) {
-                    point.setNext((TrackPointEnd) matchID(next));
+                    point.setNext((TrackPointEnd) TrackPointsUtil.matchID(TrackNetworkInstances.OVERWORLD.trackPoints, next));
                 } else {
                     point.setNext(null);
                 }
@@ -123,6 +126,7 @@ public class MixinLevelProperties {
 
     @Inject(at = @At("RETURN"), method = "updateProperties")
     private void updateProperties(CompoundTag compoundTag_1, CompoundTag compoundTag_2, CallbackInfo info) {
+        //TRACKMARKERS:
         compoundTag_1.putInt("trackMarkerCount", TrackMarkerInstances.OVERWORLD.trackMarkers.size());
         for(int i = 0; i < TrackMarkerInstances.OVERWORLD.trackMarkers.size(); i++) {
             TrackMarker marker = TrackMarkerInstances.OVERWORLD.trackMarkers.get(i);
@@ -137,6 +141,7 @@ public class MixinLevelProperties {
             compoundTag_1.put("trackMarker_" + i, compoundTag);
         }
 
+        //TRACKNETWORK:
         int uniqueInt = 1;
 
         for(int i = 0; i < TrackNetworkInstances.OVERWORLD.trackPoints.size(); i++) {
@@ -159,9 +164,9 @@ public class MixinLevelProperties {
                 compoundTag.putInt("next", ((TrackPointStandard) point).getNext().getUniqueID());
             } else if(point instanceof TrackPointEnd) {
                 compoundTag.putString("type", "end");
-                compoundTag.putInt("previous", ((TrackPointStandard) point).getPrevious().getUniqueID());
+                compoundTag.putInt("previous", ((TrackPointEnd) point).getPrevious().getUniqueID());
                 if(((TrackPointStandard) point).getNext() != null)
-                    compoundTag.putInt("next", ((TrackPointStandard) point).getNext().getUniqueID());
+                    compoundTag.putInt("next", ((TrackPointEnd) point).getNext().getUniqueID());
                 else
                     compoundTag.putInt("next", 0);
             }

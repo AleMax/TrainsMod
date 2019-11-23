@@ -1,6 +1,7 @@
 package alemax.trainsmod.mixin;
 
 import alemax.trainsmod.global.trackmarker.TrackMarkerInstances;
+import alemax.trainsmod.global.tracknetwork.TrackNetworkInstances;
 import alemax.trainsmod.init.TMPackets;
 import net.minecraft.network.ClientConnection;
 import net.minecraft.server.PlayerManager;
@@ -16,7 +17,7 @@ public class MixinPlayerManager {
     @Inject(at = @At("RETURN"), method = "onPlayerConnect")
     private void onPlayerConnect(ClientConnection clientConnection_1, ServerPlayerEntity serverPlayerEntity_1, CallbackInfo info) {
 
-        TMPackets.packetS2CSyncGlobalOnPlayerJoin.send(serverPlayerEntity_1, TrackMarkerInstances.OVERWORLD);
+        TMPackets.packetS2CSyncGlobalOnPlayerJoin.send(serverPlayerEntity_1, TrackMarkerInstances.OVERWORLD, TrackNetworkInstances.OVERWORLD);
 
     }
 
