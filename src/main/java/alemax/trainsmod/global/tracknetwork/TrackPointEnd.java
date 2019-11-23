@@ -7,6 +7,10 @@ public class TrackPointEnd extends TrackPoint {
     private TrackPoint previous;
     private TrackPointEnd next; //The next here is the one which is "outside" the other one, should be another End Point
 
+    public TrackPointEnd(Vec3d pos) {
+        this(pos, null);
+    }
+
     public TrackPointEnd(Vec3d pos, int uniqueID) {
         this(pos, null);
         this.uniqueID = uniqueID;

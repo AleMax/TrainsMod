@@ -4,6 +4,7 @@ import alemax.trainsmod.global.trackmarker.TrackMarker;
 import alemax.trainsmod.global.trackmarker.TrackMarkerHandler;
 import alemax.trainsmod.global.trackmarker.TrackMarkerInstances;
 import alemax.trainsmod.global.tracknetwork.*;
+import alemax.trainsmod.util.TestUtils;
 import alemax.trainsmod.util.TrackPointsUtils;
 import alemax.trainsmod.util.TrackType;
 import com.mojang.datafixers.DataFixer;
@@ -142,6 +143,9 @@ public class MixinLevelProperties {
         }
 
         //TRACKNETWORK:
+        TestUtils.saveTrackNetwork(compoundTag_1);
+
+        /*
         int uniqueInt = 1;
 
         for(int i = 0; i < TrackNetworkInstances.OVERWORLD.trackPoints.size(); i++) {
@@ -172,7 +176,10 @@ public class MixinLevelProperties {
             }
 
             compoundTag_1.put("trackPoint_" + i, compoundTag);
+
         }
+        */
+
 
     }
 

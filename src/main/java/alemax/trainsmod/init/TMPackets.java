@@ -9,6 +9,7 @@ public class TMPackets {
     public static PacketS2CTrackMarkerRemoval packetS2CTrackMarkerRemoval;
     public static PacketS2CSaveGUITrackMarker packetS2CSaveGUITrackMarker;
     public static PacketS2CTrackBlockPlacement packetS2CTrackBlockPlacement;
+    public static PacketS2CTrackData packetS2CTrackData;
 
     public static PacketC2SSaveGUITrackMarker packetC2SSaveGUITrackMarker;
     public static PacketC2STrackBuild packetC2STrackBuild;
@@ -19,6 +20,7 @@ public class TMPackets {
         packetS2CTrackMarkerRemoval = new PacketS2CTrackMarkerRemoval();
         packetS2CSaveGUITrackMarker = new PacketS2CSaveGUITrackMarker();
         packetS2CTrackBlockPlacement = new PacketS2CTrackBlockPlacement();
+        packetS2CTrackData = new PacketS2CTrackData();
 
         packetC2SSaveGUITrackMarker = new PacketC2SSaveGUITrackMarker();
         packetC2STrackBuild = new PacketC2STrackBuild();
@@ -35,6 +37,7 @@ public class TMPackets {
         packetS2CTrackMarkerRemoval.register();
         packetS2CSaveGUITrackMarker.register();
         packetS2CTrackBlockPlacement.register();
+        packetS2CTrackData.register();
 
     }
 

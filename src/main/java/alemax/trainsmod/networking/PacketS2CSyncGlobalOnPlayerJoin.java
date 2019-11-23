@@ -63,7 +63,7 @@ public class PacketS2CSyncGlobalOnPlayerJoin extends TMPacket {
             } else if(point instanceof TrackPointEnd) {
                 buf.writeEnumConstant(TrackPointType.END);
                 buf.writeInt(((TrackPointEnd) point).getPrevious().getUniqueID());
-                if(((TrackPointStandard) point).getNext() != null)
+                if(((TrackPointEnd) point).getNext() != null)
                     buf.writeInt(((TrackPointEnd) point).getNext().getUniqueID());
                 else
                     buf.writeInt(0);

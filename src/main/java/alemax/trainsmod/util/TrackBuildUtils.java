@@ -3,8 +3,14 @@ package alemax.trainsmod.util;
 import alemax.trainsmod.block.TMBlock;
 import alemax.trainsmod.global.trackmarker.TrackMarker;
 import alemax.trainsmod.global.trackmarker.TrackMarkerInstances;
+import alemax.trainsmod.global.tracknetwork.TrackNetworkInstances;
+import alemax.trainsmod.global.tracknetwork.TrackPoint;
+import alemax.trainsmod.global.tracknetwork.TrackPointEnd;
+import alemax.trainsmod.global.tracknetwork.TrackPointStandard;
 import alemax.trainsmod.init.TMBlocks;
 import alemax.trainsmod.init.TMPackets;
+import alemax.trainsmod.networking.TMPacket;
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3i;
@@ -99,26 +105,31 @@ public class TrackBuildUtils {
 
                 TMPackets.packetS2CTrackBlockPlacement.send(world.getServer(), trackPositions);
 
-                /*
-                BlockPos mainPos = new BlockPos(points3d[(int) ((points3d.length - 1) / 2.0)].x,points3d[(int) ((points3d.length - 1) / 2.0)].y, points3d[(int) ((points3d.length - 1) / 2.0)].z);
-
-                this.world.setBlockState(mainPos, ModBlocks.track_super.getDefaultState());
-
-                System.out.println(this.world.getTileEntity(mainPos).getClass().toString());
-
-                for(int i = 0; i < trackPositions.size(); i++) {
-                    TileEntity te = this.world.getTileEntity(trackPositions.get(i));
-                    if(te instanceof TileEntityTrackBasic) {
-                        ((TileEntityTrackBasic) te).setSuperPos(mainPos);
-                        PacketHandler.INSTANCE.sendToAll(new TrackSuperPosMessage(trackPositions.get(i), mainPos));
-                    }
+                TrackPoint[] trackPoints = new TrackPoint[points.length];
+                trackPoints[0] = new TrackPointEnd(points[0]);
+                for(int i = 1; i < (trackPoints.length - 1); i++) {
+                    trackPoints[i] = new TrackPointStandard(points[i]);
                 }
-                TrackData trackData = new TrackData();
-                trackData.trackPoints = points3d;
-                TileEntity ste = this.world.getTileEntity(mainPos);
-                ((TileEntityTrackSuper) ste).setTrackData(trackData);
-                PacketHandler.INSTANCE.sendToAll(new TrackDataMessage(mainPos, trackData));
-                */
+                trackPoints[trackPoints.length - 1] = new TrackPointEnd(points[trackPoints.length - 1]);
+
+                ((TrackPointEnd) trackPoints[0]).setPrevious(trackPoints[1]);
+                for(int i = 1; i < (trackPoints.length - 1); i++) {
+                    ((TrackPointStandard) trackPoints[i]).setPrevious(trackPoints[i - 1]);
+                    ((TrackPointStandard) trackPoints[i]).setNext(trackPoints[i + 1]);
+                }
+                ((TrackPointEnd) trackPoints[trackPoints.length - 1]).setPrevious(trackPoints[trackPoints.length - 2]);
+
+                for(int i = 0; i < trackPoints.length; i++) {
+                    TrackNetworkInstances.OVERWORLD.addTrackPoint(trackPoints[i]);
+                }
+
+                BlockPos mainPos = new BlockPos(points[(int) ((points.length - 1) / 2.0)].x, points[(int) ((points.length - 1) / 2.0)].y, points[(int) ((points.length - 1) / 2.0)].z);
+
+                world.setBlockState(mainPos, TMBlocks.BLOCK_TRACK_SUPER.getDefaultState());
+                System.out.println(mainPos.getX() + "\t" + mainPos.getY() + "\t" + mainPos.getZ());
+
+                TMPackets.packetS2CTrackData.send(world.getServer(), mainPos, points);
+
 
             } else {
                 System.out.println("TO CLOSE TO EACH OTHER");

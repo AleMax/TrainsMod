@@ -7,6 +7,10 @@ public class TrackPointStandard extends TrackPoint {
     private TrackPoint previous;
     private TrackPoint next;
 
+    public TrackPointStandard(Vec3d pos) {
+        this(pos, null, null);
+    }
+
     public TrackPointStandard(Vec3d pos, int uniqueID) {
         this(pos, null, null);
         this.uniqueID = uniqueID;
