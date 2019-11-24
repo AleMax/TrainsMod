@@ -100,7 +100,6 @@ public class TrackBuildUtils {
 
                 for(int i = 0; i < trackPositions.size(); i++) {
                     world.setBlockState(trackPositions.get(i), TMBlocks.BLOCK_TRACK.getDefaultState());
-                    System.out.println("BUILD BLOCK\t" + trackPositions.get(i).getX() + "\t" + trackPositions.get(i).getZ());
                 }
 
                 TMPackets.packetS2CTrackBlockPlacement.send(world.getServer(), trackPositions);
@@ -126,7 +125,6 @@ public class TrackBuildUtils {
                 BlockPos mainPos = new BlockPos(points[(int) ((points.length - 1) / 2.0)].x, points[(int) ((points.length - 1) / 2.0)].y, points[(int) ((points.length - 1) / 2.0)].z);
 
                 world.setBlockState(mainPos, TMBlocks.BLOCK_TRACK_SUPER.getDefaultState());
-                System.out.println(mainPos.getX() + "\t" + mainPos.getY() + "\t" + mainPos.getZ());
 
                 TMPackets.packetS2CTrackData.send(world.getServer(), mainPos, points);
 
@@ -145,7 +143,7 @@ public class TrackBuildUtils {
 
     private static void addToBlockList(ArrayList<BlockPos> trackPositions, Vec3i pos, Vec3d[] points) {
         for(BlockPos currentPos : trackPositions) {
-            if(pos.getX() == currentPos.getX() && pos.getZ() == currentPos.getZ()) {
+            if(pos.getX() == currentPos.getX() && pos.getY() == currentPos.getY() && pos.getZ() == currentPos.getZ()) {
                 return;
             }
         }
@@ -159,7 +157,9 @@ public class TrackBuildUtils {
             }
         }
         trackPositions.add(new BlockPos(pos.getX(), nearestHeight, pos.getZ()));
-        if(nearestHeight % 1 < (3.0 / 16.0)) trackPositions.add(new BlockPos(pos.getX(), nearestHeight - 1, pos.getZ()));
+        if((nearestHeight - Math.floor(nearestHeight)) < (3.0 / 16.0)) {
+            trackPositions.add(new BlockPos(pos.getX(), nearestHeight - 1, pos.getZ()));
+        }
 
     }
 
