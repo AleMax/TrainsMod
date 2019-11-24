@@ -27,7 +27,7 @@ public class TrackMarker {
             this.channel = name;
 
         this.angle = 0;
-        this.height = 5;
+        this.height = 7;
         this.trackType = TrackType.CONCRETE;
 
         this.realAngle = 0;

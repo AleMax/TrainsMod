@@ -15,6 +15,7 @@ import net.minecraft.client.gui.screen.SplashScreen;
 import net.minecraft.client.texture.Sprite;
 import net.minecraft.client.texture.SpriteAtlasTexture;
 import net.minecraft.client.texture.TextureStitcher;
+import net.minecraft.util.Identifier;
 
 import java.io.IOException;
 
@@ -37,6 +38,8 @@ public class TrainsModClient implements ClientModInitializer {
         //Loading OBJ models
         String trackModelPath = "/assets/" + TrainsMod.modid + "/models/block/";
         BERTrackSuper.model = OBJHandler.INSTANCE.loadModel(getClass().getResourceAsStream(trackModelPath + "track_concrete.obj"));
+
+        BERTrackSuper.track_texture = new Identifier(TrainsMod.modid, "textures/block/track_concrete.png");
 
     }
 }
