@@ -24,21 +24,18 @@ public class MixinLevelProperties {
 
     @Inject(at = @At("RETURN"), method = "<init>")
     private void onConstructed(CallbackInfo info) {
-        if(TrackMarkerInstances.OVERWORLD == null) {
+        if(TrackMarkerInstances.OVERWORLD == null)
             TrackMarkerInstances.OVERWORLD = new TrackMarkerHandler();
+        if(TrackNetworkInstances.OVERWORLD == null)
             TrackNetworkInstances.OVERWORLD = new TrackNetwork();
-        }
-
-
     }
 
     @Inject(at = @At("RETURN"), method = "<init>(Lnet/minecraft/world/level/LevelInfo;Ljava/lang/String;)V")
     private void onConstructed(LevelInfo levelInfo_1, String string_1, CallbackInfo info) {
-        if(TrackMarkerInstances.OVERWORLD == null) {
+        if(TrackMarkerInstances.OVERWORLD == null)
             TrackMarkerInstances.OVERWORLD = new TrackMarkerHandler();
+        if(TrackNetworkInstances.OVERWORLD == null)
             TrackNetworkInstances.OVERWORLD = new TrackNetwork();
-        }
-
     }
 
 

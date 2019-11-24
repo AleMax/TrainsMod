@@ -39,7 +39,6 @@ public class PacketS2CSyncGlobalOnPlayerJoin extends TMPacket {
             //buf.writeByte(marker.trackType.ordinal());
             buf.writeEnumConstant(marker.trackType);
         }
-        ServerSidePacketRegistry.INSTANCE.sendToPlayer(player, new CustomPayloadS2CPacket(this.identifier, buf));
 
         //TRACKNETWORK:
         int uniqueInt = 1;
@@ -62,7 +61,12 @@ public class PacketS2CSyncGlobalOnPlayerJoin extends TMPacket {
                 buf.writeInt(((TrackPointStandard) point).getNext().getUniqueID());
             } else if(point instanceof TrackPointEnd) {
                 buf.writeEnumConstant(TrackPointType.END);
-                buf.writeInt(((TrackPointEnd) point).getPrevious().getUniqueID());
+                if(((TrackPointEnd) point).getPrevious() == null) {
+                    buf.writeInt(((TrackPointEnd) point).getPrevious().getUniqueID());
+
+                } else
+                    buf.writeInt(((TrackPointEnd) point).getPrevious().getUniqueID());
+
                 if(((TrackPointEnd) point).getNext() != null)
                     buf.writeInt(((TrackPointEnd) point).getNext().getUniqueID());
                 else
@@ -71,6 +75,9 @@ public class PacketS2CSyncGlobalOnPlayerJoin extends TMPacket {
             }
 
         }
+
+        ServerSidePacketRegistry.INSTANCE.sendToPlayer(player, new CustomPayloadS2CPacket(this.identifier, buf));
+
 
 
     }
@@ -93,11 +100,11 @@ public class PacketS2CSyncGlobalOnPlayerJoin extends TMPacket {
             }
 
             //TRACKNETWORK:
-            count = buf.readInt();
+            int nextCount = buf.readInt();
             List<TrackPoint> points = new ArrayList<TrackPoint>();
 
             int readerIndex = buf.readerIndex();
-            for(int i = 0; i < count; i++) {
+            for(int i = 0; i < nextCount; i++) {
                 Vec3d pos = new Vec3d(buf.readDouble(), buf.readDouble(), buf.readDouble());
                 int uniqueID = buf.readInt();
 
@@ -106,19 +113,22 @@ public class PacketS2CSyncGlobalOnPlayerJoin extends TMPacket {
                 if(type == TrackPointType.STANDARD) {
                     TrackPointStandard point = new TrackPointStandard(pos, uniqueID);
                     points.add(point);
-                    buf.readerIndex(buf.readerIndex() + 8); //Skip previous and next
-                    //buf.readInt(); buf.readInt(); //Skip previous and next
+                    //buf.readerIndex(buf.readerIndex() + 8); //Skip previous and next
+                    buf.readInt(); buf.readInt(); //Skip previous and next
                 } else if(type == TrackPointType.END) {
                     TrackPointEnd point = new TrackPointEnd(pos, uniqueID);
+                    points.add(point);
                     TrackNetworkInstances.OVERWORLD.addTrackPoint(point);
-                    buf.readerIndex(buf.readerIndex() + 8); //Skip previous and next
-                    //buf.readInt(); buf.readInt(); //Skip previous and next
+                    //buf.readerIndex(buf.readerIndex() + 8); //Skip previous and next
+                    buf.readInt(); buf.readInt(); //Skip previous and next
                 }
             }
 
             buf.readerIndex(readerIndex);
-            for(int i = 0; i < count; i++) {
-                buf.readerIndex(buf.readerIndex() + 28); //Skips pos and uniqueID
+            for(int i = 0; i < nextCount; i++) {
+                //buf.readerIndex(buf.readerIndex() + 28); //Skips pos and uniqueID
+                buf.readDouble(); buf.readDouble(); buf.readDouble();
+                buf.readInt();
                 TrackPointType type = buf.readEnumConstant(TrackPointType.class);
 
                 if(type == TrackPointType.STANDARD) {

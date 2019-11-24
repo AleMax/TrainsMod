@@ -29,9 +29,11 @@ public class TestUtils {
                 compoundTag.putString("type", "standard");
                 compoundTag.putInt("previous", ((TrackPointStandard) point).getPrevious().getUniqueID());
                 compoundTag.putInt("next", ((TrackPointStandard) point).getNext().getUniqueID());
+
             } else if(point instanceof TrackPointEnd) {
                 compoundTag.putString("type", "end");
                 compoundTag.putInt("previous", ((TrackPointEnd) point).getPrevious().getUniqueID());
+
                 if(((TrackPointEnd) point).getNext() != null)
                     compoundTag.putInt("next", ((TrackPointEnd) point).getNext().getUniqueID());
                 else
