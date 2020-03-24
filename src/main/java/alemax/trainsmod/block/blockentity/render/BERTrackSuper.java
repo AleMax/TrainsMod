@@ -158,31 +158,34 @@ public class BERTrackSuper extends BlockEntityRenderer<BlockEntityTrackSuper> {
 
 
 						//TOP
+						float normal = 0f;
+						if(index == 0) normal = 0.3f;
+
 						x = (float) leftPoints[index][i].x - beX;
 						z = (float) leftPoints[index][i].z - beZ;
 						y = (float) rightPoints[index][i].y - index / 32.0f - 9f / 32 - beY;
-						GL11.glNormal3f(0, 1, 0);
+						GL11.glNormal3f(normal, 1, 0);
 						GL11.glTexCoord2f(x, z);
 						GL11.glVertex3f(x, y, z);
 
 						x = (float) leftPoints[index][i - 1].x - beX;
 						z = (float) leftPoints[index][i - 1].z - beZ;
 						y = (float) rightPoints[index][i - 1].y - index / 32.0f - 9f / 32 - beY;
-						GL11.glNormal3f(0, 1, 0);
+						GL11.glNormal3f(normal, 1, 0);
 						GL11.glTexCoord2f(x, z);
 						GL11.glVertex3f(x, y, z);
 
 						x = (float) rightPoints[index][i - 1].x - beX;
 						z = (float) rightPoints[index][i - 1].z - beZ;
 						y = (float) rightPoints[index][i - 1].y - index / 32.0f - 9f / 32 - beY;
-						GL11.glNormal3f(0, 1, 0);
+						GL11.glNormal3f(-normal, 1, 0);
 						GL11.glTexCoord2f(x, z);
 						GL11.glVertex3f(x, y, z);
 
 						x = (float) rightPoints[index][i].x - beX;
 						z = (float) rightPoints[index][i].z - beZ;
 						y = (float) rightPoints[index][i].y - index / 32.0f - 9f / 32 - beY;
-						GL11.glNormal3f(0, 1, 0);
+						GL11.glNormal3f(-normal, 1, 0);
 						GL11.glTexCoord2f(x, z);
 						GL11.glVertex3f(x, y, z);
 
@@ -190,28 +193,28 @@ public class BERTrackSuper extends BlockEntityRenderer<BlockEntityTrackSuper> {
 						x = (float) leftPoints[index][i - 1].x - beX;
 						z = (float) leftPoints[index][i - 1].z - beZ;
 						y = (float) leftPoints[index][i - 1].y - (index + 1) / 32.0f - 9f / 32 - beY;
-						GL11.glNormal3f(0, 1, 0);
+						GL11.glNormal3f(0, 0, -1);
 						GL11.glTexCoord2f(x, y);
 						GL11.glVertex3f(x, y, z);
 
 						x = (float) rightPoints[index][i - 1].x - beX;
 						z = (float) rightPoints[index][i - 1].z - beZ;
 						y = (float) rightPoints[index][i - 1].y - (index + 1) / 32.0f - 9f / 32 - beY;
-						GL11.glNormal3f(0, 1, 0);
+						GL11.glNormal3f(0, 0, -1);
 						GL11.glTexCoord2f(x, y);
 						GL11.glVertex3f(x, y, z);
 
 						x = (float) rightPoints[index][i - 1].x - beX;
 						z = (float) rightPoints[index][i - 1].z - beZ;
 						y = (float) rightPoints[index][i - 1].y - index / 32.0f - 9f / 32 - beY;
-						GL11.glNormal3f(0, 1, 0);
+						GL11.glNormal3f(0, 0, -1);
 						GL11.glTexCoord2f(x, y);
 						GL11.glVertex3f(x, y, z);
 
 						x = (float) leftPoints[index][i - 1].x - beX;
 						z = (float) leftPoints[index][i - 1].z - beZ;
 						y = (float) leftPoints[index][i - 1].y - index / 32.0f - 9f / 32 - beY;
-						GL11.glNormal3f(0, 1, 0);
+						GL11.glNormal3f(0, 0, -1);
 						GL11.glTexCoord2f(x, y);
 						GL11.glVertex3f(x, y, z);
 
@@ -220,28 +223,28 @@ public class BERTrackSuper extends BlockEntityRenderer<BlockEntityTrackSuper> {
 						x = (float) leftPoints[index][i].x - beX;
 						z = (float) leftPoints[index][i].z - beZ;
 						y = (float) leftPoints[index][i].y - index / 32.0f - 9f / 32 - beY;
-						GL11.glNormal3f(0, 1, 0);
+						GL11.glNormal3f(0, 0, 1);
 						GL11.glTexCoord2f(x, y);
 						GL11.glVertex3f(x, y, z);
 
 						x = (float) rightPoints[index][i].x - beX;
 						z = (float) rightPoints[index][i].z - beZ;
 						y = (float) rightPoints[index][i].y - index / 32.0f - 9f / 32 - beY;
-						GL11.glNormal3f(0, 1, 0);
+						GL11.glNormal3f(0, 0, 1);
 						GL11.glTexCoord2f(x, y);
 						GL11.glVertex3f(x, y, z);
 
 						x = (float) rightPoints[index][i].x - beX;
 						z = (float) rightPoints[index][i].z - beZ;
 						y = (float) rightPoints[index][i].y - (index + 1) / 32.0f - 9f / 32 - beY;
-						GL11.glNormal3f(0, 1, 0);
+						GL11.glNormal3f(0, 0, 1);
 						GL11.glTexCoord2f(x, y);
 						GL11.glVertex3f(x, y, z);
 
 						x = (float) leftPoints[index][i].x - beX;
 						z = (float) leftPoints[index][i].z - beZ;
 						y = (float) leftPoints[index][i].y - (index + 1) / 32.0f - 9f / 32 - beY;
-						GL11.glNormal3f(0, 1, 0);
+						GL11.glNormal3f(0, 0, 1);
 						GL11.glTexCoord2f(x, y);
 						GL11.glVertex3f(x, y, z);
 
@@ -249,28 +252,28 @@ public class BERTrackSuper extends BlockEntityRenderer<BlockEntityTrackSuper> {
 						x = (float) leftPoints[index][i - 1].x - beX;
 						z = (float) leftPoints[index][i - 1].z - beZ;
 						y = (float) leftPoints[index][i - 1].y - index / 32.0f - 9f / 32 - beY;
-						GL11.glNormal3f(0, 1, 0);
+						GL11.glNormal3f(1, 0.3f, 0);
 						GL11.glTexCoord2f(x, z);
 						GL11.glVertex3f(x, y, z);
 
 						x = (float) leftPoints[index][i].x - beX;
 						z = (float) leftPoints[index][i].z - beZ;
 						y = (float) leftPoints[index][i].y - index / 32.0f - 9f / 32 - beY;
-						GL11.glNormal3f(0, 1, 0);
+						GL11.glNormal3f(1, 0.3f, 0);
 						GL11.glTexCoord2f(x, z);
 						GL11.glVertex3f(x, y, z);
 
 						x = (float) leftPoints[index][i].x - beX;
 						z = (float) leftPoints[index][i].z - beZ;
 						y = (float) leftPoints[index][i].y - (index + 1) / 32.0f - 9f / 32 - beY;
-						GL11.glNormal3f(0, 1, 0);
+						GL11.glNormal3f(1, 0.3f, 0);
 						GL11.glTexCoord2f(x, z);
 						GL11.glVertex3f(x, y, z);
 
 						x = (float) leftPoints[index][i - 1].x - beX;
 						z = (float) leftPoints[index][i - 1].z - beZ;
 						y = (float) leftPoints[index][i - 1].y - (index + 1) / 32.0f - 9f / 32 - beY;
-						GL11.glNormal3f(0, 1, 0);
+						GL11.glNormal3f(1, 0.3f, 0);
 						GL11.glTexCoord2f(x, z);
 						GL11.glVertex3f(x, y, z);
 
@@ -278,28 +281,28 @@ public class BERTrackSuper extends BlockEntityRenderer<BlockEntityTrackSuper> {
 						x = (float) rightPoints[index][i - 1].x - beX;
 						z = (float) rightPoints[index][i - 1].z - beZ;
 						y = (float) rightPoints[index][i - 1].y - (index + 1) / 32.0f - 9f / 32 - beY;
-						GL11.glNormal3f(0, 1, 0);
+						GL11.glNormal3f(-1, 0.3f, 0);
 						GL11.glTexCoord2f(x, z);
 						GL11.glVertex3f(x, y, z);
 
 						x = (float) rightPoints[index][i].x - beX;
 						z = (float) rightPoints[index][i].z - beZ;
 						y = (float) rightPoints[index][i].y - (index + 1) / 32.0f - 9f / 32 - beY;
-						GL11.glNormal3f(0, 1, 0);
+						GL11.glNormal3f(-1, 0.3f, 0);
 						GL11.glTexCoord2f(x, z);
 						GL11.glVertex3f(x, y, z);
 
 						x = (float) rightPoints[index][i].x - beX;
 						z = (float) rightPoints[index][i].z - beZ;
 						y = (float) rightPoints[index][i].y - index / 32.0f - 9f / 32 - beY;
-						GL11.glNormal3f(0, 1, 0);
+						GL11.glNormal3f(-1, 0.3f, 0);
 						GL11.glTexCoord2f(x, z);
 						GL11.glVertex3f(x, y, z);
 
 						x = (float) rightPoints[index][i - 1].x - beX;
 						z = (float) rightPoints[index][i - 1].z - beZ;
 						y = (float) rightPoints[index][i - 1].y - index / 32.0f - 9f / 32 - beY;
-						GL11.glNormal3f(0, 1, 0);
+						GL11.glNormal3f(-1, 0.3f, 0);
 						GL11.glTexCoord2f(x, z);
 						GL11.glVertex3f(x, y, z);
 
